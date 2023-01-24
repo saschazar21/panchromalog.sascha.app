@@ -38,7 +38,7 @@ export default defineConfig({
         navigateFallback: null,
         runtimeCaching: [
           {
-            urlPattern: /^http:\/\/localhost:3000\/_image/,
+            urlPattern: /\/_image/,
             handler: "CacheFirst",
           },
         ],
