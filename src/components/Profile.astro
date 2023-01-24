@@ -1,0 +1,36 @@
+---
+import { Picture } from "@astrojs/image/components";
+import pkg from "../../package.json";
+---
+
+<section aria-labelledby="author">
+  <Picture
+    src="https://via.placeholder.com/192x192.png"
+    alt=""
+    sizes="(min-width: 640px) 96px, 64px"
+    widths={[64, 96, 128, 192]}
+    aspectRatio={1}
+    formats={["avif", "webp", "jpeg"]}
+  />
+  <div>
+    <strong id="author">{pkg.author.name}</strong>
+    <p>{pkg.description}</p>
+  </div>
+</section>
+
+<style>
+  section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  img {
+    flex: 0 0 auto;
+    border-radius: 9999px;
+  }
+
+  div {
+    flex: 2 0 auto;
+  }
+</style>

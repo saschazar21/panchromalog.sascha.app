@@ -1,0 +1,36 @@
+{
+  "name": "photos.sascha.app",
+  "short_name": "Instanalog",
+  "description": "This is Sascha's collection of analog photographs.",
+  "color": "#343A40",
+  "type": "module",
+  "version": "0.0.1",
+  "homepage": "https://photos.sascha.app",
+  "author": {
+    "name": "Sascha Zarhuber",
+    "email": "saschazar21@yahoo.de",
+    "url": "https://sascha.work"
+  },
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/image": "^0.12.1",
+    "@astrojs/lit": "^1.0.2",
+    "@astrojs/netlify": "^1.3.0",
+    "@vite-pwa/astro": "^0.0.1",
+    "@webcomponents/template-shadowroot": "^0.1.0",
+    "astro": "^1.9.0",
+    "astro-seo": "^0.7.0",
+    "gardevoir": "^1.0.0",
+    "lit": "^2.1.3",
+    "sharp": "^0.31.3",
+    "vite-plugin-pwa": "^0.14.1"
+  }
+}
