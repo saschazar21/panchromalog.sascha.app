@@ -11,11 +11,18 @@ import "@styles/_base.css";
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    <link
+      rel="preload"
+      href="/fonts/Cabin-VariableFont_wdth,wght.ttf"
+      as="font"
+    />
     <SEO />
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
   </head>
   <body>
-    <slot />
+    <main>
+      <slot />
+    </main>
     <script src="/src/utils/pwa.ts"></script>
   </body>
 </html>

@@ -3,34 +3,61 @@ import { Picture } from "@astrojs/image/components";
 import pkg from "../../package.json";
 ---
 
-<section aria-labelledby="author">
-  <Picture
-    src="https://via.placeholder.com/192x192.png"
-    alt=""
-    sizes="(min-width: 640px) 96px, 64px"
-    widths={[64, 96, 128, 192]}
-    aspectRatio={1}
-    formats={["avif", "webp", "jpeg"]}
-  />
+<header aria-labelledby="author">
+  <div data-avatar>
+    <Picture
+      src="https://via.placeholder.com/192x192.png"
+      alt=""
+      sizes="(min-width: 640px) 96px, 64px"
+      widths={[64, 96, 128, 192]}
+      aspectRatio={1}
+      formats={["avif", "webp", "jpeg"]}
+      loading="eager"
+      width="64"
+      height="64"
+    />
+  </div>
   <div>
     <strong id="author">{pkg.author.name}</strong>
     <p>{pkg.description}</p>
   </div>
-</section>
+</header>
 
 <style>
-  section {
+  header {
+    --gap: var(--space-m);
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: var(--space-m);
   }
 
   img {
-    flex: 0 0 auto;
     border-radius: 9999px;
+    height: 64px;
+    width: 64px;
   }
 
   div {
-    flex: 2 0 auto;
+    flex: 2 0 var(--gap);
+  }
+
+  strong {
+    font-size: var(--font-size-h5);
+  }
+
+  [data-avatar] {
+    flex: 1 0 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media screen and (min-width: 768px) {
+    img {
+      height: 96px;
+      width: 96px;
+    }
   }
 </style>

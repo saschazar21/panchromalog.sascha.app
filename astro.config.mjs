@@ -30,11 +30,18 @@ export default defineConfig({
       registerType: "autoUpdate",
       manifest,
       workbox: {
+        cleanupOutdatedCaches: true,
         globDirectory: "dist",
         globPatterns: [
           "**/*.{js,css,svg,png,jpg,jpeg,gif,avif,webp,woff,woff2,ttf,eot,ico}",
         ],
         navigateFallback: null,
+        runtimeCaching: [
+          {
+            urlPattern: /^http:\/\/localhost:3000\/_image/,
+            handler: "CacheFirst",
+          },
+        ],
       },
     }),
   ],
