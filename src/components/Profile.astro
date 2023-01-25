@@ -3,7 +3,7 @@ import { Picture } from "@astrojs/image/components";
 import pkg from "../../package.json";
 ---
 
-<header aria-labelledby="author">
+<header aria-labelledby="title">
   <div data-avatar>
     <Picture
       src="https://via.placeholder.com/192x192.png"
@@ -18,7 +18,7 @@ import pkg from "../../package.json";
     />
   </div>
   <div>
-    <strong id="author">{pkg.author.name}</strong>
+    <h1 id="title">{pkg.short_name}</h1>
     <p>{pkg.description}</p>
   </div>
 </header>
@@ -43,8 +43,10 @@ import pkg from "../../package.json";
     flex: 2 0 var(--gap);
   }
 
-  strong {
-    font-size: var(--font-size-h5);
+  #title {
+    margin: 0;
+    font-size: var(--font-size-h4);
+    text-align: left;
   }
 
   [data-avatar] {
