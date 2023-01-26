@@ -2,13 +2,23 @@
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
     "baseUrl": ".",
+    "experimentalDecorators": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
     "lib": ["ESNext", "DOM", "WebWorker"],
     "paths": {
       "@components/*": ["src/components/*"],
       "@data/*": ["src/_data/*"],
       "@layouts/*": ["src/layouts/*"],
       "@styles/*": ["src/styles/*"],
-      "@utils/*": ["src/utils/*"]
-    }
-  }
+      "@utils/*": ["src/utils/*"],
+      "react": ["node_modules/preact/compat/"],
+      "react-dom": ["node_modules/preact/compat/"]
+    },
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "useDefineForClassFields": false
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "dist", ".vercel"]
 }

@@ -7,14 +7,15 @@ import pkg from "../../package.json";
   <div data-avatar>
     <Picture
       src="https://via.placeholder.com/192x192.png"
-      alt=""
+      alt={`Avatar of ${pkg.author.name}`}
       sizes="(min-width: 640px) 96px, 64px"
       widths={[64, 96, 128, 192]}
       aspectRatio={1}
       formats={["avif", "webp", "jpeg"]}
       loading="eager"
-      width="64"
-      height="64"
+      background={undefined}
+      width={64}
+      height={64}
     />
   </div>
   <div>
