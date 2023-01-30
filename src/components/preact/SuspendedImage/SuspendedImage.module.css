@@ -1,0 +1,8 @@
+.img {
+  opacity: 1;
+  transition: opacity var(--duration) ease-in;
+}
+
+.img[data-loading] {
+  opacity: 0;
+}

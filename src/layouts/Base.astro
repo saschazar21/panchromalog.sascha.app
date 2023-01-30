@@ -15,6 +15,7 @@ import "@styles/_base.css";
       rel="preload"
       href="/fonts/Cabin-VariableFont_wdth,wght.ttf"
       as="font"
+      crossorigin="anonymous"
     />
     <SEO />
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}

@@ -1,5 +1,13 @@
 ---
-import { AsyncImage } from "@components/preact/AsyncImage";
+import { SuspendedPicture } from "./preact/SuspendedPicture";
 ---
 
-<AsyncImage client:visible src="APX_100/IMG_002.png" />
+<SuspendedPicture
+  client:visible
+  src="http://localhost:3000/api/image/APX_100/IMG_001.png"
+  width={360}
+  height={360}
+  sizes="360px"
+  widths={[360, 720, 1080]}
+  formats={["avif", "webp", "jpeg"]}
+/>
