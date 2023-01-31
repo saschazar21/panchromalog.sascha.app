@@ -1,3 +1,5 @@
+import { useImageContext } from "@utils/context/ImageContext";
+import { seoConfig } from "@utils/manifest";
 import { useMemo } from "preact/hooks";
 
 export interface ImageOptions {
@@ -36,11 +38,24 @@ export const getImageURL = (opts: ImageOptions): string => {
 };
 
 export const useImageLink = (options: ImageOptions) => {
+  const contextOptions = (useImageContext() as ImageOptions) ?? {};
+
+  const href = useMemo(
+    () =>
+      new URL(
+        options.href ?? contextOptions.href,
+        seoConfig.baseURL
+      ).toString(),
+    [options.href, contextOptions.href]
+  );
+
   return useMemo(
     () =>
       getImageURL({
         ...DEFAULT_OPTIONS,
+        ...contextOptions,
         ...options,
+        href,
       }),
     [options]
   );

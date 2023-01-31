@@ -1,4 +1,4 @@
-import { ImageOptions, useImageLink } from "@utils/hooks/useImageLink";
+import { useImageLink } from "@utils/hooks/useImageLink";
 import classNames from "classnames";
 import type { FunctionComponent } from "preact";
 import type { HTMLAttributes } from "preact/compat";
@@ -6,9 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 
 import styles from "./SuspendedImage.module.css";
 
-export interface SuspendedImageProps
-  extends HTMLAttributes<HTMLImageElement>,
-    Partial<Omit<ImageOptions, "href">> {
+export interface SuspendedImageProps extends HTMLAttributes<HTMLImageElement> {
   height: number;
   width: number;
 }

@@ -2,11 +2,10 @@ import type { FunctionComponent } from "preact";
 import { useCallback, useMemo } from "preact/hooks";
 import type { HTMLAttributes } from "preact/compat";
 import { SuspendedImage } from "@components/preact/SuspendedImage";
-import { getImageURL, ImageOptions } from "@utils/hooks/useImageLink";
+import { useImageLink } from "@utils/hooks/useImageLink";
 
 export interface SuspendedPictureProps
-  extends HTMLAttributes<HTMLImageElement>,
-    Partial<Omit<ImageOptions, "href">> {
+  extends HTMLAttributes<HTMLImageElement> {
   formats?: Array<"avif" | "webp" | "jpeg">;
   height: number;
   sizes: string;
@@ -24,11 +23,9 @@ export const SuspendedPicture: FunctionComponent<SuspendedPictureProps> = (
     (format: string) =>
       widths
         .map((w) => {
-          const { ar, height, width, src } = props;
-          const aspectRatio = ar || width / height;
+          const { height, width, src } = props;
           const ratio = w / width;
-          const url = getImageURL({
-            ar: aspectRatio,
+          const url = useImageLink({
             f: format as "avif" | "webp" | "jpeg",
             h: Math.floor(height * ratio),
             href: src,
