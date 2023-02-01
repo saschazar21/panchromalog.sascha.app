@@ -1,0 +1,122 @@
+enum FilmType {
+  bw
+  color
+}
+
+input CameraInput {
+  model: String!
+  make: String!
+}
+
+input FilmInput {
+  name: String!
+  brand: String!
+  speed: Int!
+  type: FilmType!
+}
+
+input LensInput {
+  model: String!
+  make: String!
+}
+
+input GeoInput @embedded {
+  latitude: Float!
+  longitude: Float!
+}
+
+input MetaInput @embedded {
+  aperture: Float!
+  camera: String!
+  date: Time!
+  film: String
+  focal_length: Int!
+  geo: GeoInput
+  height: Int!
+  lens: String
+  shutter: Float!
+  width: Int!
+}
+
+input ImageInput {
+  id: ID!
+  description: String
+  meta: MetaInput!
+  path: String!
+  title: String
+}
+
+type Camera @collection(name: "cameras") {
+  model: String! @unique(index: "camera_by_model")
+  make: String
+  created_at: Time
+}
+
+type Lens @collection(name: "lenses") {
+  model: String! @unique(index: "lens_by_model")
+  make: String
+  created_at: Time
+}
+
+type Film @collection(name: "films") {
+  name: String! @unique(index: "film_by_name")
+  brand: String
+  speed: Int
+  type: FilmType
+  created_at: Time
+}
+
+type Developer @embedded {
+  name: String!
+  duration: Int!
+}
+
+type Geo @embedded {
+  latitude: Float!
+  longitude: Float!
+}
+
+type Meta @embedded {
+  aperture: Float
+  camera: Camera @relation
+  date: Time
+  developer: Developer
+  film: Film @relation
+  focal_length: Int
+  geo: Geo
+  height: Int
+  lens: Lens @relation
+  shutter: Float
+  width: Int
+}
+
+type Image @collection(name: "images") {
+  id: ID! @unique(index: "image_by_id")
+  created_at: Time
+  description: String
+  meta: Meta
+  path: String!
+  title: String
+}
+
+type Mutation {
+  createCamera(camera: CameraInput): Camera! @resolver(name: "create_camera")
+  createFilm(film: FilmInput!): Film! @resolver(name: "create_film")
+  createImages(images: [ImageInput!]!): [Image!]!
+    @resolver(name: "create_images")
+  createImage(image: ImageInput!): Image! @resolver(name: "create_image")
+  deleteImage(id: String): Image! @resolver(name: "delete_image")
+  createLens(lens: LensInput!): Lens! @resolver(name: "create_lens")
+}
+
+type Query {
+  cameras: [Camera!]! @resolver(name: "all_cameras")
+  camera(model: String!): Camera @resolver(name: "camera_by_model")
+  films: [Film!]! @resolver(name: "all_films")
+  film(name: String!): Film @resolver(name: "film_by_name")
+  images(camera: String, film: String, lens: String): [Image!]!
+    @resolver(name: "all_images", paginated: true)
+  image(id: String!): Image @resolver(name: "image_by_id")
+  lenses: [Lens!]! @resolver(name: "all_lenses")
+  lens(model: String): Lens @resolver(name: "lens_by_model")
+}
