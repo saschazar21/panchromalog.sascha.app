@@ -21,6 +21,7 @@ input LensInput {
 }
 
 input GeoInput @embedded {
+  description: String!
   latitude: Float!
   longitude: Float!
 }
@@ -72,8 +73,9 @@ type Developer @embedded {
 }
 
 type Geo @embedded {
-  latitude: Float!
-  longitude: Float!
+  description: String
+  latitude: Float
+  longitude: Float
 }
 
 type Meta @embedded {
@@ -105,7 +107,7 @@ type Mutation {
   createImages(images: [ImageInput!]!): [Image!]!
     @resolver(name: "create_images")
   createImage(image: ImageInput!): Image! @resolver(name: "create_image")
-  deleteImage(id: String): Image! @resolver(name: "delete_image")
+  deleteImage(id: String!): Image @resolver(name: "delete_image")
   createLens(lens: LensInput!): Lens! @resolver(name: "create_lens")
 }
 

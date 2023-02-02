@@ -1,0 +1,516 @@
+{
+	"info": {
+		"_postman_id": "db1abcb5-019c-4a66-a0ae-63c91ff722a4",
+		"name": "Photos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GraphQL",
+			"item": [
+				{
+					"name": "Get Image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query image($id: String!) {\n    image(id: $id) {\n        id\n        created_at\n        description\n        meta {\n            aperture\n            camera {\n                model\n                make\n                created_at\n            }\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                speed\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                description\n                latitude\n                longitude\n            }\n            height\n            lens {\n                model\n                make\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n    }\n}",
+								"variables": "{\n    \"id\": \"{{image_id}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Images",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query images($camera: String, $film: String, $lens: String, $_size: Int, $_cursor: String) {\n    images(camera: $camera, film: $film, lens: $lens, _size: $_size, _cursor: $_cursor) {\n        id\n        created_at\n        description\n        meta {\n            aperture\n            camera {\n                model\n                make\n                created_at\n            }\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                speed\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                description\n                latitude\n                longitude\n            }\n            height\n            lens {\n                model\n                make\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n    }\n}",
+								"variables": "{\n    \n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Camera",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query camera($model: String!) {\n    camera(model: $model) {\n        model\n        make\n        created_at\n    }\n}",
+								"variables": "{\n    \"model\": \"{{camera_model}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cameras",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query cameras {\n    cameras {\n        model\n        make\n        created_at\n    }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Film",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query film($name: String!) {\n    film(name: $name) {\n        name\n        brand\n        speed\n        type\n        created_at\n    }\n}",
+								"variables": "{\n    \"name\": \"{{film_name}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Films",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query films {\n    films {\n        name\n        brand\n        speed\n        type\n        created_at\n    }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Lens",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query lens($model: String!) {\n    lens(model: $model) {\n        model\n        make\n        created_at\n    }\n}",
+								"variables": "{\n    \"model\": \"{{lens_model}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Lenses",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query lenses {\n    lenses {\n        model\n        make\n        created_at\n    }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Image",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const { v4: uuid } = require('uuid');",
+									"pm.collectionVariables.set('image_id', uuid());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createImage($image: ImageInput!) {\n    createImage(image: $image) {\n        id\n        created_at\n        description\n        meta {\n            aperture\n            camera {\n                model\n                make\n                created_at\n            }\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                speed\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                description\n                latitude\n                longitude\n            }\n            height\n            lens {\n                model\n                make\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n    }\n}",
+								"variables": "{\n    \"image\": {\n        \"id\": \"{{image_id}}\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Images",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const { v4: uuid } = require('uuid');",
+									"pm.collectionVariables.set('image_id', uuid());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createImage($images: [ImageInput!]!) {\n    createImage(images: $images) {\n        id\n        created_at\n        description\n        meta {\n            aperture\n            camera {\n                model\n                make\n                created_at\n            }\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                speed\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                description\n                latitude\n                longitude\n            }\n            height\n            lens {\n                model\n                make\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n    }\n}",
+								"variables": "{\n    \"images\": [{\n        \"id\": \"{{image_id}}\"\n    }]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Camera",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createCamera($camera: CameraInput!) {\n    createCamera(camera: $camera) {\n        model\n        make\n        created_at\n    }\n}",
+								"variables": "{\n    \"camera\": {\n        \"model\": \"{{camera_model}}\",\n        \"make\": \"Test Factory\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Film",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createFilm($film: FilmInput!) {\n    createFilm(film: $film) {\n        name\n        brand\n        speed\n        type\n        created_at\n    }\n}",
+								"variables": "{\n    \"film\": {\n        \"name\": \"{{film_name}}\",\n        \"brand\": \"Test Brand\",\n        \"speed\": 200,\n        \"type\": \"bw\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Lens",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation createLens($lens: LensInput!) {\n    createLens(lens: $lens) {\n        model\n        make\n        created_at\n    }\n}",
+								"variables": "{\n    \"lens\": {\n        \"model\": \"{{lens_model}}\",\n        \"make\": \"Test Brand\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation deleteImage($id: String!) {\n    deleteImage(id: $id) {\n        id\n        created_at\n        description\n        meta {\n            aperture\n            camera {\n                model\n                make\n                created_at\n            }\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                speed\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                description\n                latitude\n                longitude\n            }\n            height\n            lens {\n                model\n                make\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n    }\n}",
+								"variables": "{\n    \"id\": \"{{image_id}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql_host}}",
+							"host": [
+								"{{graphql_host}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{graphql_bearer}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Image",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/image/{{image_path}}?w=360&h=360&f=jpeg&fit=cover",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"image",
+						"{{image_path}}"
+					],
+					"query": [
+						{
+							"key": "w",
+							"value": "360"
+						},
+						{
+							"key": "h",
+							"value": "360"
+						},
+						{
+							"key": "f",
+							"value": "jpeg"
+						},
+						{
+							"key": "fit",
+							"value": "cover"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "images",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/images?cursor&camera&film&lens",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"images"
+					],
+					"query": [
+						{
+							"key": "cursor",
+							"value": null
+						},
+						{
+							"key": "camera",
+							"value": null
+						},
+						{
+							"key": "film",
+							"value": null
+						},
+						{
+							"key": "lens",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "images/[id]",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/images/{{image_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"images",
+						"{{image_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:3000",
+			"type": "default"
+		},
+		{
+			"key": "graphql_host",
+			"value": "https://graphql.eu.fauna.com/graphql",
+			"type": "default"
+		},
+		{
+			"key": "graphql_bearer",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "image_path",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "image_id",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "camera_model",
+			"value": "Test 1",
+			"type": "default"
+		},
+		{
+			"key": "film_name",
+			"value": "Testpan",
+			"type": "default"
+		},
+		{
+			"key": "lens_model",
+			"value": "50mm f1.8",
+			"type": "default"
+		}
+	]
+}
