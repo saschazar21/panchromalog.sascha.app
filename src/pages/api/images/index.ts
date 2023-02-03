@@ -1,6 +1,8 @@
 import { getImages } from "@utils/graphql/images/images";
 import type { APIRoute } from "astro";
 
+export const DEFAULT_SIZE = 15;
+
 export const get: APIRoute = async ({ request }): Promise<Response> => {
   const url = new URL(request.url);
   const params = url.searchParams;
@@ -20,6 +22,8 @@ export const get: APIRoute = async ({ request }): Promise<Response> => {
     const parsed = parseInt(params.get("size") as string, 10);
 
     !isNaN(parsed) && variables.set("_size", parsed);
+  } else {
+    variables.set("_size", DEFAULT_SIZE);
   }
 
   const res = await getImages(Object.fromEntries(variables));
