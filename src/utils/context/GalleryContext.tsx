@@ -1,92 +1,26 @@
-import type { Camera } from "@utils/graphql/cameras/camera";
-import type { Film } from "@utils/graphql/films/film";
 import {
   getImages,
   ImagesVariables,
   PaginatedImages,
 } from "@utils/graphql/images/images";
-import type { Lens } from "@utils/graphql/lenses/lens";
+import {
+  GalleryState,
+  GALLERY_ACTIONS,
+  useGallery,
+} from "@utils/hooks/useGallery";
+import {
+  FilterAction,
+  FilterState,
+  useGalleryFilters,
+} from "@utils/hooks/useGalleryFilters";
 import { createContext, FunctionComponent } from "preact";
-import { useEffect, useReducer, useState } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 
-export enum FILTER_ACTIONS {
-  RESET,
-  SET_CAMERA,
-  SET_CURSOR,
-  SET_FILM,
-  SET_LENS,
-}
-
-export interface FilterState {
-  camera: Camera | null;
-  cursor: string | null;
-  film: Film | null;
-  resetGallery: boolean;
-  lens: Lens | null;
-}
-
-export interface FilterAction {
-  type: FILTER_ACTIONS;
-  payload: Partial<FilterState>;
-}
-
-export interface GalleryContextValue extends Omit<FilterState, "resetGallery"> {
+export interface GalleryContextValue
+  extends Omit<FilterState, "resetGallery">,
+    GalleryState {
   dispatch: (action: FilterAction) => void;
-  error: Error | null;
-  gallery: PaginatedImages;
-  loading: boolean;
 }
-
-const initialState: FilterState = {
-  camera: null,
-  cursor: null,
-  film: null,
-  lens: null,
-  resetGallery: true,
-};
-
-const reducer = (state: FilterState, action: FilterAction): FilterState => {
-  switch (action.type) {
-    case FILTER_ACTIONS.RESET:
-      return initialState;
-    case FILTER_ACTIONS.SET_CAMERA:
-      return {
-        ...state,
-        camera: action.payload.camera!,
-        cursor: null,
-        resetGallery: true,
-      };
-    case FILTER_ACTIONS.SET_CURSOR:
-      return {
-        ...state,
-        cursor: action.payload.cursor!,
-        resetGallery: false,
-      };
-    case FILTER_ACTIONS.SET_FILM:
-      return {
-        ...state,
-        cursor: null,
-        film: action.payload.film!,
-        resetGallery: true,
-      };
-    case FILTER_ACTIONS.SET_LENS:
-      return {
-        ...state,
-        cursor: null,
-        lens: action.payload.lens!,
-        resetGallery: true,
-      };
-    default:
-      return state;
-  }
-};
-
-const init = (custom: Partial<FilterState>): FilterState => {
-  return {
-    ...initialState,
-    ...custom,
-  };
-};
 
 const GalleryContext = createContext<GalleryContextValue | null>(null);
 
@@ -103,10 +37,6 @@ export const GalleryContextProvider: FunctionComponent<
     ...rest
   } = props;
 
-  const [error, setError] = useState<Error | null>(null);
-  const [gallery, setGallery] = useState(galleryInit);
-  const [loading, setLoading] = useState(false);
-
   const customInitialState = Object.assign(
     {},
     camera ? { camera } : {},
@@ -115,13 +45,21 @@ export const GalleryContextProvider: FunctionComponent<
     lens ? { lens } : {}
   );
 
-  const [state, dispatch] = useReducer(reducer, customInitialState, init);
+  const [filterState, filterDispatch] = useGalleryFilters(customInitialState);
+  const [galleryState, galleryDispatch] = useGallery(galleryInit);
 
   useEffect(() => {
-    setError(null);
-    setLoading(true);
+    galleryState.error &&
+      galleryDispatch({
+        type: GALLERY_ACTIONS.SET_ERROR,
+        payload: { error: null },
+      });
+    galleryDispatch({
+      type: GALLERY_ACTIONS.SET_LOADING,
+      payload: { isLoading: true },
+    });
 
-    const { camera, cursor, film, lens, resetGallery } = state;
+    const { camera, cursor, film, lens, resetGallery } = filterState;
 
     const variables: ImagesVariables = Object.assign(
       {},
@@ -136,37 +74,42 @@ export const GalleryContextProvider: FunctionComponent<
         if (errors?.length) {
           throw new Error(errors[0].message);
         }
+        const { before } = galleryState;
 
-        setGallery((current) => {
-          const { after, data: currentGallery } = current;
+        if (resetGallery) {
+          return galleryDispatch({
+            type: GALLERY_ACTIONS.RESET,
+            payload: data!,
+          });
+        }
 
-          if (resetGallery) {
-            return data as PaginatedImages;
-          }
-
-          if (cursor === after) {
-            return {
-              ...data,
-              data: [...currentGallery, ...data!.data],
-            } as PaginatedImages;
-          } else {
-            return {
-              ...data,
-              data: [...data!.data, ...currentGallery],
-            } as PaginatedImages;
-          }
-        });
+        if (cursor === before) {
+          return galleryDispatch({
+            type: GALLERY_ACTIONS.PREPEND,
+            payload: data!,
+          });
+        } else {
+          return galleryDispatch({
+            type: GALLERY_ACTIONS.APPEND,
+            payload: data!,
+          });
+        }
       })
-      .catch(setError)
-      .finally(() => setLoading(false));
-  }, [state]);
+      .catch((error) =>
+        galleryDispatch({ type: GALLERY_ACTIONS.SET_ERROR, payload: { error } })
+      )
+      .finally(() =>
+        galleryDispatch({
+          type: GALLERY_ACTIONS.SET_LOADING,
+          payload: { isLoading: false },
+        })
+      );
+  }, [filterState]);
 
   const value: GalleryContextValue = {
-    dispatch,
-    ...state,
-    error,
-    loading,
-    gallery,
+    dispatch: filterDispatch,
+    ...filterState,
+    ...galleryState,
   };
 
   return (
