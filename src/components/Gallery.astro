@@ -6,8 +6,6 @@ import { InfiniteGallery } from "./preact/InfiniteGallery";
 const params = new URL(Astro.url).searchParams;
 
 const { camera, cursor, film, gallery, lens } = await fetchGalleryInit(params);
-
-console.log(camera, cursor, film, gallery, lens);
 ---
 
 <GalleryContextProvider
