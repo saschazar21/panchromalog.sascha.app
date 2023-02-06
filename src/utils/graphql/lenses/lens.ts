@@ -21,4 +21,4 @@ query lens($model: String!) {
 `;
 
 export const getLens = async (variables: LensVariables) =>
-  graphQLRequest<Lens>(GET_LENS_QUERY, variables);
+  graphQLRequest<{ lens: Lens }>(GET_LENS_QUERY, variables);

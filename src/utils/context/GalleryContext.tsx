@@ -14,7 +14,7 @@ import {
   useGalleryFilters,
 } from "@utils/hooks/useGalleryFilters";
 import { createContext, FunctionComponent } from "preact";
-import { useEffect } from "preact/hooks";
+import { useContext, useEffect, useMemo } from "preact/hooks";
 
 export interface GalleryContextValue
   extends Omit<FilterState, "resetGallery">,
@@ -24,8 +24,10 @@ export interface GalleryContextValue
 
 const GalleryContext = createContext<GalleryContextValue | null>(null);
 
+export const useGalleryContext = () => useContext(GalleryContext);
+
 export const GalleryContextProvider: FunctionComponent<
-  { gallery: PaginatedImages } & Partial<FilterState>
+  { gallery: Partial<PaginatedImages> } & Partial<FilterState>
 > = (props) => {
   const {
     gallery: galleryInit,
@@ -79,19 +81,19 @@ export const GalleryContextProvider: FunctionComponent<
         if (resetGallery) {
           return galleryDispatch({
             type: GALLERY_ACTIONS.RESET,
-            payload: data!,
+            payload: data!.images,
           });
         }
 
         if (cursor === before) {
           return galleryDispatch({
             type: GALLERY_ACTIONS.PREPEND,
-            payload: data!,
+            payload: data!.images,
           });
         } else {
           return galleryDispatch({
             type: GALLERY_ACTIONS.APPEND,
-            payload: data!,
+            payload: data!.images,
           });
         }
       })
@@ -106,11 +108,14 @@ export const GalleryContextProvider: FunctionComponent<
       );
   }, [filterState]);
 
-  const value: GalleryContextValue = {
-    dispatch: filterDispatch,
-    ...filterState,
-    ...galleryState,
-  };
+  const value: GalleryContextValue = useMemo(
+    () => ({
+      dispatch: filterDispatch,
+      ...filterState,
+      ...galleryState,
+    }),
+    [filterState, galleryState]
+  );
 
   return (
     <GalleryContext.Provider value={value} {...rest}>

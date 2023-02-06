@@ -11,4 +11,5 @@ query lenses {
 }
 `;
 
-export const getLenses = async () => graphQLRequest<Lens[]>(GET_LENSES_QUERY);
+export const getLenses = async () =>
+  graphQLRequest<{ lenses: Lens[] }>(GET_LENSES_QUERY);

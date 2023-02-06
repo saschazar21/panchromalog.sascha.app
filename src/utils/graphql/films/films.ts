@@ -13,4 +13,5 @@ query films {
 }
 `;
 
-export const getFilms = async () => graphQLRequest<Film[]>(GET_FILMS_QUERY);
+export const getFilms = async () =>
+  graphQLRequest<{ films: Film[] }>(GET_FILMS_QUERY);

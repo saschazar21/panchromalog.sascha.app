@@ -30,4 +30,4 @@ query film($name: String!) {
 `;
 
 export const getFilm = async (variables: FilmVariables) =>
-  graphQLRequest<Film>(GET_FILM_QUERY, variables);
+  graphQLRequest<{ film: Film }>(GET_FILM_QUERY, variables);

@@ -66,4 +66,4 @@ query images($camera: String, $film: String, $lens: String, $_size: Int, $_curso
 `;
 
 export const getImages = async (variables: ImagesVariables) =>
-  graphQLRequest<PaginatedImages>(GET_IMAGES_QUERY, variables);
+  graphQLRequest<{ images: PaginatedImages }>(GET_IMAGES_QUERY, variables);

@@ -21,4 +21,4 @@ query camera($model: String!) {
 `;
 
 export const getCamera = async (variables: CameraVariables) =>
-  graphQLRequest<Camera>(GET_CAMERA_QUERY, variables);
+  graphQLRequest<{ camera: Camera }>(GET_CAMERA_QUERY, variables);

@@ -88,4 +88,4 @@ query image($id: String!) {
 `;
 
 export const getImage = async (variables: ImageVariables) =>
-  graphQLRequest<Image>(GET_IMAGE_QUERY, variables);
+  graphQLRequest<{ image: Image }>(GET_IMAGE_QUERY, variables);

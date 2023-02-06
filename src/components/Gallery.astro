@@ -1,15 +1,22 @@
 ---
+import { GalleryContextProvider } from "@utils/context/GalleryContext";
+import { fetchGalleryInit } from "@utils/pages/gallery";
 import { InfiniteGallery } from "./preact/InfiniteGallery";
-import { SuspendedPicture } from "./preact/SuspendedPicture";
+
+const params = new URL(Astro.url).searchParams;
+
+const { camera, cursor, film, gallery, lens } = await fetchGalleryInit(params);
+
+console.log(camera, cursor, film, gallery, lens);
 ---
 
-<!-- <SuspendedPicture
+<GalleryContextProvider
   client:visible
-  src="/api/image/APX_100/IMG_001.png"
-  width={360}
-  height={360}
-  sizes="360px"
-  widths={[360, 720, 1080]}
-  formats={["avif", "webp", "jpeg"]}
-/> -->
-<InfiniteGallery client:visible />
+  camera={camera}
+  cursor={cursor}
+  film={film}
+  gallery={gallery}
+  lens={lens}
+>
+  <InfiniteGallery />
+</GalleryContextProvider>

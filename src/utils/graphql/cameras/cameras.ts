@@ -12,4 +12,4 @@ query cameras {
 `;
 
 export const getCameras = async () =>
-  graphQLRequest<Camera[]>(GET_CAMERAS_QUERY);
+  graphQLRequest<{ cameras: Camera[] }>(GET_CAMERAS_QUERY);
