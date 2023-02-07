@@ -1,11 +1,8 @@
 import { getCamera } from "@utils/graphql/cameras/camera";
 import { getFilm } from "@utils/graphql/films/film";
-import {
-  getImages,
-  ImagesVariables,
-  PaginatedImages,
-} from "@utils/graphql/images/images";
+import { getImages, ImagesVariables } from "@utils/graphql/images/images";
 import { getLens } from "@utils/graphql/lenses/lens";
+import type { GalleryState } from "@utils/hooks/useGallery";
 import type { FilterState } from "@utils/hooks/useGalleryFilters";
 
 const fetchFilters = async (params: URLSearchParams) => {
@@ -19,7 +16,6 @@ const fetchFilters = async (params: URLSearchParams) => {
       )?.data?.camera) ?? null,
     ]);
   }
-
   if (params.has("film")) {
     keys.push([
       "film",
@@ -40,10 +36,10 @@ const fetchFilters = async (params: URLSearchParams) => {
   return keys.filter(([_, val]) => !!val);
 };
 
-export const fetchGalleryInit = async (
+export const parseParams = async (
   params: URLSearchParams
-): Promise<Partial<FilterState> & { gallery: Partial<PaginatedImages> }> => {
-  const filters: FilterState = Object.fromEntries(await fetchFilters(params));
+): Promise<Partial<FilterState> & { gallery: GalleryState | null }> => {
+  const filters = Object.fromEntries(await fetchFilters(params));
 
   const variables: ImagesVariables = Object.assign(
     {},

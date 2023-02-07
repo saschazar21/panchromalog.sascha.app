@@ -1,4 +1,4 @@
-import type { FunctionComponent, VNode } from "preact";
+import type { FunctionComponent } from "preact";
 import { forwardRef, HTMLAttributes } from "preact/compat";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 

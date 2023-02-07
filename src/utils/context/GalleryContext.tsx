@@ -27,7 +27,7 @@ const GalleryContext = createContext<GalleryContextValue | null>(null);
 export const useGalleryContext = () => useContext(GalleryContext);
 
 export const GalleryContextProvider: FunctionComponent<
-  { gallery: Partial<PaginatedImages> } & Partial<FilterState>
+  { gallery: Partial<PaginatedImages> | null } & Partial<FilterState>
 > = (props) => {
   const {
     gallery: galleryInit,
@@ -48,7 +48,7 @@ export const GalleryContextProvider: FunctionComponent<
   );
 
   const [filterState, filterDispatch] = useGalleryFilters(customInitialState);
-  const [galleryState, galleryDispatch] = useGallery(galleryInit);
+  const [galleryState, galleryDispatch] = useGallery(galleryInit ?? {});
 
   useEffect(() => {
     galleryState.error &&

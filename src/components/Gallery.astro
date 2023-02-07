@@ -1,20 +1,13 @@
 ---
 import { GalleryContextProvider } from "@utils/context/GalleryContext";
-import { fetchGalleryInit } from "@utils/pages/gallery";
 import { InfiniteGallery } from "./preact/InfiniteGallery";
+import { parseParams } from "./preact/InfiniteGallery/helpers";
 
 const params = new URL(Astro.url).searchParams;
 
-const { camera, cursor, film, gallery, lens } = await fetchGalleryInit(params);
+const props = await parseParams(params);
 ---
 
-<GalleryContextProvider
-  client:visible
-  camera={camera}
-  cursor={cursor}
-  film={film}
-  gallery={gallery}
-  lens={lens}
->
+<GalleryContextProvider {...props}>
   <InfiniteGallery />
 </GalleryContextProvider>
