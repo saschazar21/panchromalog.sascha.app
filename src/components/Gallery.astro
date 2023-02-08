@@ -1,5 +1,4 @@
 ---
-import { GalleryContextProvider } from "@utils/context/GalleryContext";
 import { InfiniteGallery } from "./preact/InfiniteGallery";
 import { parseParams } from "./preact/InfiniteGallery/helpers";
 
@@ -8,6 +7,4 @@ const params = new URL(Astro.url).searchParams;
 const props = await parseParams(params);
 ---
 
-<GalleryContextProvider {...props}>
-  <InfiniteGallery />
-</GalleryContextProvider>
+<InfiniteGallery client:visible {...props} />

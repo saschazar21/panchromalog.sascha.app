@@ -1,8 +1,15 @@
+import type { PaginatedImages } from "@utils/graphql/images/images";
+import { useGallery } from "@utils/hooks/useGallery";
+import type { Filters } from "@utils/stores/filters";
 import type { FunctionComponent } from "preact";
 import { forwardRef, HTMLAttributes } from "preact/compat";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 
 import styles from "./InfiniteGallery.module.css";
+
+export interface InfiniteGalleryProps extends Partial<Filters> {
+  gallery: PaginatedImages | null;
+}
 
 // https://dev.to/hey_yogini/infinite-scrolling-in-react-with-intersection-observer-22fh
 
@@ -22,7 +29,12 @@ const Square: FunctionComponent<HTMLAttributes<HTMLDivElement>> = forwardRef(
   }
 );
 
-export const InfiniteGallery: FunctionComponent = () => {
+export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
+  gallery: initialGallery,
+  ...rest
+}) => {
+  const value = useGallery(rest);
+
   const ref = useRef<HTMLDivElement>(null);
   const [lastElement, setLastElement] = useState<any>(null);
 

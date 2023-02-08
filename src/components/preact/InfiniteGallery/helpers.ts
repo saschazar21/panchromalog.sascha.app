@@ -2,8 +2,8 @@ import { getCamera } from "@utils/graphql/cameras/camera";
 import { getFilm } from "@utils/graphql/films/film";
 import { getImages, ImagesVariables } from "@utils/graphql/images/images";
 import { getLens } from "@utils/graphql/lenses/lens";
-import type { GalleryState } from "@utils/hooks/useGallery";
-import type { FilterState } from "@utils/hooks/useGalleryFilters";
+import type { Gallery as GalleryState } from "@utils/stores/gallery";
+import type { Filters as FilterState } from "@utils/stores/filters";
 
 const fetchFilters = async (params: URLSearchParams) => {
   const keys = [];
@@ -53,7 +53,6 @@ export const parseParams = async (
 
   return {
     ...filters,
-    ...{ gallery: gallery ?? {} },
     cursor: variables._cursor,
   };
 };

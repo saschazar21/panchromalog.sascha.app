@@ -1,7 +1,7 @@
 import type { Camera } from "@utils/graphql/cameras/camera";
 import type { Film } from "@utils/graphql/films/film";
 import type { Lens } from "@utils/graphql/lenses/lens";
-import { useReducer } from "preact/hooks";
+import { atom } from "nanostores";
 
 export enum FILTER_ACTIONS {
   RESET,
@@ -11,20 +11,20 @@ export enum FILTER_ACTIONS {
   SET_LENS,
 }
 
-export interface FilterState {
+export interface Filters {
   camera: Camera | null;
   cursor: string | null;
   film: Film | null;
-  resetGallery: boolean;
   lens: Lens | null;
+  resetGallery: boolean;
 }
 
 export interface FilterAction {
+  payload: Partial<Filters>;
   type: FILTER_ACTIONS;
-  payload: Partial<FilterState>;
 }
 
-const initialState: FilterState = {
+const initialState = {
   camera: null,
   cursor: null,
   film: null,
@@ -32,46 +32,38 @@ const initialState: FilterState = {
   resetGallery: true,
 };
 
-const reducer = (state: FilterState, action: FilterAction): FilterState => {
+export const filters = atom<Filters>(initialState);
+
+export const mutateFilters = (action: FilterAction) => {
   switch (action.type) {
     case FILTER_ACTIONS.RESET:
-      return initialState;
+      return filters.set(initialState);
     case FILTER_ACTIONS.SET_CAMERA:
-      return {
-        ...state,
+      return filters.set({
+        ...filters.get(),
         camera: action.payload.camera!,
         cursor: null,
         resetGallery: true,
-      };
+      });
     case FILTER_ACTIONS.SET_CURSOR:
-      return {
-        ...state,
+      return filters.set({
+        ...filters.get(),
         cursor: action.payload.cursor!,
         resetGallery: false,
-      };
+      });
     case FILTER_ACTIONS.SET_FILM:
-      return {
-        ...state,
+      return filters.set({
+        ...filters.get(),
         cursor: null,
         film: action.payload.film!,
         resetGallery: true,
-      };
+      });
     case FILTER_ACTIONS.SET_LENS:
-      return {
-        ...state,
+      return filters.set({
+        ...filters.get(),
         cursor: null,
         lens: action.payload.lens!,
         resetGallery: true,
-      };
-    default:
-      return state;
+      });
   }
 };
-
-const init = (custom: Partial<FilterState>): FilterState => ({
-  ...initialState,
-  ...custom,
-});
-
-export const useGalleryFilters = (customInit: Partial<FilterState>) =>
-  useReducer(reducer, customInit, init);
