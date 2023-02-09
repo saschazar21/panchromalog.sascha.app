@@ -1,7 +1,7 @@
 import type { PaginatedImages } from "@utils/graphql/images/images";
 import type { FunctionComponent } from "preact";
 import { useMemo, useRef } from "preact/hooks";
-import { useObservedGallery } from "./useIntersectionObserver";
+import { useObservedGallery } from "./useObservedGallery";
 
 import styles from "./InfiniteGallery.module.css";
 import { SuspendedPicture } from "../SuspendedPicture";

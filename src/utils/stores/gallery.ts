@@ -1,8 +1,4 @@
-import {
-  getImages,
-  ImagesVariables,
-  PaginatedImages,
-} from "@utils/graphql/images/images";
+import type { PaginatedImages } from "@utils/graphql/images/images";
 import { atom } from "nanostores";
 import { Filters, filters } from "./filters";
 
@@ -76,12 +72,14 @@ const galleryUpdate = ({
   lens,
   resetGallery,
 }: Filters) => {
-  const variables: ImagesVariables = Object.assign(
-    {},
-    camera ? { camera: camera.model } : {},
-    cursor ? { _cursor: cursor } : {},
-    film ? { film: film.name } : {},
-    lens ? { lens: lens.model } : {}
+  const params: URLSearchParams = new URLSearchParams(
+    Object.assign(
+      {},
+      camera ? { camera: camera.model } : {},
+      cursor ? { _cursor: cursor } : {},
+      film ? { film: film.name } : {},
+      lens ? { lens: lens.model } : {}
+    )
   );
 
   mutateGallery({
@@ -89,7 +87,12 @@ const galleryUpdate = ({
     type: GALLERY_ACTIONS.SET_LOADING,
   });
 
-  getImages(variables)
+  const search = params.toString();
+  const url = new URL("/api/images", import.meta.env.SITE);
+  url.search = search.toString();
+
+  fetch(url)
+    .then((res) => res.json())
     .then(({ data, errors }) => {
       if (!data || errors?.length) {
         throw new Error(

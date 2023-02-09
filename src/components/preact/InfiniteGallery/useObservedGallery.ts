@@ -3,6 +3,7 @@ import { useFilters } from "@utils/hooks/useFilters";
 import { useGallery } from "@utils/hooks/useGallery";
 import { FILTER_ACTIONS } from "@utils/stores/filters";
 import type { Gallery } from "@utils/stores/gallery";
+import { createRef } from "preact";
 import { Ref, useCallback, useEffect, useMemo, useRef } from "preact/hooks";
 
 const IMAGE_API_PATH = "/api/image/";
@@ -23,6 +24,16 @@ export const useObservedGallery = (
   } = useGallery(galleryInit);
   const refFirst = useRef<HTMLPictureElement | null>(null);
   const refLast = useRef<HTMLPictureElement | null>(null);
+  const observer = createRef<IntersectionObserver>();
+
+  useEffect(() => {
+    if (ref.current) {
+      observer.current = new IntersectionObserver(handleObserve, {
+        ...DEFAULT_SETTINGS,
+        root: ref.current,
+      });
+    }
+  }, [ref]);
 
   const pictures = useMemo(
     () =>
@@ -31,13 +42,13 @@ export const useObservedGallery = (
           alt: meta.alt,
           decoding: "async",
           formats: ["avif", "webp", "jpeg"],
-          height: 123,
+          height: 256,
           id: id,
           loading: "lazy",
           sizes: "(min-width: 940px) 300px, 30vw",
           src: IMAGE_API_PATH + path,
-          width: 123,
-          widths: [123, 256, 512, 600, 900],
+          width: 256,
+          widths: [256, 256, 512, 600, 900],
           ...(i === 0 ? { ref: refFirst } : {}),
           ...(i === data.length - 1 ? { ref: refLast } : {}),
         })
@@ -47,6 +58,7 @@ export const useObservedGallery = (
 
   const handleObserve: IntersectionObserverCallback = useCallback(
     ([first, last]) => {
+      console.log(first, last);
       if (first.isIntersecting) {
         dispatch({
           payload: { cursor: before },
@@ -64,24 +76,17 @@ export const useObservedGallery = (
     []
   );
 
-  const observer = useRef<IntersectionObserver>(
-    new IntersectionObserver(handleObserve, {
-      ...DEFAULT_SETTINGS,
-      root: ref.current,
-    })
-  );
-
   useEffect(() => {
-    if (observer.current && refFirst.current && refLast.current) {
-      observer.current.observe(refFirst.current);
-      observer.current.observe(refLast.current);
+    if (observer.current) {
+      refFirst.current && observer.current.observe(refFirst.current);
+      refLast.current && observer.current.observe(refLast.current);
 
       return () => {
-        observer.current.unobserve(refFirst.current!);
-        observer.current.unobserve(refLast.current!);
+        refFirst.current && observer.current!.unobserve(refFirst.current);
+        refLast.current && observer.current!.unobserve(refLast.current);
       };
     }
   }, [observer, refFirst, refLast]);
 
-  return pictures;
+  return new Array(25).fill(pictures[0]).map((pic, i) => ({ ...pic, id: i }));
 };

@@ -1,6 +1,5 @@
 import { getCamera } from "@utils/graphql/cameras/camera";
 import { getFilm } from "@utils/graphql/films/film";
-import { getImages, ImagesVariables } from "@utils/graphql/images/images";
 import { getLens } from "@utils/graphql/lenses/lens";
 import type { Gallery as GalleryState } from "@utils/stores/gallery";
 import type { Filters as FilterState } from "@utils/stores/filters";
@@ -41,19 +40,15 @@ export const parseParams = async (
 ): Promise<Partial<FilterState> & { gallery: GalleryState | null }> => {
   const filters = Object.fromEntries(await fetchFilters(params));
 
-  const variables: ImagesVariables = Object.assign(
-    {},
-    filters.hasOwnProperty("camera") ? { camera: filters?.camera?.model } : {},
-    filters.hasOwnProperty("film") ? { film: filters?.film?.name } : {},
-    filters.hasOwnProperty("lens") ? { lens: filters?.lens?.model } : {},
-    params.has("cursor") ? { _cursor: params.get("cursor") as string } : {}
-  );
+  const search = params.toString();
+  const url = new URL("/api/images", import.meta.env.SITE);
+  url.search = search.toString();
 
-  const gallery = await getImages(variables).then((res) => res.data?.images);
+  const { data: gallery, errors } = await fetch(url).then((res) => res.json());
 
   return {
     ...filters,
-    gallery,
-    cursor: variables._cursor,
+    gallery: gallery?.images ?? { error: new Error(errors[0].message) },
+    cursor: params.get("cursor"),
   };
 };
