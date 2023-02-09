@@ -1,18 +1,16 @@
 import { useStore } from "@nanostores/preact";
-import { Filters, filters as filterStore } from "@utils/stores/filters";
-import { gallery as galleryStore } from "@utils/stores/gallery";
+import { Gallery, gallery as galleryStore } from "@utils/stores/gallery";
 import { useEffect } from "preact/hooks";
 
-export const useGallery = (initialFilters: Partial<Filters> = {}) => {
-  const filters = useStore(filterStore);
+export const useGallery = (galleryInit: Partial<Gallery> = {}) => {
   const gallery = useStore(galleryStore);
 
   useEffect(() => {
-    filterStore.set({ ...filterStore.get(), ...initialFilters });
+    galleryStore.set({
+      ...galleryStore.get(),
+      ...galleryInit,
+    });
   }, []);
 
-  return {
-    ...filters,
-    ...gallery,
-  };
+  return gallery;
 };

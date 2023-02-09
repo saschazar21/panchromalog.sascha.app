@@ -1,13 +1,12 @@
 import type { PaginatedImages } from "@utils/graphql/images/images";
 import { useGallery } from "@utils/hooks/useGallery";
-import type { Filters } from "@utils/stores/filters";
 import type { FunctionComponent } from "preact";
 import { forwardRef, HTMLAttributes } from "preact/compat";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 
 import styles from "./InfiniteGallery.module.css";
 
-export interface InfiniteGalleryProps extends Partial<Filters> {
+export interface InfiniteGalleryProps {
   gallery: PaginatedImages | null;
 }
 
@@ -30,10 +29,9 @@ const Square: FunctionComponent<HTMLAttributes<HTMLDivElement>> = forwardRef(
 );
 
 export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
-  gallery: initialGallery,
-  ...rest
+  gallery: galleryInit,
 }) => {
-  const value = useGallery(rest);
+  const value = useGallery(galleryInit ?? {});
 
   const ref = useRef<HTMLDivElement>(null);
   const [lastElement, setLastElement] = useState<any>(null);

@@ -53,6 +53,7 @@ export const parseParams = async (
 
   return {
     ...filters,
+    gallery,
     cursor: variables._cursor,
   };
 };

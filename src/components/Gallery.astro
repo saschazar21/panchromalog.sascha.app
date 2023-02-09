@@ -4,7 +4,7 @@ import { parseParams } from "./preact/InfiniteGallery/helpers";
 
 const params = new URL(Astro.url).searchParams;
 
-const props = await parseParams(params);
+const { gallery, ...filters } = await parseParams(params);
 ---
 
-<InfiniteGallery client:visible {...props} />
+<InfiniteGallery client:visible gallery={gallery} />
