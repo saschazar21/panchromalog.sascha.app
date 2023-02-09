@@ -14,8 +14,7 @@ export interface InfiniteGalleryProps {
 export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
   gallery,
 }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const data = useObservedGallery(ref, gallery ?? {});
+  const data = useObservedGallery(gallery ?? {});
 
   const pictures = useMemo(
     () =>
@@ -27,9 +26,5 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
     [data]
   );
 
-  return (
-    <section ref={ref} className={styles.gallery}>
-      {pictures}
-    </section>
-  );
+  return <section className={styles.gallery}>{pictures}</section>;
 };
