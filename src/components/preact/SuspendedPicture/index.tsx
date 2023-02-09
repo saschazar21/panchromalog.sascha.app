@@ -1,11 +1,11 @@
 import type { FunctionComponent } from "preact";
-import { useCallback, useMemo } from "preact/hooks";
-import type { HTMLAttributes } from "preact/compat";
+import { Ref, useCallback, useMemo } from "preact/hooks";
+import { forwardRef, HTMLAttributes } from "preact/compat";
 import { SuspendedImage } from "@components/preact/SuspendedImage";
 import { useImageLink } from "@utils/hooks/useImageLink";
 
 export interface SuspendedPictureProps
-  extends HTMLAttributes<HTMLImageElement> {
+  extends Omit<HTMLAttributes<HTMLImageElement>, "ref"> {
   formats?: Array<"avif" | "webp" | "jpeg">;
   height: number;
   sizes: string;
@@ -14,9 +14,10 @@ export interface SuspendedPictureProps
   widths?: number[];
 }
 
-export const SuspendedPicture: FunctionComponent<SuspendedPictureProps> = (
-  props
-) => {
+export const SuspendedPicture = forwardRef<
+  HTMLPictureElement,
+  SuspendedPictureProps
+>((props, ref) => {
   const { formats = ["jpeg"], sizes, widths = [], ...rest } = props;
 
   const sourceSet = useCallback(
@@ -52,9 +53,9 @@ export const SuspendedPicture: FunctionComponent<SuspendedPictureProps> = (
   );
 
   return (
-    <picture>
+    <picture ref={ref}>
       {sources}
       <SuspendedImage {...rest} />
     </picture>
   );
-};
+});

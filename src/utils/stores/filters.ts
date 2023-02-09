@@ -35,32 +35,36 @@ const initialState = {
 export const filters = atom<Filters>(initialState);
 
 export const mutateFilters = (action: FilterAction) => {
+  const state = filters.get();
   switch (action.type) {
     case FILTER_ACTIONS.RESET:
-      return filters.set(initialState);
+      return filters.set({
+        ...initialState,
+        ...action.payload,
+      });
     case FILTER_ACTIONS.SET_CAMERA:
       return filters.set({
-        ...filters.get(),
+        ...state,
         camera: action.payload.camera!,
         cursor: null,
         resetGallery: true,
       });
     case FILTER_ACTIONS.SET_CURSOR:
       return filters.set({
-        ...filters.get(),
+        ...state,
         cursor: action.payload.cursor!,
         resetGallery: false,
       });
     case FILTER_ACTIONS.SET_FILM:
       return filters.set({
-        ...filters.get(),
+        ...state,
         cursor: null,
         film: action.payload.film!,
         resetGallery: true,
       });
     case FILTER_ACTIONS.SET_LENS:
       return filters.set({
-        ...filters.get(),
+        ...state,
         cursor: null,
         lens: action.payload.lens!,
         resetGallery: true,

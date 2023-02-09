@@ -25,6 +25,7 @@ query images($camera: String, $film: String, $lens: String, $_size: Int, $_curso
         created_at
         description
         meta {
+            alt
             aperture
             camera {
                 model
@@ -45,9 +46,9 @@ query images($camera: String, $film: String, $lens: String, $_size: Int, $_curso
             }
             focal_length
             geo {
-                description
                 latitude
                 longitude
+                place
             }
             height
             lens {

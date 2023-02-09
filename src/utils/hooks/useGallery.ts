@@ -1,16 +1,26 @@
 import { useStore } from "@nanostores/preact";
-import { Gallery, gallery as galleryStore } from "@utils/stores/gallery";
+import {
+  Gallery,
+  gallery,
+  GALLERY_ACTIONS,
+  mutateGallery,
+} from "@utils/stores/gallery";
 import { useEffect } from "preact/hooks";
 
-export const useGallery = (galleryInit: Partial<Gallery> = {}) => {
-  const gallery = useStore(galleryStore);
+export const useGallery = (galleryInit?: Partial<Gallery>) => {
+  const state = useStore(gallery);
+  const dispatch = mutateGallery;
 
   useEffect(() => {
-    galleryStore.set({
-      ...galleryStore.get(),
-      ...galleryInit,
-    });
+    galleryInit &&
+      dispatch({
+        payload: galleryInit,
+        type: GALLERY_ACTIONS.RESET,
+      });
   }, []);
 
-  return gallery;
+  return {
+    dispatch,
+    state,
+  };
 };

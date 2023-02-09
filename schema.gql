@@ -21,12 +21,13 @@ input LensInput {
 }
 
 input GeoInput @embedded {
-  description: String!
   latitude: Float!
   longitude: Float!
+  place: String!
 }
 
 input MetaInput @embedded {
+  alt: String!
   aperture: Float!
   camera: String!
   date: Time!
@@ -73,12 +74,13 @@ type Developer @embedded {
 }
 
 type Geo @embedded {
-  description: String
   latitude: Float
   longitude: Float
+  place: String
 }
 
 type Meta @embedded {
+  alt: String
   aperture: Float
   camera: Camera @relation
   date: Time

@@ -9,12 +9,13 @@ export interface Developer {
 }
 
 export interface Geo {
-  description?: string;
   latitude: string;
   longitude: string;
+  place?: string;
 }
 
 export interface ImageMeta {
+  alt: string;
   aperture: number;
   camera: Camera;
   date: string;
@@ -48,6 +49,7 @@ query image($id: String!) {
       created_at
       description
       meta {
+          alt
           aperture
           camera {
               model
@@ -68,9 +70,9 @@ query image($id: String!) {
           }
           focal_length
           geo {
-              description
               latitude
               longitude
+              place
           }
           height
           lens {

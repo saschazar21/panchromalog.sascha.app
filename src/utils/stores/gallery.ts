@@ -35,6 +35,7 @@ const initialState: Gallery = {
 export const gallery = atom<Gallery>(initialState);
 
 export const mutateGallery = (action: GalleryAction) => {
+  const state = gallery.get();
   switch (action.type) {
     case GALLERY_ACTIONS.RESET:
       return gallery.set({
@@ -43,15 +44,17 @@ export const mutateGallery = (action: GalleryAction) => {
       });
     case GALLERY_ACTIONS.APPEND:
       return gallery.set({
-        ...gallery.get(),
+        ...state,
         ...action.payload,
-        data: [...gallery.get().data, ...action.payload.data!],
+        before: state.before,
+        data: [...state.data, ...action.payload.data!],
       });
     case GALLERY_ACTIONS.PREPEND:
       return gallery.set({
-        ...gallery.get(),
+        ...state,
         ...action.payload,
-        data: [...action.payload.data!, ...gallery.get().data],
+        after: state.after,
+        data: [...action.payload.data!, ...state.data],
       });
     case GALLERY_ACTIONS.SET_ERROR:
       return gallery.set({
@@ -60,7 +63,7 @@ export const mutateGallery = (action: GalleryAction) => {
       });
     case GALLERY_ACTIONS.SET_LOADING:
       return gallery.set({
-        ...gallery.get(),
+        ...state,
         isLoading: action.payload.isLoading!,
       });
   }
