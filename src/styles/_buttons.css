@@ -1,0 +1,10 @@
+button,
+.button {
+  border-radius: var(--border-radius-m);
+  padding: var(--space-m) var(--space-l);
+  text-decoration: none;
+  letter-spacing: var(--ls-extended);
+  background-color: var(--color-bg-muted);
+  color: var(--text);
+  cursor: pointer;
+}

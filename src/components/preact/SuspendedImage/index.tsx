@@ -9,18 +9,20 @@ import styles from "./SuspendedImage.module.css";
 export interface SuspendedImageProps extends HTMLAttributes<HTMLImageElement> {
   height: number;
   width: number;
+  isSuspensionPrevented?: boolean;
 }
 
 export const SuspendedImage: FunctionComponent<SuspendedImageProps> = ({
   className: customClassName,
   height,
+  isSuspensionPrevented,
   src,
   width,
   ...rest
 }) => {
   const ref = useRef<HTMLImageElement>(null);
 
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(!!isSuspensionPrevented);
 
   const href = useImageLink({
     h: height,

@@ -63,12 +63,20 @@ html {
 
 body {
   box-sizing: border-box;
-  margin: 0 var(--space-m);
+  margin: 0;
   max-width: var(--content-width);
 }
 
 main {
   margin: var(--space-l) 0;
+}
+
+img,
+picture {
+  display: block;
+  max-height: 100%;
+  max-width: 100%;
+  background-color: transparent;
 }
 
 ::selection {
@@ -99,6 +107,12 @@ main {
 }
 
 @media screen and (min-width: 768px) {
+  body {
+    margin: 0 var(--space-l);
+  }
+}
+
+@media screen and (min-width: 940px) {
   body {
     margin: 0 auto;
   }

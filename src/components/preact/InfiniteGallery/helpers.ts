@@ -1,54 +1,25 @@
-import { getCamera } from "@utils/graphql/cameras/camera";
-import { getFilm } from "@utils/graphql/films/film";
-import { getLens } from "@utils/graphql/lenses/lens";
-import type { Gallery as GalleryState } from "@utils/stores/gallery";
-import type { Filters as FilterState } from "@utils/stores/filters";
+import type { SuspendedPictureProps } from "@components/preact/SuspendedPicture";
+import type { Image } from "@utils/graphql/images/image";
 
-const fetchFilters = async (params: URLSearchParams) => {
-  const keys = [];
+export const getImageUrl = (path: string) => {
+  const p = path.startsWith("/") ? path : "/" + path;
 
-  if (params.has("camera")) {
-    keys.push([
-      "camera",
-      (await (
-        await getCamera({ model: params.get("camera") as string })
-      )?.data?.camera) ?? null,
-    ]);
-  }
-  if (params.has("film")) {
-    keys.push([
-      "film",
-      (await (
-        await getFilm({ name: params.get("film") as string })
-      )?.data?.film) ?? null,
-    ]);
-  }
-  if (params.has("lens")) {
-    keys.push([
-      "lens",
-      (await (
-        await getLens({ model: params.get("lens") as string })
-      )?.data?.lens) ?? null,
-    ]);
-  }
-
-  return keys.filter(([_, val]) => !!val);
+  return new URL(`/api/image${p}`, import.meta.env.SITE).toString();
 };
 
-export const parseParams = async (
-  params: URLSearchParams
-): Promise<Partial<FilterState> & { gallery: GalleryState | null }> => {
-  const filters = Object.fromEntries(await fetchFilters(params));
-
-  const search = params.toString();
-  const url = new URL("/api/images", import.meta.env.SITE);
-  url.search = search.toString();
-
-  const { data: gallery, errors } = await fetch(url).then((res) => res.json());
-
-  return {
-    ...filters,
-    gallery: gallery?.images ?? { error: new Error(errors[0].message) },
-    cursor: params.get("cursor"),
-  };
-};
+export const mapImageDataToProps = ({
+  id,
+  meta,
+  path,
+}: Image): SuspendedPictureProps => ({
+  alt: meta.alt,
+  decoding: "async",
+  formats: ["avif", "webp", "jpeg"],
+  height: 123,
+  id,
+  loading: "lazy",
+  sizes: "(min-width: 940px) 300px, 30vw",
+  src: getImageUrl(path),
+  width: 123,
+  widths: [123, 256, 512, 600, 900],
+});

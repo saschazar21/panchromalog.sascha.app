@@ -4,8 +4,7 @@ import { useGallery } from "@utils/hooks/useGallery";
 import { FILTER_ACTIONS } from "@utils/stores/filters";
 import type { Gallery } from "@utils/stores/gallery";
 import { useCallback, useEffect, useMemo, useRef } from "preact/hooks";
-
-const IMAGE_API_PATH = "/api/image/";
+import { mapImageDataToProps } from "./helpers";
 
 const DEFAULT_SETTINGS: Partial<IntersectionObserverInit> = {
   root: null,
@@ -13,10 +12,11 @@ const DEFAULT_SETTINGS: Partial<IntersectionObserverInit> = {
   threshold: 0.9,
 };
 
+// https://dev.to/hey_yogini/infinite-scrolling-in-react-with-intersection-observer-22fh
 export const useObservedGallery = (galleryInit?: Partial<Gallery>) => {
   const { dispatch } = useFilters();
   const {
-    state: { after, before, data },
+    state: { after, before, data, mutations },
   } = useGallery(galleryInit);
   const refFirst = useRef<HTMLPictureElement>(null);
   const refLast = useRef<HTMLPictureElement>(null);
@@ -43,17 +43,9 @@ export const useObservedGallery = (galleryInit?: Partial<Gallery>) => {
   const pictures = useMemo(
     () =>
       data.map(
-        ({ id, meta, path }, i): SuspendedPictureProps => ({
-          alt: meta.alt,
-          decoding: "async",
-          formats: ["avif", "webp", "jpeg"],
-          height: 256,
-          id: id,
-          loading: "lazy",
-          sizes: "(min-width: 940px) 300px, 30vw",
-          src: IMAGE_API_PATH + path,
-          width: 256,
-          widths: [256, 256, 512, 600, 900],
+        (image, i): SuspendedPictureProps => ({
+          ...mapImageDataToProps(image),
+          loading: mutations ? "lazy" : "eager",
           ...(i === 0 ? { ref: refFirst } : {}),
           ...(i === data.length - 1 ? { ref: refLast } : {}),
         })

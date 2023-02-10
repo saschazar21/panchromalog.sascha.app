@@ -18,6 +18,7 @@ export interface GalleryAction {
 export interface Gallery extends PaginatedImages {
   error: Error | null;
   isLoading: boolean;
+  mutations: number;
 }
 
 const initialState: Gallery = {
@@ -26,6 +27,7 @@ const initialState: Gallery = {
   data: [],
   error: null,
   isLoading: false,
+  mutations: 0,
 };
 
 export const gallery = atom<Gallery>(initialState);
@@ -44,6 +46,7 @@ export const mutateGallery = (action: GalleryAction) => {
         ...action.payload,
         before: state.before,
         data: [...state.data, ...action.payload.data!],
+        mutations: ++state.mutations,
       });
     case GALLERY_ACTIONS.PREPEND:
       return gallery.set({
@@ -51,6 +54,7 @@ export const mutateGallery = (action: GalleryAction) => {
         ...action.payload,
         after: state.after,
         data: [...action.payload.data!, ...state.data],
+        mutations: ++state.mutations,
       });
     case GALLERY_ACTIONS.SET_ERROR:
       return gallery.set({
@@ -76,7 +80,7 @@ const galleryUpdate = ({
     Object.assign(
       {},
       camera ? { camera: camera.model } : {},
-      cursor ? { _cursor: cursor } : {},
+      cursor ? { cursor: cursor } : {},
       film ? { film: film.name } : {},
       lens ? { lens: lens.model } : {}
     )

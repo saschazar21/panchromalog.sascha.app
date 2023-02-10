@@ -2,15 +2,18 @@
 import { pwaInfo } from "virtual:pwa-info";
 import SEO from "@components/SEO.astro";
 import Header from "@components/Header.astro";
+import pkg from "../../package.json";
 
 import "gardevoir/dist/index.min.css";
 import "@styles/_base.css";
+import "@styles/_buttons.css";
 ---
 
 <html lang="en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content={pkg.color} />
     <link
       rel="preload"
       href="/fonts/Cabin-VariableFont_wdth,wght.ttf"
