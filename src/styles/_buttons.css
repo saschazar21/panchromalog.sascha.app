@@ -1,10 +1,19 @@
 button,
 .button {
+  --link-color: var(--color-bg-muted);
+
   border-radius: var(--border-radius-m);
   padding: var(--space-m) var(--space-l);
   text-decoration: none;
   letter-spacing: var(--ls-extended);
-  background-color: var(--color-bg-muted);
-  color: var(--text);
+  background-color: var(--color-text);
   cursor: pointer;
+}
+
+button:hover,
+button:focus,
+.button:hover,
+.button:focus {
+  --link-color: var(--color-bg-muted);
+  outline-color: var(--color-text);
 }

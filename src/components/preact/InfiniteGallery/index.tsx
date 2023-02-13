@@ -44,22 +44,23 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
   const className = classNames("button", styles.cursor);
 
   return (
-    <>
-      <noscript className={styles.noscript}>
-        {gallery?.before && (
-          <a className={className} href={"/?cursor=" + gallery.before}>
-            Load previous images
-          </a>
-        )}
+    <div className={styles.container}>
+      {gallery?.before && (
+        <a className={className} href={"/?cursor=" + gallery.before}>
+          Load previous images
+        </a>
+      )}
+      <noscript>
         <section className={styles.gallery}>{noScriptImages}</section>
-        {gallery?.after && (
-          <a className={className} href={"/?cursor=" + gallery.after}>
-            Load next images
-          </a>
-        )}
       </noscript>
       <section className={styles.gallery}>{pictures}</section>
-      <span className={styles.end}>This is the end.</span>
-    </>
+      {gallery?.after ? (
+        <a className={className} href={"/?cursor=" + gallery.after}>
+          Load next images
+        </a>
+      ) : (
+        <span className={styles.end}>This is the end.</span>
+      )}
+    </div>
   );
 };
