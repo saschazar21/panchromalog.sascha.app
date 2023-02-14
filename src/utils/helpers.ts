@@ -35,6 +35,12 @@ const fetchFilters = async (params: URLSearchParams) => {
   return keys.filter(([_, val]) => !!val);
 };
 
+export const getImageUrl = (path: string) => {
+  const p = path.startsWith("/") ? path : "/" + path;
+
+  return new URL(`/api/image${p}`, import.meta.env.SITE).toString();
+};
+
 export const parseParams = async (
   params: URLSearchParams
 ): Promise<Partial<FilterState> & { gallery: GalleryState | null }> => {

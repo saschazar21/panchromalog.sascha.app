@@ -1,5 +1,4 @@
-import type { FunctionComponent } from "preact";
-import { Ref, useCallback, useMemo } from "preact/hooks";
+import { useCallback, useMemo } from "preact/hooks";
 import { forwardRef, HTMLAttributes } from "preact/compat";
 import { SuspendedImage } from "@components/preact/SuspendedImage";
 import { useImageLink } from "@utils/hooks/useImageLink";

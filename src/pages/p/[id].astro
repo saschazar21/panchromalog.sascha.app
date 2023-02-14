@@ -1,0 +1,18 @@
+---
+import { ImageDetail } from "@components/preact/ImageDetail";
+import Profile from "@components/Profile.astro";
+import Base from "@layouts/Base.astro";
+
+const id = Astro.params.id;
+
+const {
+  data: { image },
+} = await fetch(new URL("/api/images/" + id, Astro.site)).then((res) =>
+  res.json()
+);
+---
+
+<Base>
+  <Profile />
+  <ImageDetail {...image} isSuspensionPrevented />
+</Base>

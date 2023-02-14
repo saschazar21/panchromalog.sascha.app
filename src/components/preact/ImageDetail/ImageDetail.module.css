@@ -1,0 +1,121 @@
+.container {
+  --gap: var(--space-l);
+
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 580px;
+}
+
+.container > * {
+  flex: 1 1 auto;
+}
+
+.container > picture {
+  width: 100%;
+  height: auto;
+  max-width: 580px;
+}
+
+.picture {
+  height: auto;
+  height: 100%;
+  width: 100%;
+  max-width: 580px;
+  aspect-ratio: 1;
+}
+
+.info {
+  --bg-color: var(--color-bg-muted);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.info > section {
+  padding: var(--gap);
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--gap) calc(var(--gap) * 2);
+  font-family: var(--font-mono);
+  text-align: center;
+}
+
+.content {
+  flex: 1 0 auto;
+  border-top: var(--border-width-s) solid var(--color-bg-muted);
+  border-bottom: var(--border-width-s) solid var(--color-bg-muted);
+}
+
+.content > time {
+  --letter-spacing: var(--ls-extended);
+
+  display: block;
+  font-size: var(--font-size-s);
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.content > h2 {
+  font-family: var(--font-sans);
+}
+
+.extra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--gap);
+}
+
+.pill {
+  flex: 1 1 auto;
+  display: inline-flex;
+  flex-direction: column;
+  border-radius: var(--border-radius-s);
+  padding: var(--gap);
+  background-color: var(--bg-color);
+  text-decoration: none;
+}
+
+.pill > small {
+  color: var(--color-text-muted);
+}
+
+@media screen and (min-width: 580px) {
+  .container {
+    box-shadow: 0 0 15px -5px var(--color-shadow);
+    border: var(--border-width-s) solid var(--color-shadow);
+  }
+
+  .info {
+    border-top: var(--border-width-s) solid var(--color-shadow);
+  }
+}
+
+@media screen and (min-width: 940px) {
+  .container {
+    --gap: var(--space-xl);
+
+    flex-direction: row;
+    max-height: calc(580px + var(--border-width-s) * 2);
+    max-width: 100%;
+  }
+
+  .info {
+    border-top: none;
+    border-left: var(--border-width-s) solid var(--color-shadow);
+  }
+
+  .meta {
+    padding: var(--gap) calc(var(--space-l) * 2);
+    font-size: var(--font-size-h5);
+  }
+
+  .extra {
+    --gap: var(--space-l);
+  }
+}

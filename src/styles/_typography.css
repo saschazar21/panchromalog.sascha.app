@@ -1,10 +1,10 @@
-/* @font-face {
+@font-face {
   font-family: "Cabin";
   font-weight: 400 600;
   src: url("/fonts/Cabin-VariableFont_wdth,wght.ttf") format("truetype");
   font-display: swap;
   font-style: normal;
-} */
+}
 
 @font-face {
   font-family: "Linowrite";
@@ -57,7 +57,7 @@ html {
 body {
   -moz-osx-font-smoothing: auto;
   -webkit-font-smoothing: antialiased;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-weight: 400;
   font-variation-settings: "wdth" 400;
   line-height: var(--line-height, var(--lh-normal));
@@ -111,14 +111,15 @@ a,
 a:hover,
 a:focus,
 a:visited {
-  --color: var(--link-color, var(--color-primary));
+  --color: var(--link-color, var(--color-text));
 
   position: relative;
   color: var(--color);
 }
 
 strong {
-  font-weight: 700;
+  font-weight: 600;
+  font-variation-settings: "wdth" 600;
 }
 
 p {
@@ -139,17 +140,6 @@ ul[data-horizontal] {
 [role="alert"] {
   background-color: var(--color-bg-error);
   color: var(--color-error);
-}
-
-[data-logout] {
-  --link-color: var(--color-text);
-
-  display: block;
-  padding: var(--space-l);
-  margin: calc(var(--space-l) * -1);
-  background-color: var(--color-secondary);
-  text-decoration: none;
-  letter-spacing: var(--ls-extended);
 }
 
 @media print {
