@@ -14,7 +14,7 @@ export interface ImageDetailProps extends Image {
 }
 
 export const ImageDetail: FunctionComponent<ImageDetailProps> = (props) => {
-  const { description, id, meta, path, title } = props;
+  const { description, meta, path, title } = props;
 
   const [dateTime, date] = useMemo(() => {
     const d = new Date(meta.date);

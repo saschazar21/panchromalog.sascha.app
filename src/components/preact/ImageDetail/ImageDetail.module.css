@@ -4,8 +4,10 @@
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+  height: 100%;
   width: 100%;
   max-width: 580px;
+  background-color: var(--color-bg-light);
 }
 
 .container > * {
@@ -61,7 +63,8 @@
 }
 
 .content > h2 {
-  font-family: var(--font-sans);
+  margin: var(--gap) 0 var(--space-m);
+  font-size: var(--font-size-h4);
 }
 
 .extra {
