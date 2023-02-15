@@ -1,10 +1,10 @@
 import type { SuspendedPictureProps } from "@components/preact/SuspendedPicture";
+import { mapImageDataToProps } from "@utils/helpers";
 import { useFilters } from "@utils/hooks/useFilters";
 import { useGallery } from "@utils/hooks/useGallery";
 import { FILTER_ACTIONS } from "@utils/stores/filters";
 import type { Gallery } from "@utils/stores/gallery";
 import { useCallback, useEffect, useMemo, useRef } from "preact/hooks";
-import { mapImageDataToProps } from "./helpers";
 
 const DEFAULT_SETTINGS: Partial<IntersectionObserverInit> = {
   root: null,
@@ -45,7 +45,11 @@ export const useObservedGallery = (galleryInit?: Partial<Gallery>) => {
       data.map(
         (image, i): SuspendedPictureProps => ({
           ...mapImageDataToProps(image),
+          height: 123,
           loading: mutations ? "lazy" : "eager",
+          sizes: "(min-width: 940px) 300px, 30vw",
+          width: 123,
+          widths: [123, 256, 512, 600, 900],
           ...(i === 0 ? { ref: refFirst } : {}),
           ...(i === data.length - 1 ? { ref: refLast } : {}),
         })

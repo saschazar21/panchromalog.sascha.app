@@ -1,4 +1,7 @@
-if (!import.meta.env.FAUNA_KEY || !import.meta.env.FAUNA_GRAPHQL_HOST) {
+if (
+  import.meta.env.PROD &&
+  (!import.meta.env.FAUNA_KEY || !import.meta.env.FAUNA_GRAPHQL_HOST)
+) {
   throw new Error(
     "ERROR: FAUNA_KEY and/or FAUNA_GRAPHQL_HOST env not defined!"
   );

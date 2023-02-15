@@ -1,5 +1,7 @@
+import type { SuspendedPictureProps } from "@components/preact/SuspendedPicture";
 import { getCamera } from "@utils/graphql/cameras/camera";
 import { getFilm } from "@utils/graphql/films/film";
+import type { Image } from "@utils/graphql/images/image";
 import { getLens } from "@utils/graphql/lenses/lens";
 import type { Gallery as GalleryState } from "@utils/stores/gallery";
 import type { Filters as FilterState } from "@utils/stores/filters";
@@ -40,6 +42,22 @@ export const getImageUrl = (path: string) => {
 
   return new URL(`/api/image${p}`, import.meta.env.SITE).toString();
 };
+
+export const mapImageDataToProps = ({
+  id,
+  meta,
+  path,
+}: Image): Omit<
+  SuspendedPictureProps,
+  "height" | "sizes" | "width" | "widths"
+> => ({
+  alt: meta.alt,
+  decoding: "async",
+  formats: ["avif", "webp", "jpeg"],
+  id,
+  loading: "lazy",
+  src: getImageUrl(path),
+});
 
 export const parseParams = async (
   params: URLSearchParams
