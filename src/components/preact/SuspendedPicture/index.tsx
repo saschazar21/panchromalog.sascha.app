@@ -7,7 +7,6 @@ export interface SuspendedPictureProps
   extends Omit<HTMLAttributes<HTMLImageElement>, "ref"> {
   formats?: Array<"avif" | "webp" | "jpeg">;
   height: number;
-  isSuspensionPrevented?: boolean;
   sizes: string;
   src: string;
   width: number;
@@ -53,7 +52,7 @@ export const SuspendedPicture = forwardRef<
   );
 
   return (
-    <picture ref={ref}>
+    <picture ref={ref} style={{ "--bg-color": "var(--color-shadow)" }}>
       {sources}
       <SuspendedImage {...rest} />
     </picture>

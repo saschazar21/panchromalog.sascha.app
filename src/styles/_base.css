@@ -81,7 +81,7 @@ picture {
   display: block;
   max-height: 100%;
   max-width: 100%;
-  background-color: transparent;
+  background-color: var(--bg-color, transparent);
 }
 
 ::selection {

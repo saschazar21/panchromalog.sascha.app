@@ -1,17 +1,28 @@
 ---
 import { ImageDetail } from "@components/preact/ImageDetail";
 import Default from "@layouts/Default.astro";
-import { mapImageDataToProps } from "@utils/helpers";
+import ErrorPage from "../404.astro";
 
 const id = Astro.params.id;
 
-const {
-  data: { image },
-} = await fetch(new URL("/api/images/" + id, Astro.site)).then((res) =>
-  res.json()
-);
+const { data, errors } = await fetch(
+  new URL("/api/images/" + id, Astro.site)
+).then((res) => res.json());
+
+if (!data?.image || errors?.length) {
+  Astro.response.status = 404;
+  Astro.response.statusText = "This image could not be found.";
+}
+
+const { image } = data ?? {};
 ---
 
-<Default>
-  <ImageDetail {...image} isSuspensionPrevented />
-</Default>
+{
+  !image ? (
+    <ErrorPage />
+  ) : (
+    <Default>
+      <ImageDetail client:visible {...image} />
+    </Default>
+  )
+}

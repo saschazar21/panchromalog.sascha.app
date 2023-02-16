@@ -45,7 +45,6 @@ export const ImageDetail: FunctionComponent<ImageDetailProps> = (props) => {
       src: getImageUrl(path),
       width: 375,
       widths: [375, 580, 750, 940, 1160],
-      ...(props.isSuspensionPrevented ? { isSuspensionPrevented: true } : {}),
     }),
     [meta, path]
   );

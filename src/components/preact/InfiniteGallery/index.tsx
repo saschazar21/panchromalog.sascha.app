@@ -27,7 +27,6 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
             <SuspendedPictureLink
               {...mapImageDataToProps(img)}
               height={123}
-              isSuspensionPrevented={!!import.meta.env.SSR}
               key={img.id}
               sizes="(min-width: 940px) 300px, 30vw"
               width={123}
