@@ -3,52 +3,40 @@ import { SEO } from "astro-seo";
 import { manifest } from "@utils/manifest";
 import pkg from "../../package.json";
 
-const { description, title } = Astro.props;
+const { alt, description, image, title } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <SEO
-  title={title || manifest.name}
+  title={title ?? manifest.name}
   charset="utf-8"
-  description={manifest.description}
+  description={description ?? manifest.description}
   canonical={canonicalURL.toString()}
   nofollow={pkg.private}
   noindex={pkg.private}
-  openGraph={{
-    basic: {
-      title: title || manifest.name,
-      type: "website",
-      image: "https://via.placeholder.com/1200x600.jpg", // TODO: change!
-      url: canonicalURL.toString(),
-    },
-    optional: {
-      description: description || manifest.description,
-      siteName: manifest.name,
-    },
-    image: {
-      // url?: string;
-      // secureUrl?: string;
-      // type?: string;
-      // width?: number;
-      // height?: number;
-      // alt?: string;
-    },
-    // article?: {
-    //   publishedTime?: string;
-    //   modifiedTime?: string;
-    //   expirationTime?: string;
-    //   authors?: string[];
-    //   section?: string;
-    //   tags?: string[];
-    // },
-  }}
+  openGraph={image
+    ? {
+        basic: {
+          title: title ?? manifest.name,
+          type: "website",
+          image,
+        },
+        image: {
+          secureUrl: image,
+          type: "image/jpeg",
+          width: 1200,
+          height: 600,
+          alt,
+        },
+      }
+    : undefined}
   twitter={{
     card: "summary_large_image",
     site: Astro.site?.toString(),
     creator: "@saschazar",
     title: title || manifest.name,
     description: description || manifest.description,
-    // image?: string;
-    // imageAlt?: string;
+    image,
+    imageAlt: alt,
   }}
 />

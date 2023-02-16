@@ -1,9 +1,11 @@
 ---
 import Profile from "@components/Profile.astro";
 import Base from "./Base.astro";
+
+const props = Astro.props;
 ---
 
-<Base>
+<Base {...props}>
   <Profile />
   <main>
     <slot />

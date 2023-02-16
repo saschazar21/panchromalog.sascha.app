@@ -1,12 +1,13 @@
 ---
 import { pwaInfo } from "virtual:pwa-info";
 import SEO from "@components/SEO.astro";
-import Header from "@components/Header.astro";
 import pkg from "../../package.json";
 
 import "gardevoir/dist/index.min.css";
 import "@styles/_base.css";
 import "@styles/_buttons.css";
+
+const props = Astro.props;
 ---
 
 <html lang="en">
@@ -20,7 +21,7 @@ import "@styles/_buttons.css";
       as="font"
       crossorigin="anonymous"
     />
-    <SEO />
+    <SEO {...props} />
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
   </head>
   <body>

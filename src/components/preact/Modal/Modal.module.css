@@ -31,6 +31,7 @@
 
 .container,
 .backdrop {
+  animation: appear var(--duration) cubic-bezier(0, 0.67, 0.5, 1);
   position: fixed;
   top: 0;
   right: 0;
@@ -41,7 +42,6 @@
 }
 
 .backdrop {
-  animation: appear var(--duration) cubic-bezier(0, 0.67, 0.5, 1);
   background-color: hsla(210, 11%, 15%, 0.95); /* --eerie-black */
   backdrop-filter: blur(8px);
 }

@@ -1,6 +1,8 @@
 ---
 import { ImageDetail } from "@components/preact/ImageDetail";
 import Default from "@layouts/Default.astro";
+import { getImageUrl } from "@utils/helpers";
+import { useImageLink } from "@utils/hooks/useImageLink";
 import ErrorPage from "../404.astro";
 
 const id = Astro.params.id;
@@ -15,13 +17,30 @@ if (!data?.image || errors?.length) {
 }
 
 const { image } = data ?? {};
+
+const imageUrl = new URL("/_image", Astro.site);
+
+imageUrl.search = new URLSearchParams({
+  f: "jpeg",
+  fit: "cover",
+  h: "600",
+  href: getImageUrl(image.path),
+  w: "1200",
+}).toString();
+
+const props = {
+  alt: image.meta.alt,
+  title: image.title,
+  description: image.description,
+  image: imageUrl.toString(),
+};
 ---
 
 {
   !image ? (
     <ErrorPage />
   ) : (
-    <Default>
+    <Default {...props}>
       <ImageDetail client:visible {...image} />
     </Default>
   )
