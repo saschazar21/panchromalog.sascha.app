@@ -100,6 +100,7 @@ export const mapImageDataToProps = ({
   "height" | "sizes" | "width" | "widths"
 > => ({
   alt: meta.alt,
+  color: meta.color,
   decoding: "async",
   formats: ["avif", "webp", "jpeg"],
   id,

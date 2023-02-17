@@ -18,11 +18,13 @@ export interface ImageMeta {
   alt: string;
   aperture: number;
   camera: Camera;
+  color?: string;
   date: string;
   developer?: Developer;
   film?: Film;
   focal_length: number;
   geo?: Geo;
+  hash?: string;
   height: number;
   lens: Lens;
   shutter: number;
@@ -56,6 +58,7 @@ query image($id: String!) {
               make
               created_at
           }
+          color
           date
           developer {
               name
@@ -74,6 +77,7 @@ query image($id: String!) {
               longitude
               place
           }
+          hash
           height
           lens {
               model

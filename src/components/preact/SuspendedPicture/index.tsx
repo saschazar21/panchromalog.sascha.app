@@ -5,6 +5,7 @@ import { useImageLink } from "@utils/hooks/useImageLink";
 
 export interface SuspendedPictureProps
   extends Omit<HTMLAttributes<HTMLImageElement>, "ref"> {
+  color?: string;
   formats?: Array<"avif" | "webp" | "jpeg">;
   height: number;
   sizes: string;
@@ -17,7 +18,7 @@ export const SuspendedPicture = forwardRef<
   HTMLPictureElement,
   SuspendedPictureProps
 >((props, ref) => {
-  const { formats = ["jpeg"], sizes, widths = [], ...rest } = props;
+  const { color, formats = ["jpeg"], sizes, widths = [], ...rest } = props;
 
   const sourceSet = useCallback(
     (format: string) =>
@@ -52,7 +53,7 @@ export const SuspendedPicture = forwardRef<
   );
 
   return (
-    <picture ref={ref} style={{ "--bg-color": "var(--color-shadow)" }}>
+    <picture ref={ref} style={{ "--bg-color": color ?? "var(--color-shadow)" }}>
       {sources}
       <SuspendedImage {...rest} />
     </picture>

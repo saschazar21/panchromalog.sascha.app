@@ -30,10 +30,12 @@ input MetaInput @embedded {
   alt: String!
   aperture: Float!
   camera: String!
+  color: String
   date: Time!
   film: String
   focal_length: Int!
   geo: GeoInput
+  hash: String
   height: Int!
   lens: String
   shutter: Float!
@@ -83,11 +85,13 @@ type Meta @embedded {
   alt: String
   aperture: Float
   camera: Camera @relation
+  color: String
   date: Time
   developer: Developer
   film: Film @relation
   focal_length: Int
   geo: Geo
+  hash: String
   height: Int
   lens: Lens @relation
   shutter: Float

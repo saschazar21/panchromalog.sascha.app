@@ -32,6 +32,7 @@ query images($camera: String, $film: String, $lens: String, $_size: Int, $_curso
                 make
                 created_at
             }
+            color
             date
             developer {
                 name
@@ -50,6 +51,7 @@ query images($camera: String, $film: String, $lens: String, $_size: Int, $_curso
                 longitude
                 place
             }
+            hash
             height
             lens {
                 model
