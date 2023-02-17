@@ -37,6 +37,7 @@ export const ImageDetail: FunctionComponent<ImageDetailProps> = (props) => {
   const imageProps: SuspendedPictureProps = useMemo(
     () => ({
       alt: meta.alt,
+      color: meta.color,
       decoding: "async",
       formats: ["avif", "webp", "jpeg"],
       height: 375,
