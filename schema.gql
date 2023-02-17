@@ -20,6 +20,11 @@ input LensInput {
   make: String!
 }
 
+input DeveloperInput @embedded {
+  name: String!
+  duration: Float!
+}
+
 input GeoInput @embedded {
   latitude: Float!
   longitude: Float!
@@ -32,6 +37,7 @@ input MetaInput @embedded {
   camera: String!
   color: String
   date: Time!
+  developer: DeveloperInput
   film: String
   focal_length: Int!
   geo: GeoInput
@@ -72,7 +78,7 @@ type Film @collection(name: "films") {
 
 type Developer @embedded {
   name: String!
-  duration: Int!
+  duration: Float!
 }
 
 type Geo @embedded {

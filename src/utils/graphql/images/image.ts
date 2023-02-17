@@ -5,7 +5,7 @@ import { graphQLRequest } from "../request";
 
 export interface Developer {
   name: string;
-  duration: string;
+  duration: number;
 }
 
 export interface Geo {
