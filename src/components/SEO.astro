@@ -28,15 +28,22 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           height: 600,
           alt,
         },
+        optional: {
+          description: description ?? manifest.description,
+          locale: "en_US",
+          siteName: pkg.short_name,
+        },
       }
     : undefined}
-  twitter={{
-    card: "summary_large_image",
-    site: Astro.site?.toString(),
-    creator: "@saschazar",
-    title: title || manifest.name,
-    description: description || manifest.description,
-    image,
-    imageAlt: alt,
-  }}
+  twitter={image
+    ? {
+        card: "summary_large_image",
+        site: Astro.site?.toString(),
+        creator: "@saschazar",
+        title: title || manifest.name,
+        description: description || manifest.description,
+        image,
+        imageAlt: alt,
+      }
+    : undefined}
 />

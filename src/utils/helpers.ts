@@ -6,6 +6,54 @@ import { getLens } from "@utils/graphql/lenses/lens";
 import type { Gallery as GalleryState } from "@utils/stores/gallery";
 import type { Filters as FilterState } from "@utils/stores/filters";
 
+export const IMAGE_API_PATH = "/api/image";
+
+export const IMAGE_ROUTE_PATH = "/_image";
+
+export interface ImageOptions {
+  /** original image url */
+  href: string;
+  /** height */
+  h: number;
+  /** width */
+  w: number;
+  /** image quality */
+  q?: number;
+  /** format */
+  f?: "avif" | "webp" | "jpeg";
+  /** crop factor */
+  fit?: "cover" | "contain" | "fill" | "inside" | "outside";
+  /** aspect ratio */
+  ar?: number;
+  /** image position */
+  p?: string;
+  /** color for alpha channel */
+  bg?: string;
+}
+
+export const DEFAULT_OPTIONS: Partial<ImageOptions> = {
+  q: 80,
+  f: "jpeg",
+  fit: "cover",
+  bg: "white",
+};
+
+export const buildImageLink = (options: ImageOptions): string => {
+  const opts = {
+    ...DEFAULT_OPTIONS,
+    ...options,
+  };
+
+  const searchParams = new URLSearchParams(
+    opts as unknown as Record<string, string>
+  );
+
+  const url = new URL(IMAGE_ROUTE_PATH, import.meta.env.SITE);
+  url.search = searchParams.toString();
+
+  return url.toString();
+};
+
 const fetchFilters = async (params: URLSearchParams) => {
   const keys = [];
 

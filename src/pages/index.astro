@@ -1,7 +1,7 @@
 ---
 import { InfiniteGallery } from "@components/preact/InfiniteGallery";
 import Default from "@layouts/Default.astro";
-import { getImageUrl, parseParams } from "@utils/helpers";
+import { buildImageLink, getImageUrl, parseParams } from "@utils/helpers";
 
 const params = new URL(Astro.url).searchParams;
 
@@ -9,15 +9,13 @@ const { gallery, ...filters } = await parseParams(params);
 
 const { meta: { alt = "" } = {}, path } = gallery?.data[0] ?? {};
 
-const imageUrl = new URL("/_image", Astro.site);
-
-imageUrl.search = new URLSearchParams({
+const imageUrl = buildImageLink({
   f: "jpeg",
   fit: "cover",
-  h: "600",
+  h: 600,
   href: getImageUrl(path!),
-  w: "1200",
-}).toString();
+  w: 1200,
+});
 
 const props = {
   alt,
