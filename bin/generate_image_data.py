@@ -91,7 +91,7 @@ class ImageData:
         files = map(format_file_path, glob(self.args.images[0]))
 
         print("Found {} images using glob pattern \"{}\"".format(
-            len(files)), self.args.images)
+            len(files)), self.args.images[0])
 
         return list(files)
 
@@ -134,7 +134,7 @@ class ImageData:
     def write_json(self):
         def transform_csv():
             data = []
-            with open(self.args.file, 'r', newline='') as csv_file:
+            with open(self.args.file[0], 'r', newline='') as csv_file:
                 image_data = DictReader(csv_file)
                 for i, row in enumerate(image_data):
                     if self.images and self.images.get(i + 1) == None:
@@ -151,7 +151,7 @@ class ImageData:
 
         data = transform_csv()
 
-        with open(self.args.output, 'w') as json_file:
+        with open(self.args.output[0], 'w') as json_file:
             json.dump(data, json_file)
 
             print("Transformed {} image data entries and exported them to JSON.".format(
