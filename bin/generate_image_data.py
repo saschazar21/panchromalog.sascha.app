@@ -71,7 +71,7 @@ class ImageData:
         image_dict = {}
 
         for image in images:
-            i = int(list(filter(str.isdigit, os.path.basename(image))))
+            i = int("".join(list(filter(str.isdigit, os.path.basename(image)))))
             image_dict.update([(i, image)])
 
         return image_dict
@@ -88,14 +88,16 @@ class ImageData:
             print("No image glob pattern given, CSV-file won't be filtered!")
             return None
 
-        files = map(format_file_path, glob(self.args.images[0]))
+        files = map(format_file_path, glob(
+            self.args.images[0], root_dir=os.getcwd()))
+        files = list(files)
 
         print("Found {} images using glob pattern \"{}\"".format(
-            len(files)), self.args.images[0])
+            len(files), self.args.images[0]))
 
-        return list(files)
+        return files
 
-    def csv_to_dict(row_data):
+    def csv_to_dict(self, row_data):
         data = dict(row_data)
 
         data.pop("id")
@@ -109,9 +111,10 @@ class ImageData:
         geo_place = data.pop("geo.place")
 
         data.update([
-            ("aperture", data.aperture and float(data.aperture) or None),
-            ("focal_length", data.focal_length and int(data.focal_length) or None),
-            ("shutter", data.shutter and float(data.shutter) or None)
+            ("aperture", data['aperture'] and float(data['aperture']) or None),
+            ("focal_length", data['focal_length']
+             and int(data['focal_length']) or None),
+            ("shutter", data['shutter'] and float(data['shutter']) or None)
         ])
 
         if developer_name and developer_duration:
