@@ -2,7 +2,6 @@
 
 from argparse import ArgumentParser
 from csv import DictReader
-from glob import glob
 import json
 import os
 import random
@@ -41,10 +40,10 @@ def create_argument_parser():
     parser = ArgumentParser(
         description="Maps a CSV- into a JSON-file based on existing source images.\nIf no images are found, the CSV file will be considered as single source of truth.")
 
-    parser.add_argument('file', metavar="CSV", nargs=1,
-                        help="the CSV file to map into JSON")
-    parser.add_argument('-i', '--images', metavar="DIR",
-                        nargs=1, help="path pointing to the source images")
+    parser.add_argument('images', metavar="IMAGES", nargs="+",
+                        help="the images to filter the CSV entries by")
+    parser.add_argument('-i', '--input', metavar="CSV", required=True,
+                        nargs=1, help="the CSV file to map into JSON")
     parser.add_argument('-o', '--output', metavar="JSON", default="out.json", nargs=1,
                         help="path pointing to the output location of the generated JSON-file")
 
@@ -63,7 +62,7 @@ class ImageData:
         self.images = self.create_image_dict()
 
     def create_image_dict(self):
-        images = self.glob_files()
+        images = self.format_file_paths()
 
         if images == None:
             return None
@@ -76,7 +75,7 @@ class ImageData:
 
         return image_dict
 
-    def glob_files(self):
+    def format_file_paths(self):
 
         def format_file_path(image_path):
             base_path = os.path.split(os.path.dirname(image_path))[1]
@@ -88,12 +87,11 @@ class ImageData:
             print("No image glob pattern given, CSV-file won't be filtered!")
             return None
 
-        files = map(format_file_path, glob(
-            self.args.images[0], root_dir=os.getcwd()))
+        files = map(format_file_path, self.args.images)
         files = list(files)
 
-        print("Found {} images using glob pattern \"{}\"".format(
-            len(files), self.args.images[0]))
+        print("Found {} images".format(
+            len(files)))
 
         return files
 
@@ -137,11 +135,14 @@ class ImageData:
     def write_json(self):
         def transform_csv():
             data = []
-            with open(self.args.file[0], 'r', newline='') as csv_file:
+            with open(self.args.input[0], 'r', newline='') as csv_file:
                 image_data = DictReader(csv_file)
                 for i, row in enumerate(image_data):
                     if self.images and self.images.get(i + 1) == None:
                         continue
+
+                    # https://stackoverflow.com/a/58859083
+                    row = {k: v if v else None for k, v in row.items()}
 
                     row_data = self.csv_to_dict(row)
                     row_data.update([
