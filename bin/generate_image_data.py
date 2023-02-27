@@ -113,6 +113,7 @@ class ImageData:
             ("aperture", data['aperture'] and float(data['aperture']) or None),
             ("focal_length", data['focal_length']
              and int(data['focal_length']) or None),
+            ("iso", data['iso'] and int(data['iso']) or None),
             ("shutter", data['shutter'] and float(data['shutter']) or None)
         ])
 
