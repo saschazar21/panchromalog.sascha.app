@@ -53,6 +53,7 @@ query images($camera: String, $film: String, $lens: String, $_size: Int, $_curso
             }
             hash
             height
+            iso
             lens {
                 model
                 make

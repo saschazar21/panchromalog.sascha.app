@@ -8,7 +8,7 @@ export enum FilmType {
 export interface Film {
   name: string;
   brand: string;
-  speed: number;
+  iso: number;
   type: FilmType;
   created_at: string;
 }
@@ -22,7 +22,7 @@ query film($name: String!) {
   film(name: $name) {
       name
       brand
-      speed
+      iso
       type
       created_at
   }

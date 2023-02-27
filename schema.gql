@@ -11,7 +11,7 @@ input CameraInput {
 input FilmInput {
   name: String!
   brand: String!
-  speed: Int!
+  iso: Int!
   type: FilmType!
 }
 
@@ -43,6 +43,7 @@ input MetaInput @embedded {
   geo: GeoInput
   hash: String
   height: Int!
+  iso: Int!
   lens: String
   shutter: Float!
   width: Int!
@@ -71,7 +72,7 @@ type Lens @collection(name: "lenses") {
 type Film @collection(name: "films") {
   name: String! @unique(index: "film_by_name")
   brand: String
-  speed: Int
+  iso: Int
   type: FilmType
   created_at: Time
 }
@@ -99,6 +100,7 @@ type Meta @embedded {
   geo: Geo
   hash: String
   height: Int
+  iso: Int
   lens: Lens @relation
   shutter: Float
   width: Int

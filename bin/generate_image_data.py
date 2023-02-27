@@ -16,6 +16,7 @@ The source CSV-file must contain the following keys:
  - camera (string)
  - date (string) -- date in ISO string
  - focal_length (int)
+ - iso (int)
  - shutter (float)
 
 Optional fields are the following:

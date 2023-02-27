@@ -26,6 +26,7 @@ export interface ImageMeta {
   geo?: Geo;
   hash?: string;
   height: number;
+  iso: number;
   lens: Lens;
   shutter: number;
   width: number;
@@ -79,6 +80,7 @@ query image($id: String!) {
           }
           hash
           height
+          iso
           lens {
               model
               make

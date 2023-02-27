@@ -6,7 +6,7 @@ query films {
   films {
       name
       brand
-      speed
+      iso
       type
       created_at
   }
