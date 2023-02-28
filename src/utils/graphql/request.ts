@@ -9,6 +9,7 @@ if (
 
 export const graphQLRequest = async <T>(
   query: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   variables: Record<string, any> = {}
 ): Promise<{
   data: T | null;

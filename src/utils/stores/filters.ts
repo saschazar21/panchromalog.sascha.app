@@ -45,28 +45,28 @@ export const mutateFilters = (action: FilterAction) => {
     case FILTER_ACTIONS.SET_CAMERA:
       return filters.set({
         ...state,
-        camera: action.payload.camera!,
+        camera: action.payload.camera as Camera,
         cursor: null,
         resetGallery: true,
       });
     case FILTER_ACTIONS.SET_CURSOR:
       return filters.set({
         ...state,
-        cursor: action.payload.cursor!,
+        cursor: action.payload.cursor as string,
         resetGallery: false,
       });
     case FILTER_ACTIONS.SET_FILM:
       return filters.set({
         ...state,
         cursor: null,
-        film: action.payload.film!,
+        film: action.payload.film as Film,
         resetGallery: true,
       });
     case FILTER_ACTIONS.SET_LENS:
       return filters.set({
         ...state,
         cursor: null,
-        lens: action.payload.lens!,
+        lens: action.payload.lens as Lens,
         resetGallery: true,
       });
   }

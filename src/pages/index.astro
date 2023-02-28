@@ -6,7 +6,7 @@ import { buildImageLink, getImageUrl, parseParams } from "@utils/helpers";
 
 const params = new URL(Astro.url).searchParams;
 
-const { gallery, ...filters } = await parseParams(params);
+const { gallery, ..._filters } = await parseParams(params);
 
 const { meta: { alt = "" } = {}, path } = Array.isArray(gallery?.data)
   ? gallery!.data[0]
@@ -16,7 +16,7 @@ const imageUrl = buildImageLink({
   f: "jpeg",
   fit: "cover",
   h: 600,
-  href: getImageUrl(path!),
+  href: getImageUrl(path),
   w: 1200,
 });
 

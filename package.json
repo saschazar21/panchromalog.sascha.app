@@ -18,7 +18,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@astrojs/image": "^0.13.0",
@@ -33,13 +34,21 @@
     "nanostores": "^0.7.3",
     "preact": "^10.6.5",
     "sharp": "^0.31.3",
-    "vercel": "^28.13.1",
     "vite-plugin-pwa": "^0.14.1",
     "workbox-routing": "^6.5.4",
     "workbox-strategies": "^6.5.4"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
+    "eslint": "^8.35.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-astro": "^0.23.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.4",
     "typescript": "^4.9.4",
+    "vercel": "^28.13.1",
     "vite": "^4.0.4",
     "workbox-build": "^6.5.4",
     "workbox-window": "^6.5.4"

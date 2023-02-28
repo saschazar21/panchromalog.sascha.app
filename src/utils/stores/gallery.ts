@@ -45,7 +45,7 @@ export const mutateGallery = (action: GalleryAction) => {
         ...state,
         ...action.payload,
         before: state.before,
-        data: [...state.data, ...action.payload.data!],
+        data: [...state.data, ...(action.payload.data ?? [])],
         mutations: ++state.mutations,
       });
     case GALLERY_ACTIONS.PREPEND:
@@ -53,18 +53,18 @@ export const mutateGallery = (action: GalleryAction) => {
         ...state,
         ...action.payload,
         after: state.after,
-        data: [...action.payload.data!, ...state.data],
+        data: [...(action.payload.data ?? []), ...state.data],
         mutations: ++state.mutations,
       });
     case GALLERY_ACTIONS.SET_ERROR:
       return gallery.set({
         ...initialState,
-        error: action.payload.error!,
+        error: action.payload.error as Error,
       });
     case GALLERY_ACTIONS.SET_LOADING:
       return gallery.set({
         ...state,
-        isLoading: action.payload.isLoading!,
+        isLoading: action.payload.isLoading as boolean,
       });
   }
 };

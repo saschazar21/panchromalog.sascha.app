@@ -15,20 +15,21 @@ if (!data?.image || errors?.length) {
   Astro.response.statusText = "This image could not be found.";
 }
 
-const { image } = data ?? {};
+const { image = {} } = data ?? {};
+const { description, meta, path, title } = image;
 
 const imageUrl = buildImageLink({
   f: "jpeg",
   fit: "cover",
   h: 600,
-  href: getImageUrl(image?.path!),
+  href: getImageUrl(path),
   w: 1200,
 });
 
 const props = {
-  alt: image?.meta.alt,
-  title: image?.title,
-  description: image?.description,
+  alt: meta.alt,
+  title: title,
+  description: description,
   image: imageUrl,
 };
 ---

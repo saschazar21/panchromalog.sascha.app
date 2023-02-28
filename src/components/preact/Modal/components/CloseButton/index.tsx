@@ -3,7 +3,7 @@ import type { HTMLAttributes } from "preact/compat";
 
 import styles from "./CloseButton.module.css";
 
-export interface CloseButtonProps extends HTMLAttributes<HTMLButtonElement> {}
+export type CloseButtonProps = HTMLAttributes<HTMLButtonElement>;
 
 export const CloseButton: FunctionComponent<CloseButtonProps> = (props) => {
   return (
