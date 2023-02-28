@@ -21,14 +21,14 @@ const imageUrl = buildImageLink({
   f: "jpeg",
   fit: "cover",
   h: 600,
-  href: getImageUrl(image.path!),
+  href: getImageUrl(image?.path!),
   w: 1200,
 });
 
 const props = {
-  alt: image.meta.alt,
-  title: image.title,
-  description: image.description,
+  alt: image?.meta.alt,
+  title: image?.title,
+  description: image?.description,
   image: imageUrl,
 };
 ---

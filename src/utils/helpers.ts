@@ -86,7 +86,7 @@ const fetchFilters = async (params: URLSearchParams) => {
 };
 
 export const getImageUrl = (path: string) => {
-  const p = path.startsWith("/") ? path : "/" + path;
+  const p = path?.startsWith("/") ? path : "/" + path;
 
   return new URL(`/api/image${p}`, import.meta.env.SITE).toString();
 };
@@ -105,7 +105,7 @@ export const mapImageDataToProps = ({
   formats: ["avif", "webp", "jpeg"],
   id,
   loading: "lazy",
-  src: getImageUrl(path),
+  src: getImageUrl(path) as string,
 });
 
 export const parseParams = async (

@@ -1,13 +1,16 @@
 ---
 import { InfiniteGallery } from "@components/preact/InfiniteGallery";
 import Default from "@layouts/Default.astro";
+import type { Image } from "@utils/graphql/images/image";
 import { buildImageLink, getImageUrl, parseParams } from "@utils/helpers";
 
 const params = new URL(Astro.url).searchParams;
 
 const { gallery, ...filters } = await parseParams(params);
 
-const { meta: { alt = "" } = {}, path } = gallery?.data[0] ?? {};
+const { meta: { alt = "" } = {}, path } = Array.isArray(gallery?.data)
+  ? gallery!.data[0]
+  : ({} as Image);
 
 const imageUrl = buildImageLink({
   f: "jpeg",
