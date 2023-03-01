@@ -1,6 +1,9 @@
 name: Deploy
 
 env:
+  IMAGEKIT_ID: ${{ secrets.IMAGEKIT_ID }}
+  FAUNA_KEY: ${{ secrets.FAUNA_KEY }}
+  FAUNA_GRAPHQL_HOST: ${{ secrets.FAUNA_GRAPHQL_HOST}}
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
@@ -65,7 +68,7 @@ jobs:
               repo: context.repo.repo
             });
 
-            const comment = comments.find(({ body }) => body.startsWith('Deployment preview ready!'));
+            const comment = comments?.find(({ body }) => body.startsWith('Deployment preview ready!'));
 
             // Remove comment
             comment && await github.rest.issues.deleteComment({
