@@ -1,11 +1,11 @@
 {
-  "name": "photos.sascha.app",
-  "short_name": "Instanalog",
+  "name": "panchromalog.sascha.app",
+  "short_name": "Panchromalog",
   "description": "This is Sascha's collection of analog photographs.",
   "color": "#343A40",
   "type": "module",
   "version": "0.0.1",
-  "homepage": "https://photos.sascha.app",
+  "homepage": "https://panchromalog.sascha.app",
   "author": {
     "name": "Sascha Zarhuber",
     "email": "saschazar21@yahoo.de",

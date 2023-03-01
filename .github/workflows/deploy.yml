@@ -39,15 +39,45 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
-      - name: Build
-        run: yarn build
-
-      - name: Create Deployment Preview
-        if: ${{ github.event.pull_request.state == 'open' }}
-        run: |
-          vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Create Deployment
+      - name: Deploy to production
         if: ${{ startsWith(github.ref, 'refs/heads/main') }}
         run: |
-          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel pull --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prod --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy preview
+        if: ${{ github.event.pull_request.state == 'open' }}
+        run: |
+          vercel pull --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          echo "DEPLOYMENT_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_ENV
+
+      - name: Update deployment URL on PR comment
+        if: ${{ github.event.pull_request.state == 'open' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // Find previous comment
+            const comments = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            const comment = comments.find(({ body }) => body.startsWith('Deployment preview ready!'));
+
+            // Remove comment
+            comment && await github.rest.issues.deleteComment({
+              comment_id: comment.id,
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            // Add comment
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "Deployment preview ready!\n\n[${{ env.DEPLOYMENT_URL }}](${{ env.DEPLOYMENT_URL}})"
+            });
