@@ -41,7 +41,7 @@ query images($camera: String, $film: String, $lens: String, $_size: Int, $_curso
             film {
                 name
                 brand
-                speed
+                iso
                 type
                 created_at
             }
