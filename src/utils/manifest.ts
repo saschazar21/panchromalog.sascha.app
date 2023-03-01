@@ -2,8 +2,8 @@ import type { ManifestOptions } from "vite-plugin-pwa";
 import pkg from "../../package.json";
 
 export const seoConfig = {
-  baseURL: import.meta.env.VERCEL_URL
-    ? `https://${import.meta.env.VERCEL_URL}`
+  baseURL: import.meta.env.PUBLIC_VERCEL_URL
+    ? `https://${import.meta.env.PUBLIC_VERCEL_URL}`
     : "http://localhost:3000",
 };
 
