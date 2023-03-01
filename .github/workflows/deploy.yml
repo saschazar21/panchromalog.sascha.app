@@ -19,6 +19,8 @@ on:
 jobs:
   deploy:
     name: Deploy
+    permissions:
+      pull-requests: write
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip ci')"
 
