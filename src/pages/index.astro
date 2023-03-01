@@ -3,29 +3,45 @@ import { InfiniteGallery } from "@components/preact/InfiniteGallery";
 import Default from "@layouts/Default.astro";
 import type { Image } from "@utils/graphql/images/image";
 import { buildImageLink, getImageUrl, parseParams } from "@utils/helpers";
+import type { Gallery } from "@utils/stores/gallery";
+import ErrorPage from "./500.astro";
 
 const params = new URL(Astro.url).searchParams;
+let gallery: Gallery | null = null;
+let props;
 
-const { gallery, ..._filters } = await parseParams(params);
+try {
+  const data = await parseParams(params);
+  gallery = data.gallery;
 
-const { meta: { alt = "" } = {}, path } = Array.isArray(gallery?.data)
-  ? gallery!.data[0]
-  : ({} as Image);
+  const { meta: { alt = "" } = {}, path } = Array.isArray(gallery?.data)
+    ? gallery!.data[0]
+    : ({} as Image);
 
-const imageUrl = buildImageLink({
-  f: "jpeg",
-  fit: "cover",
-  h: 600,
-  href: getImageUrl(path),
-  w: 1200,
-});
+  const imageUrl = buildImageLink({
+    f: "jpeg",
+    fit: "cover",
+    h: 600,
+    href: getImageUrl(path),
+    w: 1200,
+  });
 
-const props = {
-  alt,
-  image: path?.length ? imageUrl.toString() : null,
-};
+  props = {
+    alt,
+    image: path?.length ? imageUrl.toString() : null,
+  };
+} catch (e) {
+  console.error(e);
+  Astro.response.status = 500;
+}
 ---
 
-<Default {...props}>
-  <InfiniteGallery client:visible gallery={gallery} />
-</Default>
+{
+  !gallery ? (
+    <ErrorPage />
+  ) : (
+    <Default {...props}>
+      <InfiniteGallery client:visible gallery={gallery} />
+    </Default>
+  )
+}
