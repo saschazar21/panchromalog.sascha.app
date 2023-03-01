@@ -62,13 +62,11 @@ jobs:
         with:
           script: |
             // Find previous comment
-            const comments = await github.rest.issues.listComments({
+            const { data: comments } = await github.rest.issues.listComments({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo
-            }) ?? [];
-
-            console.log(comments);
+            });
 
             const comment = comments.find(({ body }) => body.startsWith('Deployment preview ready!'));
 
