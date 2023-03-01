@@ -66,9 +66,11 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo
-            });
+            }) ?? [];
 
-            const comment = comments?.find(({ body }) => body.startsWith('Deployment preview ready!'));
+            console.log(comments);
+
+            const comment = comments.find(({ body }) => body.startsWith('Deployment preview ready!'));
 
             // Remove comment
             comment && await github.rest.issues.deleteComment({
