@@ -5,7 +5,7 @@ import image from "@astrojs/image";
 
 // https://astro.build/config
 import vitePwa from "@vite-pwa/astro";
-import { manifest, seoConfig } from "./src/utils/manifest";
+import { manifest } from "./src/utils/manifest";
 
 // https://astro.build/config
 import preact from "@astrojs/preact";
@@ -15,7 +15,7 @@ import netlify from "@astrojs/netlify/functions";
 
 // https://astro.build/config
 export default defineConfig({
-  site: seoConfig.baseURL,
+  site: "http://localhost:3000",
   output: "server",
   adapter: netlify(),
   integrations: [

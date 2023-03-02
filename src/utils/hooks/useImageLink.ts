@@ -1,6 +1,5 @@
 import { useImageContext } from "@utils/context/ImageContext";
 import { ImageOptions, buildImageLink } from "@utils/helpers";
-import { seoConfig } from "@utils/manifest";
 import { useMemo } from "preact/hooks";
 
 export const useImageLink = (options: ImageOptions) => {
@@ -10,7 +9,7 @@ export const useImageLink = (options: ImageOptions) => {
     () =>
       new URL(
         options.href ?? contextOptions.href,
-        seoConfig.baseURL
+        import.meta.env.SITE
       ).toString(),
     [options.href, contextOptions.href]
   );
