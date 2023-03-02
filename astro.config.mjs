@@ -8,16 +8,16 @@ import vitePwa from "@vite-pwa/astro";
 import { manifest, seoConfig } from "./src/utils/manifest";
 
 // https://astro.build/config
-import vercel from "@astrojs/vercel/serverless";
+import preact from "@astrojs/preact";
 
 // https://astro.build/config
-import preact from "@astrojs/preact";
+import netlify from "@astrojs/netlify/functions";
 
 // https://astro.build/config
 export default defineConfig({
   site: seoConfig.baseURL,
   output: "server",
-  adapter: vercel(),
+  adapter: netlify(),
   integrations: [
     preact({
       compat: true,

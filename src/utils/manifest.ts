@@ -2,8 +2,10 @@ import type { ManifestOptions } from "vite-plugin-pwa";
 import pkg from "../../package.json";
 
 export const seoConfig = {
-  baseURL: import.meta.env.PUBLIC_VERCEL_URL
-    ? `https://${import.meta.env.PUBLIC_VERCEL_URL}`
+  baseURL: import.meta.env.CONTEXT
+    ? import.meta.env.CONTEXT === "production"
+      ? import.meta.env.URL
+      : import.meta.env.DEPLOY_URL
     : "http://localhost:3000",
 };
 
