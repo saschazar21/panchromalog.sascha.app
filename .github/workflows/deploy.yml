@@ -47,23 +47,23 @@ jobs:
           FAUNA_GRAPHQL_HOST: ${{ secrets.FAUNA_GRAPHQL_HOST }}
           FAUNA_KEY: ${{ secrets.FAUNA_KEY }}
           IMAGEKIT_ID: ${{ secrets.IMAGEKIT_ID }}
-        uses: netlify/actions/cli@master
-        with:
-          args: deploy --build --prod
+        run: |
+          netlify deploy --build --prod --telemetry-disable
 
       - name: Deploy preview
-        id: deploy-preview
+        id: preview
         if: ${{ github.event.pull_request.state == 'open' }}
         env:
           FAUNA_GRAPHQL_HOST: ${{ secrets.FAUNA_GRAPHQL_HOST }}
           FAUNA_KEY: ${{ secrets.FAUNA_KEY }}
           IMAGEKIT_ID: ${{ secrets.IMAGEKIT_ID }}
-        uses: netlify/actions/cli@master
-        with:
-          args: deploy --build
+        run: |
+          echo "NETLIFY_OUTPUT=$(netlify deploy --build --json --telemetry-disable --context deploy-preview)" >> $GITHUB_OUTPUT
 
       - name: Update comment on PR
         if: ${{ github.event.pull_request.state == 'open' }}
+        env:
+          DEPLOYMENT_URL: ${{ fromJson(steps.preview.outputs.NETLIFY_OUTPUT).deploy_url }}
         uses: actions/github-script@v6
         with:
           script: |
@@ -87,5 +87,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "Deployment preview ready!\n\n[${{ steps.deploy-preview.outputs.NETLIFY_LIVE_URL }}](${{ steps.deploy-preview.outputs.NETLIFY_LIVE_URL}})"
+              body: "Deployment preview ready!\n\n[${{ env.DEPLOYMENT_URL }}](${{ env.DEPLOYMENT_URL }})"
             });
