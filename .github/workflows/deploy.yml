@@ -1,5 +1,9 @@
 name: Deploy
 
+env:
+  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
 on:
   push:
     branches:
@@ -37,25 +41,51 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
-      - name: Build
+      - name: Deploy to production
+        if: ${{ startsWith(github.ref, 'refs/heads/main') }}
         env:
           FAUNA_GRAPHQL_HOST: ${{ secrets.FAUNA_GRAPHQL_HOST }}
           FAUNA_KEY: ${{ secrets.FAUNA_KEY }}
           IMAGEKIT_ID: ${{ secrets.IMAGEKIT_ID }}
-        run: yarn build
-
-      - name: Deploy to Netlify
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        timeout-minutes: 2
-        uses: nwtgck/actions-netlify@v2
+        uses: netlify/actions/cli@master
         with:
-          publish-dir: "./dist"
-          production-branch: main
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          deploy-message: |
-            Deploy from GitHub Actions
-          enable-pull-request-comment: true
-          enable-commit-comment: false
-          overwrites-pull-request-commment: true
+          args: deploy --build --prod
+
+      - name: Deploy preview
+        id: deploy-preview
+        if: ${{ github.event.pull_request.state == 'open' }}
+        env:
+          FAUNA_GRAPHQL_HOST: ${{ secrets.FAUNA_GRAPHQL_HOST }}
+          FAUNA_KEY: ${{ secrets.FAUNA_KEY }}
+          IMAGEKIT_ID: ${{ secrets.IMAGEKIT_ID }}
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --build
+
+      - name: Update comment on PR
+        if: ${{ github.event.pull_request.state == 'open' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // Find previous comment
+            const { data: comments } = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            const comment = comments.find(({ body }) => body.startsWith('Deployment preview ready!'));
+
+            // Remove comment
+            comment && await github.rest.issues.deleteComment({
+              comment_id: comment.id,
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            // Add comment
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "Deployment preview ready!\n\n[${{ steps.deploy-preview.outputs.NETLIFY_LIVE_URL }}](${{ steps.deploy-preview.outputs.NETLIFY_LIVE_URL}})"
+            });
