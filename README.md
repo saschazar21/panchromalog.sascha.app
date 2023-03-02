@@ -3,7 +3,7 @@
   <strong>This is Sascha's collection of analog photographs. 📸🎞️</strong>
   <br />
   <br />
-  <a href="https://github.com/saschazar21/panchromalog.sascha.app/actions/workflows/deploy.yml"><img alt="GitHub Actions: Deploy workflow" src="actions/workflows/deploy.yml/badge.svg" /></a> <a href="https://github.com/saschazar21/panchromalog.sascha.app/actions/workflows/build-and-test.yml"><img alt="GitHub Actions: Test workflow" src="https://github.com/saschazar21/panchromalog.sascha.app/actions/workflows/build-and-test.yml/badge.svg" /></a> <img alt="License" src="https://img.shields.io/github/license/saschazar21/panchromalog.sascha.app" />
+  <a href="https://github.com/saschazar21/panchromalog.sascha.app/actions/workflows/deploy.yml"><img alt="GitHub Actions: Deploy workflow" src="https://github.com/saschazar21/panchromalog.sascha.app/actions/workflows/deploy.yml/badge.svg" /></a> <a href="https://github.com/saschazar21/panchromalog.sascha.app/actions/workflows/build-and-test.yml"><img alt="GitHub Actions: Test workflow" src="https://github.com/saschazar21/panchromalog.sascha.app/actions/workflows/build-and-test.yml/badge.svg" /></a> <img alt="License" src="https://img.shields.io/github/license/saschazar21/panchromalog.sascha.app" />
   <br />
   <br />
   <br />
