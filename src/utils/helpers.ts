@@ -117,6 +117,8 @@ export const parseParams = async (
   const url = new URL("/api/images", import.meta.env.SITE);
   url.search = search.toString();
 
+  console.log(url);
+
   const { data: gallery, errors } = await fetch(url).then((res) => res.json());
 
   return {

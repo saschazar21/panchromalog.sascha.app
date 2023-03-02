@@ -68,7 +68,7 @@ query image($id: String!) {
           film {
               name
               brand
-              speed
+              iso
               type
               created_at
           }

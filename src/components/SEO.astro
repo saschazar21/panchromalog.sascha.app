@@ -12,8 +12,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   charset="utf-8"
   description={description ?? manifest.description}
   canonical={canonicalURL.toString()}
-  nofollow={pkg.private}
-  noindex={pkg.private}
+  nofollow={import.meta.env.CONTEXT !== "production"}
+  noindex={import.meta.env.CONTEXT !== "production"}
   openGraph={image
     ? {
         basic: {

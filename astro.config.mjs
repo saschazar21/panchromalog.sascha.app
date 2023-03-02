@@ -5,19 +5,28 @@ import image from "@astrojs/image";
 
 // https://astro.build/config
 import vitePwa from "@vite-pwa/astro";
-import { manifest, seoConfig } from "./src/utils/manifest";
-
-// https://astro.build/config
-import vercel from "@astrojs/vercel/serverless";
+import { manifest } from "./src/utils/manifest";
 
 // https://astro.build/config
 import preact from "@astrojs/preact";
 
 // https://astro.build/config
+import netlify from "@astrojs/netlify/functions";
+
+const define = Object.fromEntries(
+  Object.keys(process.env).map((key) => [
+    "process.env." + key,
+    JSON.stringify(process.env[key]),
+  ])
+);
+
+console.log(define);
+
+// https://astro.build/config
 export default defineConfig({
-  site: seoConfig.baseURL,
+  site: "http://localhost:3000",
   output: "server",
-  adapter: vercel(),
+  adapter: netlify(),
   integrations: [
     preact({
       compat: true,
@@ -44,4 +53,7 @@ export default defineConfig({
       strategies: "injectManifest",
     }),
   ],
+  vite: {
+    define,
+  },
 });

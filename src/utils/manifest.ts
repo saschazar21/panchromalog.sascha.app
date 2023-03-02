@@ -1,12 +1,6 @@
 import type { ManifestOptions } from "vite-plugin-pwa";
 import pkg from "../../package.json";
 
-export const seoConfig = {
-  baseURL: import.meta.env.VERCEL_URL
-    ? `https://${import.meta.env.VERCEL_URL}`
-    : "http://localhost:3000",
-};
-
 export const manifest: Partial<ManifestOptions> = {
   name: pkg.short_name,
   short_name: pkg.short_name,
