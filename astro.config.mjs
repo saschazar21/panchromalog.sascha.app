@@ -13,6 +13,15 @@ import preact from "@astrojs/preact";
 // https://astro.build/config
 import netlify from "@astrojs/netlify/functions";
 
+const define = Object.fromEntries(
+  Object.keys(process.env).map((key) => [
+    "process.env." + key,
+    JSON.stringify(process.env[key]),
+  ])
+);
+
+console.log(define);
+
 // https://astro.build/config
 export default defineConfig({
   site: "http://localhost:3000",
@@ -45,12 +54,6 @@ export default defineConfig({
     }),
   ],
   vite: {
-    define: {
-      "process.env.IMAGEKIT_ID": JSON.stringify(process.env.IMAGEKIT_ID),
-      "process.env.FAUNA_GRAPHQL_HOST": JSON.stringify(
-        process.env.FAUNA_GRAPHQL_HOST
-      ),
-      "process.env.FAUNA_KEY": JSON.stringify(process.env.FAUNA_KEY),
-    },
+    define,
   },
 });
