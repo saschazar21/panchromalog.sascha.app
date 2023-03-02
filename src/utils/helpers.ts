@@ -111,13 +111,13 @@ export const mapImageDataToProps = ({
 export const parseParams = async (
   params: URLSearchParams
 ): Promise<Partial<FilterState> & { gallery: GalleryState | null }> => {
+  console.log(Object.fromEntries(params));
+
   const filters = Object.fromEntries(await fetchFilters(params));
 
   const search = params.toString();
   const url = new URL("/api/images", import.meta.env.SITE);
   url.search = search.toString();
-
-  console.log(url);
 
   const { data: gallery, errors } = await fetch(url).then((res) => res.json());
 

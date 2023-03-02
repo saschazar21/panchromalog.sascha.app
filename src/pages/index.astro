@@ -14,8 +14,8 @@ try {
   const data = await parseParams(params);
   gallery = data.gallery;
 
-  const { meta: { alt = "" } = {}, path } = Array.isArray(gallery?.data)
-    ? gallery!.data[0]
+  const { meta: { alt = "" } = {}, path } = gallery?.data?.length
+    ? gallery.data[0]
     : ({} as Image);
 
   const imageUrl = buildImageLink({
