@@ -64,11 +64,10 @@ jobs:
           FAUNA_KEY: ${{ secrets.FAUNA_KEY }}
           IMAGEKIT_ID: ${{ secrets.IMAGEKIT_ID }}
         run: |
-          netlify build \
-            --context deploy-preview \
-            --telemetry-disable
+          yarn build --site $DEPLOYMENT_URL
           netlify deploy \
             --alias ${{ steps.vars.outputs.SHORT_SHA }} \
+            --context deploy-preview \
             --telemetry-disable
 
       - name: Update comment on PR
