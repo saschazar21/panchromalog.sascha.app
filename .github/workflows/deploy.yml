@@ -63,8 +63,8 @@ jobs:
         run: |
           netlify deploy \
             --alias ${{ steps.vars.outputs.SHORT_SHA }} \
-            --build
-            --context deploy-preview
+            --build \
+            --context deploy-preview \
             --telemetry-disable
 
       - name: Update comment on PR
