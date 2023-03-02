@@ -50,8 +50,10 @@ jobs:
       - name: Deploy to production
         if: ${{ startsWith(github.ref, 'refs/heads/main') }}
         run: |
+          netlify build \
+            --context production
+            --telemetry-disable
           netlify deploy \
-            --build \
             --prod \
             --telemetry-disable
 

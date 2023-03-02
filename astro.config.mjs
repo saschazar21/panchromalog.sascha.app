@@ -20,8 +20,6 @@ const define = Object.fromEntries(
   ])
 );
 
-console.log(define);
-
 // https://astro.build/config
 export default defineConfig({
   site: "http://localhost:3000",
