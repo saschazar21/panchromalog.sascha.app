@@ -62,7 +62,7 @@ jobs:
           URL: ${{ format('https://{0}--panchromalog-sascha-app.netlify.app', steps.vars.outputs.SHORT_SHA) }}
         run: |
           netlify deploy \
-            --alias ${{ env.URL }} \
+            --alias ${{ steps.vars.outputs.SHORT_SHA }} \
             --build \
             --telemetry-disable \
             --context deploy-preview
