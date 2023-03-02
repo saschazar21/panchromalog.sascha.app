@@ -51,7 +51,7 @@ jobs:
         if: ${{ startsWith(github.ref, 'refs/heads/main') }}
         run: |
           netlify build \
-            --context production
+            --context production \
             --telemetry-disable
           netlify deploy \
             --prod \
