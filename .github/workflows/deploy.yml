@@ -59,13 +59,17 @@ jobs:
         id: preview
         if: ${{ github.event.pull_request.state == 'open' }}
         env:
-          URL: ${{ format('https://{0}--panchromalog-sascha-app.netlify.app', steps.vars.outputs.SHORT_SHA) }}
+          DEPLOYMENT_URL: ${{ format('https://{0}--panchromalog-sascha-app.netlify.app', steps.vars.outputs.SHORT_SHA) }}
+          FAUNA_GRAPHQL_HOST: ${{ secrets.FAUNA_GRAPHQL_HOST }}
+          FAUNA_KEY: ${{ secrets.FAUNA_KEY }}
+          IMAGEKIT_ID: ${{ secrets.IMAGEKIT_ID }}
         run: |
+          netlify build \
+            --context deploy-preview \
+            --telemetry-disable
           netlify deploy \
             --alias ${{ steps.vars.outputs.SHORT_SHA }} \
-            --build \
-            --telemetry-disable \
-            --context deploy-preview
+            --telemetry-disable
 
       - name: Update comment on PR
         if: ${{ github.event.pull_request.state == 'open' }}
