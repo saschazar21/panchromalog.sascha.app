@@ -27,7 +27,6 @@ jobs:
         run: |
           SHORT_SHA=$(git rev-parse --short HEAD)
           echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_OUTPUT
-          echo "DEPLOYMENT_URL=${{ format('https://{0}--panchromalog-sascha-app.netlify.app', $SHORT_SHA) }}" >> $GITHUB_OUTPUT
 
       - name: Check out repository
         uses: actions/checkout@v2
@@ -60,7 +59,7 @@ jobs:
         id: preview
         if: ${{ github.event.pull_request.state == 'open' }}
         env:
-          URL: ${{ steps.vars.outputs.DEPLOYMENT_URL }}
+          URL: ${{ format('https://{0}--panchromalog-sascha-app.netlify.app', steps.vars.outputs.SHORT_SHA) }}
         run: |
           netlify deploy \
             --alias ${{ env.URL }} \
@@ -71,7 +70,7 @@ jobs:
       - name: Update comment on PR
         if: ${{ github.event.pull_request.state == 'open' }}
         env:
-          DEPLOYMENT_URL: ${{ steps.vars.outputs.DEPLOYMENT_URL }}
+          DEPLOYMENT_URL: ${{ format('https://{0}--panchromalog-sascha-app.netlify.app', steps.vars.outputs.SHORT_SHA) }}
         uses: actions/github-script@v6
         with:
           script: |
