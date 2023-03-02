@@ -44,4 +44,13 @@ export default defineConfig({
       strategies: "injectManifest",
     }),
   ],
+  vite: {
+    define: {
+      "process.env.IMAGEKIT_ID": JSON.stringify(process.env.IMAGEKIT_ID),
+      "process.env.FAUNA_GRAPHQL_HOST": JSON.stringify(
+        process.env.FAUNA_GRAPHQL_HOST
+      ),
+      "process.env.FAUNA_KEY": JSON.stringify(process.env.FAUNA_KEY),
+    },
+  },
 });

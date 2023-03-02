@@ -60,13 +60,11 @@ jobs:
         if: ${{ github.event.pull_request.state == 'open' }}
         env:
           DEPLOYMENT_URL: ${{ format('https://{0}--panchromalog-sascha-app.netlify.app', steps.vars.outputs.SHORT_SHA) }}
-          FAUNA_GRAPHQL_HOST: ${{ secrets.FAUNA_GRAPHQL_HOST }}
-          FAUNA_KEY: ${{ secrets.FAUNA_KEY }}
-          IMAGEKIT_ID: ${{ secrets.IMAGEKIT_ID }}
         run: |
-          yarn build --site $DEPLOYMENT_URL
           netlify deploy \
             --alias ${{ steps.vars.outputs.SHORT_SHA }} \
+            --build
+            --context deploy-preview
             --telemetry-disable
 
       - name: Update comment on PR
