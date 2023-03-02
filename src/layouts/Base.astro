@@ -1,5 +1,4 @@
 ---
-import { pwaInfo } from "virtual:pwa-info";
 import SEO from "@components/SEO.astro";
 import pkg from "../../package.json";
 
@@ -22,7 +21,11 @@ const props = Astro.props;
       crossorigin="anonymous"
     />
     <SEO {...props} />
-    {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+    <link
+      rel="manifest"
+      href="/manifest.webmanifest"
+      crossorigin="use-credentials"
+    />
   </head>
   <body>
     <slot />
