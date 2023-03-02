@@ -37,6 +37,13 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
+      - name: Build
+        env:
+          FAUNA_GRAPHQL_HOST: ${{ secrets.FAUNA_GRAPHQL_HOST }}
+          FAUNA_KEY: ${{ secrets.FAUNA_KEY }}
+          IMAGEKIT_ID: ${{ secrets.IMAGEKIT_ID }}
+        run: yarn build
+
       - name: Deploy to Netlify
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
