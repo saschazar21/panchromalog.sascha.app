@@ -1,4 +1,5 @@
 ---
+import Filters from "@components/Filters.astro";
 import { InfiniteGallery } from "@components/preact/InfiniteGallery";
 import Default from "@layouts/Default.astro";
 import type { Image } from "@utils/graphql/images/image";
@@ -41,6 +42,7 @@ try {
     <ErrorPage />
   ) : (
     <Default {...props}>
+      <Filters />
       <InfiniteGallery client:visible gallery={gallery} />
     </Default>
   )
