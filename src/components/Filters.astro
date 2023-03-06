@@ -1,26 +1,10 @@
 ---
 import { FilterForm } from "@components/preact/FilterForm";
-import { getCameras } from "@utils/graphql/cameras/cameras";
-import { getFilms } from "@utils/graphql/films/films";
-import { getLenses } from "@utils/graphql/lenses/lenses";
+import { fetchFilters } from "@utils/helpers";
 
-const { data: cameraData } = await getCameras().catch((e) => ({
-  data: null,
-  errors: [e] as [{ message: string }],
-}));
-const { data: filmData } = await getFilms().catch((e) => ({
-  data: null,
-  errors: [e] as [{ message: string }],
-}));
-const { data: lensData } = await getLenses().catch((e) => ({
-  data: null,
-  errors: [e] as [{ message: string }],
-}));
+const params = new URL(Astro.url).searchParams;
+
+const props = await fetchFilters(params);
 ---
 
-<FilterForm
-  client:idle
-  cameras={cameraData?.cameras ?? null}
-  films={filmData?.films ?? null}
-  lenses={lensData?.lenses ?? null}
-/>
+<FilterForm client:idle {...props} />

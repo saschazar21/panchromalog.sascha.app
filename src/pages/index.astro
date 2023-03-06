@@ -5,15 +5,21 @@ import Default from "@layouts/Default.astro";
 import type { Image } from "@utils/graphql/images/image";
 import { buildImageLink, getImageUrl, parseParams } from "@utils/helpers";
 import type { Gallery } from "@utils/stores/gallery";
+import NotFoundPage from "./404.astro";
 import ErrorPage from "./500.astro";
 
 const params = new URL(Astro.url).searchParams;
 let gallery: Gallery | null = null;
 let props;
+let status = 200;
 
 try {
-  const data = await parseParams(params);
-  gallery = data.gallery;
+  gallery = await parseParams(params);
+
+  if (!gallery?.data) {
+    Astro.response.status = 404;
+    status = 404;
+  }
 
   const { meta: { alt = "" } = {}, path } = gallery?.data?.length
     ? gallery.data[0]
@@ -32,18 +38,20 @@ try {
     image: path?.length ? imageUrl.toString() : null,
   };
 } catch (e) {
-  console.error(e);
   Astro.response.status = 500;
+  status = 500;
+
+  console.error(e);
 }
 ---
 
 {
-  !gallery ? (
-    <ErrorPage />
-  ) : (
+  status === 200 && (
     <Default {...props}>
       <Filters />
       <InfiniteGallery client:visible gallery={gallery} />
     </Default>
   )
 }
+{status === 404 && <NotFoundPage />}
+{status === 500 && <ErrorPage />}

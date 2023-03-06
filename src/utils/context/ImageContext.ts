@@ -1,4 +1,4 @@
-import type { ImageOptions } from "@utils/hooks/useImageLink";
+import type { ImageOptions } from "@utils/helpers";
 import { createContext } from "preact";
 import { useContext } from "preact/hooks";
 

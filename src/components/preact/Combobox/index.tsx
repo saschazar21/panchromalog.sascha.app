@@ -5,7 +5,7 @@ export interface ComboboxProps {
   name: string;
   onChange?: (value: string) => void;
   options: string[];
-  value?: string;
+  value?: string | null;
 }
 
 export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {

@@ -1,10 +1,10 @@
 import type { SuspendedPictureProps } from "@components/preact/SuspendedPicture";
-import { getCamera } from "@utils/graphql/cameras/camera";
-import { getFilm } from "@utils/graphql/films/film";
+import { Camera, getCamera } from "@utils/graphql/cameras/camera";
+import { getFilters } from "@utils/graphql/custom/filters";
+import { Film, getFilm } from "@utils/graphql/films/film";
 import type { Image } from "@utils/graphql/images/image";
-import { getLens } from "@utils/graphql/lenses/lens";
+import { getLens, Lens } from "@utils/graphql/lenses/lens";
 import type { Gallery as GalleryState } from "@utils/stores/gallery";
-import type { Filters as FilterState } from "@utils/stores/filters";
 
 export const IMAGE_API_PATH = "/api/image";
 
@@ -31,6 +31,16 @@ export interface ImageOptions {
   bg?: string;
 }
 
+export interface FilterInit {
+  cursor: string | null;
+  cameras?: Camera[];
+  films?: Film[];
+  lenses?: Lens[];
+  camera?: Camera | null;
+  film?: Film | null;
+  lens?: Lens | null;
+}
+
 export const DEFAULT_OPTIONS: Partial<ImageOptions> = {
   q: 80,
   f: "jpeg",
@@ -54,7 +64,9 @@ export const buildImageLink = (options: ImageOptions): string => {
   return url.toString();
 };
 
-const fetchFilters = async (params: URLSearchParams) => {
+export const fetchFilters = async (
+  params: URLSearchParams
+): Promise<FilterInit> => {
   const keys = [];
 
   if (params.has("camera")) {
@@ -82,7 +94,13 @@ const fetchFilters = async (params: URLSearchParams) => {
     ]);
   }
 
-  return keys.filter(([_, val]) => !!val);
+  const filters = (await (await getFilters())?.data) ?? {};
+
+  return {
+    ...Object.fromEntries(keys.filter(([_, val]) => !!val)),
+    ...filters,
+    cursor: params.get("cursor") ?? null,
+  };
 };
 
 export const getImageUrl = (path: string) => {
@@ -110,10 +128,8 @@ export const mapImageDataToProps = ({
 
 export const parseParams = async (
   params: URLSearchParams
-): Promise<Partial<FilterState> & { gallery: GalleryState | null }> => {
+): Promise<GalleryState | null> => {
   console.log(Object.fromEntries(params));
-
-  const filters = Object.fromEntries(await fetchFilters(params));
 
   const search = params.toString();
   const url = new URL("/api/images", import.meta.env.SITE);
@@ -121,9 +137,13 @@ export const parseParams = async (
 
   const { data: gallery, errors } = await fetch(url).then((res) => res.json());
 
-  return {
-    ...filters,
-    gallery: gallery?.images ?? { error: new Error(errors[0].message) },
-    cursor: params.get("cursor"),
-  };
+  if (!gallery || errors?.length) {
+    throw new Error(
+      Array.isArray(errors)
+        ? errors[0].message
+        : "Failed to fetch images filtered by: " + params.toString()
+    );
+  }
+
+  return gallery?.images ?? null;
 };
