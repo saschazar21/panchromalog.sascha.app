@@ -1,0 +1,28 @@
+.form {
+  --gap: var(--space-m);
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--gap);
+}
+
+.form > * {
+  flex: 1 0 calc(50% - var(--gap) * 0.5);
+}
+
+.form > :first-child,
+.form > button {
+  flex: 1 0 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .form {
+    --gap: var(--space-l);
+  }
+
+  .form > *,
+  .form > :first-child {
+    flex: 1 0 calc(33.33333% - var(--gap) * 0.666667);
+  }
+}

@@ -1,0 +1,51 @@
+button,
+.button {
+  --link-color: var(--color-bg-muted);
+
+  border-radius: var(--border-radius-m);
+  padding: var(--space-m) var(--space-l);
+  text-decoration: none;
+  letter-spacing: var(--ls-extended);
+  background-color: var(--bg-color, var(--color-text));
+  color: var(--link-color);
+  cursor: pointer;
+}
+
+button:hover,
+button:focus,
+.button:hover,
+.button:focus {
+  --link-color: var(--color-bg-muted);
+  outline-color: var(--color-text);
+}
+
+:disabled {
+  --link-color: var(--color-bg-light);
+  background-color: var(--color-shadow);
+  cursor: default;
+}
+
+:disabled:hover,
+:disabled:focus {
+  --link-color: var(--color-bg-light);
+  outline-color: transparent;
+}
+
+input {
+  display: block;
+  border-radius: var(--border-radius-s);
+  border: var(--border-width-s) solid var(--color-text-muted);
+  padding: var(--space-m) var(--space-l);
+  width: 100%;
+  background-color: var(--bg-color, var(--color-bg-light));
+  color: inherit;
+  font-family: inherit;
+  letter-spacing: var(--ls-extended);
+}
+
+label {
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-extended);
+  font-size: var(--font-size-s);
+}

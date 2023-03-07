@@ -50,21 +50,21 @@ export const useFilterForm = (filterInit: FilterInit) => {
         case FILTERFORM_ACTIONS.SET_CAMERA:
           return filterDispatch({
             payload: {
-              camera: cameras.find(({ model }) => model === payload),
+              camera: cameras.find(({ model }) => model === payload) ?? null,
             },
             type: FILTER_ACTIONS.SET_CAMERA,
           });
         case FILTERFORM_ACTIONS.SET_FILM:
           return filterDispatch({
             payload: {
-              film: films.find(({ name }) => name === payload),
+              film: films.find(({ name }) => name === payload) ?? null,
             },
             type: FILTER_ACTIONS.SET_FILM,
           });
         case FILTERFORM_ACTIONS.SET_LENS:
           return filterDispatch({
             payload: {
-              lens: lenses.find(({ model }) => model === payload),
+              lens: lenses.find(({ model }) => model === payload) ?? null,
             },
             type: FILTER_ACTIONS.SET_LENS,
           });

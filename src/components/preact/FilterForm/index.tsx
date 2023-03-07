@@ -4,6 +4,8 @@ import type { FunctionalComponent } from "preact";
 import { useCallback } from "preact/hooks";
 import { FILTERFORM_ACTIONS, useFilterForm } from "./useFilterForm";
 
+import styles from "./FilterForm.module.css";
+
 export type FilterFormProps = FilterInit;
 
 export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
@@ -39,32 +41,40 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
   }, []);
 
   return (
-    <form method="GET" action="/" onSubmit={handleSubmit}>
-      {cameras.length && (
+    <form
+      className={styles.form}
+      method="GET"
+      action="/"
+      onSubmit={handleSubmit}
+    >
+      {cameras.length > 0 && (
         <Combobox
           name="camera"
           options={cameras}
+          placeholder="Enter camera name"
           value={camera?.model ?? null}
           onChange={(payload) => handleChange(payload, "camera")}
         />
       )}
-      {lenses.length && (
+      {lenses.length > 0 && (
         <Combobox
           name="lens"
           options={lenses}
+          placeholder="Enter lens name"
           value={lens?.model ?? null}
           onChange={(payload) => handleChange(payload, "lens")}
         />
       )}
-      {films.length && (
+      {films.length > 0 && (
         <Combobox
           name="film"
           options={films}
+          placeholder="Enter film name"
           value={film?.name ?? null}
           onChange={(payload) => handleChange(payload, "film")}
         />
       )}
-      <button type="submit">Submit</button>
+      {import.meta.env.SSR && <button type="submit">Submit</button>}
     </form>
   );
 };

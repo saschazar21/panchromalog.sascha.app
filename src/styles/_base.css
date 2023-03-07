@@ -62,6 +62,11 @@ html {
   color: var(--color-text-muted);
 }
 
+* {
+  scrollbar-color: var(--color-shadow) var(--color-bg);
+  scrollbar-width: thin;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -87,6 +92,23 @@ picture {
 ::selection {
   background-color: var(--color-text-muted);
   color: var(--color-bg);
+}
+
+::-webkit-scrollbar {
+  width: var(--space-s);
+}
+
+::-webkit-scrollbar-button {
+  background-color: transparent;
+  height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-shadow);
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--color-bg);
 }
 
 :focus {

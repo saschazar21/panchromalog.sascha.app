@@ -4,6 +4,7 @@ import { getFilters } from "@utils/graphql/custom/filters";
 import { Film, getFilm } from "@utils/graphql/films/film";
 import type { Image } from "@utils/graphql/images/image";
 import { getLens, Lens } from "@utils/graphql/lenses/lens";
+import type { Filters } from "@utils/stores/filters";
 import type { Gallery as GalleryState } from "@utils/stores/gallery";
 
 export const IMAGE_API_PATH = "/api/image";
@@ -125,6 +126,17 @@ export const mapImageDataToProps = ({
   loading: "lazy",
   src: getImageUrl(path) as string,
 });
+
+export const buildParams = (state: Filters): URLSearchParams => {
+  const params = [
+    ...(state.camera ? [["camera", state.camera.model]] : []),
+    ...(state.film ? [["film", state.film.name]] : []),
+    ...(state.lens ? [["lens", state.lens.model]] : []),
+    ...(state.cursor ? [["cursor", state.cursor]] : []),
+  ];
+
+  return new URLSearchParams(params);
+};
 
 export const parseParams = async (
   params: URLSearchParams

@@ -1,6 +1,7 @@
 import { SuspendedPictureLink } from "@components/preact/InfiniteGallery/components/SuspendedPictureLink";
 import type { PaginatedImages } from "@utils/graphql/images/images";
 import { mapImageDataToProps } from "@utils/helpers";
+import { useFilterHistory } from "@utils/hooks/useFilterHistory";
 import classNames from "classnames";
 import type { FunctionComponent } from "preact";
 import { useMemo } from "preact/hooks";
@@ -15,6 +16,7 @@ export interface InfiniteGalleryProps {
 export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
   gallery,
 }) => {
+  useFilterHistory();
   const data = useObservedGallery(gallery ?? {});
 
   const pictures = useMemo(

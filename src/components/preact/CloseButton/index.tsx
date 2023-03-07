@@ -7,7 +7,7 @@ export type CloseButtonProps = HTMLAttributes<HTMLButtonElement>;
 
 export const CloseButton: FunctionComponent<CloseButtonProps> = (props) => {
   return (
-    <button type="button" title="Close Modal" {...props}>
+    <button type="button" {...props}>
       <svg
         viewBox="0 0 6 6"
         className={styles.icon}
