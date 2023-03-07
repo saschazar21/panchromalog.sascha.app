@@ -71,7 +71,7 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
           <button type="submit">Submit</button>
         </noscript>
       ) : null,
-    [rest.cameras, rest.films, rest.lenses]
+    []
   );
 
   return (
