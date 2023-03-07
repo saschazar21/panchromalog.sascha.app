@@ -1,7 +1,7 @@
 import { Combobox } from "@components/preact/Combobox";
 import type { FilterInit } from "@utils/helpers";
 import type { FunctionalComponent } from "preact";
-import { useCallback } from "preact/hooks";
+import { useCallback, useMemo } from "preact/hooks";
 import { FILTERFORM_ACTIONS, useFilterForm } from "./useFilterForm";
 
 import styles from "./FilterForm.module.css";
@@ -40,6 +40,40 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
     e.preventDefault();
   }, []);
 
+  const noscript = useMemo(
+    () =>
+      import.meta.env.SSR ? (
+        <noscript className={styles.form}>
+          {Array.isArray(rest.cameras) && (
+            <Combobox
+              name="camera"
+              options={rest.cameras.map(({ model }) => model)}
+              placeholder="Enter camera model"
+              value={rest.camera?.model}
+            />
+          )}
+          {Array.isArray(rest.lenses) && (
+            <Combobox
+              name="lens"
+              options={rest.lenses.map(({ model }) => model)}
+              placeholder="Enter lens model"
+              value={rest.lens?.model}
+            />
+          )}
+          {Array.isArray(rest.films) && (
+            <Combobox
+              name="film"
+              options={rest.films.map(({ name }) => name)}
+              placeholder="Enter film name"
+              value={rest.film?.name}
+            />
+          )}
+          <button type="submit">Submit</button>
+        </noscript>
+      ) : null,
+    [rest.cameras, rest.films, rest.lenses]
+  );
+
   return (
     <form
       className={styles.form}
@@ -47,11 +81,12 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
       action="/"
       onSubmit={handleSubmit}
     >
+      {noscript}
       {cameras.length > 0 && (
         <Combobox
           name="camera"
           options={cameras}
-          placeholder="Enter camera name"
+          placeholder="Enter camera model"
           value={camera?.model ?? null}
           onChange={(payload) => handleChange(payload, "camera")}
         />
@@ -60,7 +95,7 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
         <Combobox
           name="lens"
           options={lenses}
-          placeholder="Enter lens name"
+          placeholder="Enter lens model"
           value={lens?.model ?? null}
           onChange={(payload) => handleChange(payload, "lens")}
         />
@@ -74,7 +109,6 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
           onChange={(payload) => handleChange(payload, "film")}
         />
       )}
-      {import.meta.env.SSR && <button type="submit">Submit</button>}
     </form>
   );
 };

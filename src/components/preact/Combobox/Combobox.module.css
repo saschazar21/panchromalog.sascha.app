@@ -19,7 +19,7 @@
 
 .label {
   position: absolute;
-  padding: var(--margin);
+  padding: 0 var(--margin);
   top: 0;
   left: calc(var(--space-l) + var(--padding) * 0.5);
   background-color: var(--color-bg);
