@@ -5,6 +5,7 @@ import { useCallback, useMemo } from "preact/hooks";
 import { FILTERFORM_ACTIONS, useFilterForm } from "./useFilterForm";
 
 import styles from "./FilterForm.module.css";
+import { EditBlock } from "./components/EditBlock";
 
 export type FilterFormProps = FilterInit;
 
@@ -68,7 +69,9 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
               value={rest.film?.name}
             />
           )}
-          <button type="submit">Submit</button>
+          <button type="submit" data-noprint>
+            Submit
+          </button>
         </noscript>
       ) : null,
     []
@@ -83,31 +86,37 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
     >
       {noscript}
       {cameras.length > 0 && (
-        <Combobox
-          name="camera"
-          options={cameras}
-          placeholder="Enter camera model"
-          value={camera?.model ?? null}
-          onChange={(payload) => handleChange(payload, "camera")}
-        />
+        <EditBlock name="camera" subtitle={camera?.make} title={camera?.model}>
+          <Combobox
+            name="camera"
+            options={cameras}
+            placeholder="Enter camera model"
+            value={camera?.model ?? null}
+            onChange={(payload) => handleChange(payload, "camera")}
+          />
+        </EditBlock>
       )}
       {lenses.length > 0 && (
-        <Combobox
-          name="lens"
-          options={lenses}
-          placeholder="Enter lens model"
-          value={lens?.model ?? null}
-          onChange={(payload) => handleChange(payload, "lens")}
-        />
+        <EditBlock name="lens" subtitle={lens?.make} title={lens?.model}>
+          <Combobox
+            name="lens"
+            options={lenses}
+            placeholder="Enter lens model"
+            value={lens?.model ?? null}
+            onChange={(payload) => handleChange(payload, "lens")}
+          />
+        </EditBlock>
       )}
       {films.length > 0 && (
-        <Combobox
-          name="film"
-          options={films}
-          placeholder="Enter film name"
-          value={film?.name ?? null}
-          onChange={(payload) => handleChange(payload, "film")}
-        />
+        <EditBlock name="film" subtitle={film?.brand} title={film?.name}>
+          <Combobox
+            name="film"
+            options={films}
+            placeholder="Enter film name"
+            value={film?.name ?? null}
+            onChange={(payload) => handleChange(payload, "film")}
+          />
+        </EditBlock>
       )}
     </form>
   );

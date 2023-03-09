@@ -1,3 +1,5 @@
+import { ReactComponent as CloseIcon } from "@icons/x.svg";
+import { useEditContext } from "@utils/context/EditBlockContext";
 import type { FunctionalComponent } from "preact";
 import {
   useCallback,
@@ -6,7 +8,6 @@ import {
   useRef,
   useState,
 } from "preact/hooks";
-import { CloseButton } from "../CloseButton";
 
 import styles from "./Combobox.module.css";
 
@@ -21,6 +22,7 @@ export interface ComboboxProps {
 export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
   const { name, onChange, options, placeholder, value: externalValue } = props;
   const ref = useRef<HTMLDivElement>(null);
+  const [_, setIsEditing] = useEditContext() ?? [];
   const [clientHeight, setClientHeight] = useState(0);
   const [filtered, setFiltered] = useState(options);
   const [value, setValue] = useState<string>(externalValue as string);
@@ -49,6 +51,10 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
       setValue(option);
       typeof onChange === "function" && onChange(option);
       (e.currentTarget as HTMLButtonElement)?.blur();
+
+      option.length > 0 &&
+        typeof setIsEditing === "function" &&
+        setIsEditing(false);
     },
     [filtered]
   );
@@ -91,7 +97,7 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
   );
 
   return (
-    <div className={styles.wrapper}>
+    <section className={styles.wrapper} data-noprint>
       <label className={styles.label} for={name}>
         {name}:
       </label>
@@ -111,11 +117,14 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
           <datalist id={name + "-datalist"}>{dataListOptions}</datalist>
         )}
         {!import.meta.env.SSR && (
-          <CloseButton
+          <button
+            type="button"
             title="Clear input"
             disabled={!value?.length}
             onClick={(e: MouseEvent) => handleClick(e, "")}
-          />
+          >
+            <CloseIcon role="presentation" aria-hidden />
+          </button>
         )}
       </div>
       {!import.meta.env.SSR && filteredOptions.length > 0 && (
@@ -128,6 +137,6 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
           <div ref={ref}>{filteredOptions}</div>
         </div>
       )}
-    </div>
+    </section>
   );
 };

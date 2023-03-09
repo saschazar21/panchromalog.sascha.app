@@ -1,0 +1,31 @@
+.wrapper {
+  justify-content: flex-end;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: calc(var(--padding) * 3);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  margin-top: calc(var(--space-s) * -1);
+}
+
+.label {
+  text-transform: uppercase;
+  letter-spacing: var(--ls-extended);
+}
+
+.button {
+  --link-color: var(--color-bg-muted);
+
+  padding: var(--space-m);
+  height: calc(var(--space-m) * 2 + var(--space-s) * 2 + var(--font-base));
+  aspect-ratio: 1;
+}
+
+@media screen and (min-width: 768px) {
+  .wrapper {
+    padding-left: calc(var(--padding) * 2);
+  }
+}

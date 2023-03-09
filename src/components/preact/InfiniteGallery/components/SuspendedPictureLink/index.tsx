@@ -1,6 +1,6 @@
 import { ImageDetail } from "@components/preact/ImageDetail";
 import { Modal } from "@components/preact/Modal";
-import { CloseButton } from "@components/preact/CloseButton";
+import { ReactComponent as CloseIcon } from "@icons/x.svg";
 import {
   SuspendedPicture,
   SuspendedPictureProps,
@@ -68,11 +68,14 @@ export const SuspendedPictureLink = forwardRef<
             >
               View image details
             </a>
-            <CloseButton
+            <button
+              type="button"
               title="Close modal"
               onClick={handleOnClose}
               className={styles.closeButton}
-            />
+            >
+              <CloseIcon role="presentation" aria-hidden />
+            </button>
           </div>
           <ImageDetail {...imageDetailProps} />
         </Modal>

@@ -40,6 +40,7 @@ input {
   background-color: var(--bg-color, var(--color-bg-light));
   color: inherit;
   font-family: inherit;
+  font-size: var(--font-size);
   letter-spacing: var(--ls-extended);
 }
 

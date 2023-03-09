@@ -93,7 +93,7 @@
 .inputWrapper > button {
   position: absolute;
   display: block;
-  padding: var(--space-m);
+  padding: var(--space-s);
   right: 0;
   top: 50%;
   height: 100%;

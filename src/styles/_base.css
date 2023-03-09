@@ -144,3 +144,9 @@ picture {
     margin: 0 auto;
   }
 }
+
+@media print {
+  [data-noprint] {
+    display: none !important;
+  }
+}

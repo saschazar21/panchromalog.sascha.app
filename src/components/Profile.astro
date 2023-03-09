@@ -6,10 +6,10 @@ import pkg from "../../package.json";
 <header aria-labelledby="title">
   <div data-avatar>
     <Picture
-      src="https://via.placeholder.com/192x192.png"
+      src="https://via.placeholder.com/256x256.png"
       alt={`Avatar of ${pkg.author.name}`}
       sizes="(min-width: 640px) 96px, 64px"
-      widths={[64, 96, 128, 192]}
+      widths={[64, 128, 192, 256]}
       aspectRatio={1}
       formats={["avif", "webp", "jpeg"]}
       loading="eager"
@@ -74,8 +74,8 @@ import pkg from "../../package.json";
     }
 
     img {
-      height: 96px;
-      width: 96px;
+      height: 128px;
+      width: 128px;
     }
   }
 

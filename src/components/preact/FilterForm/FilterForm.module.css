@@ -3,15 +3,15 @@
 
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-self: stretch;
   gap: var(--gap);
+  padding: var(--space-l);
 }
 
 .form > * {
-  flex: 1 0 calc(50% - var(--gap) * 0.5);
+  flex: 1 0 100%;
 }
 
-.form > :first-child,
 .form > button {
   flex: 1 0 100%;
 }
