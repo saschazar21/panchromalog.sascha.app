@@ -1,15 +1,9 @@
 import { ReactComponent as CloseIcon } from "@icons/x.svg";
-import { useEditContext } from "@utils/context/EditBlockContext";
 import type { FunctionalComponent } from "preact";
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 
 import styles from "./Combobox.module.css";
+import { useCombobox } from "./useCombobox";
 
 export interface ComboboxProps {
   name: string;
@@ -20,58 +14,15 @@ export interface ComboboxProps {
 }
 
 export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
-  const { name, onChange, options, placeholder, value: externalValue } = props;
+  const { name, options, placeholder } = props;
   const ref = useRef<HTMLDivElement>(null);
-  const [_, setIsEditing] = useEditContext() ?? [];
   const [clientHeight, setClientHeight] = useState(0);
-  const [filtered, setFiltered] = useState(options);
-  const [value, setValue] = useState<string>(externalValue as string);
+  const { filtered, value, handleBlur, handleClick, handleInput } =
+    useCombobox(props);
 
   useEffect(() => {
     setClientHeight(ref.current?.clientHeight ?? 0);
   }, [filtered]);
-
-  const handleBlur = useCallback(
-    (e: Event) => {
-      if (e.currentTarget) {
-        const { value } = e.currentTarget as HTMLInputElement;
-
-        (e.currentTarget as HTMLInputElement).value =
-          filtered.find((available) => available === value) ??
-          externalValue ??
-          "";
-      }
-    },
-    [externalValue]
-  );
-
-  const handleClick = useCallback(
-    (e: MouseEvent, option: string) => {
-      e.preventDefault();
-      setValue(option);
-      typeof onChange === "function" && onChange(option);
-      (e.currentTarget as HTMLButtonElement)?.blur();
-
-      option.length > 0 &&
-        typeof setIsEditing === "function" &&
-        setIsEditing(false);
-    },
-    [filtered]
-  );
-
-  const handleInput = useCallback(
-    (e: Event) => {
-      e.preventDefault();
-      const { value } = (e.currentTarget as HTMLInputElement) ?? {};
-      !!value && setValue(value);
-
-      value &&
-        setFiltered(() =>
-          options.filter((option) => new RegExp(value).test(option))
-        );
-    },
-    [options]
-  );
 
   const filteredOptions = useMemo(
     () =>

@@ -80,8 +80,8 @@ export const ImageDetail: FunctionComponent<ImageDetailProps> = (props) => {
         </section>
         <section className={styles.content}>
           <time dateTime={dateTime}>{date}</time>
-          {title && <h2>{title}</h2>}
-          {description && <p>{description}</p>}
+          {title && <h2 id="imagetitle">{title}</h2>}
+          {description && <p id="description">{description}</p>}
         </section>
         <section className={styles.extra}>{gear}</section>
       </div>

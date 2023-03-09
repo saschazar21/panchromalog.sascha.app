@@ -58,7 +58,15 @@ export const SuspendedPictureLink = forwardRef<
         <SuspendedPicture {...props} ref={ref} />
       </a>
       {imageDetailProps && (
-        <Modal onClose={handleOnClose} className={styles.modal}>
+        <Modal
+          onClose={handleOnClose}
+          className={styles.modal}
+          role="dialog"
+          aria-describedby={
+            imageDetailProps.description ? "description" : undefined
+          }
+          aria-labelledby={imageDetailProps.title ? "imagetitle" : undefined}
+        >
           <div className={styles.modalControls}>
             <a
               href={"/p/" + imageDetailProps.id}
