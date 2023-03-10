@@ -1,6 +1,9 @@
-.form {
+.form,
+.modalContent {
   --gap: var(--space-m);
+}
 
+.form {
   display: flex;
   flex-wrap: wrap;
   align-self: stretch;
@@ -8,7 +11,8 @@
   padding: var(--space-l);
 }
 
-.form > * {
+.form > *,
+.modalContent {
   flex: 1 0 100%;
 }
 
@@ -16,14 +20,50 @@
   flex: 1 0 100%;
 }
 
-@media screen and (min-width: 768px) {
-  .form {
+.modalContent {
+  --padding: var(--space-m);
+
+  flex: 1 0 auto;
+  border-radius: var(--border-radius-m);
+  padding: var(--space-l) var(--padding);
+  background-color: var(--bg-color, var(--color-bg));
+}
+
+.description.description,
+.title.title {
+  flex: 1 0 100%;
+  text-align: center;
+}
+
+.title.title {
+  margin-top: var(--gap);
+  margin-bottom: var(--space-xxl);
+}
+
+@media screen and (min-width: 940px) {
+  .form,
+  .modalContent {
     --gap: var(--space-l);
+  }
+
+  .form {
     padding: 0;
   }
 
   .form > *,
-  .form > :first-child {
-    flex: 1 0 calc(33.33333% - var(--gap) * 0.666667);
+  .modalContent > * {
+    flex: 0 0 calc(33.33333% - var(--gap) * 0.666667);
+  }
+
+  .modalContent {
+    --gap: var(--space-l);
+    --padding: var(--space-l);
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: var(--gap);
+    padding-bottom: 275px;
   }
 }

@@ -1,6 +1,5 @@
 import { ImageDetail } from "@components/preact/ImageDetail";
 import { Modal } from "@components/preact/Modal";
-import { ReactComponent as CloseIcon } from "@icons/x.svg";
 import {
   SuspendedPicture,
   SuspendedPictureProps,
@@ -66,8 +65,7 @@ export const SuspendedPictureLink = forwardRef<
             imageDetailProps.description ? "description" : undefined
           }
           aria-labelledby={imageDetailProps.title ? "imagetitle" : undefined}
-        >
-          <div className={styles.modalControls}>
+          modalControls={
             <a
               href={"/p/" + imageDetailProps.id}
               target="_blank"
@@ -76,15 +74,8 @@ export const SuspendedPictureLink = forwardRef<
             >
               View image details
             </a>
-            <button
-              type="button"
-              title="Close modal"
-              onClick={handleOnClose}
-              className={styles.closeButton}
-            >
-              <CloseIcon role="presentation" aria-hidden />
-            </button>
-          </div>
+          }
+        >
           <ImageDetail {...imageDetailProps} />
         </Modal>
       )}

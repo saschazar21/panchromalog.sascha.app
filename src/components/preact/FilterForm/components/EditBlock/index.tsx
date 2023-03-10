@@ -37,7 +37,7 @@ export const EditBlock: FunctionalComponent<EditBlockProps> = ({
           <div className={customStyles.content}>
             <small className={label}>{name}:</small>
             {subtitle && <small>{subtitle}</small>}
-            <strong>{title}</strong>
+            <strong className={customStyles.title}>{title}</strong>
           </div>
           <button
             className={customStyles.button}

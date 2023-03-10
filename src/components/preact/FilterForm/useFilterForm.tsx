@@ -5,12 +5,13 @@ import { cameras as camerasStore } from "@utils/stores/cameras";
 import { films as filmsStore } from "@utils/stores/films";
 import { FILTER_ACTIONS } from "@utils/stores/filters";
 import { lenses as lensesStore } from "@utils/stores/lenses";
-import { useCallback, useEffect, useMemo } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 
 export enum FILTERFORM_ACTIONS {
   SET_CAMERA,
   SET_FILM,
   SET_LENS,
+  TOGGLE_MODAL,
 }
 
 export interface FilterFormAction {
@@ -29,6 +30,7 @@ export const useFilterForm = (filterInit: FilterInit) => {
   const films = useStore(filmsStore);
   const lenses = useStore(lensesStore);
   const { dispatch: filterDispatch, state } = useFilters(filters);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     camerasStore.set(camerasInit ?? []);
@@ -68,6 +70,8 @@ export const useFilterForm = (filterInit: FilterInit) => {
             },
             type: FILTER_ACTIONS.SET_LENS,
           });
+        case FILTERFORM_ACTIONS.TOGGLE_MODAL:
+          return setIsModalOpen((value) => !value);
       }
     },
     [cameras, films, lenses]
@@ -83,8 +87,39 @@ export const useFilterForm = (filterInit: FilterInit) => {
     [lenses]
   );
 
+  const handleChange = useCallback(
+    (payload: string, name: string) => {
+      switch (name) {
+        case "camera":
+          return dispatch({
+            payload,
+            type: FILTERFORM_ACTIONS.SET_CAMERA,
+          });
+        case "film":
+          return dispatch({
+            payload,
+            type: FILTERFORM_ACTIONS.SET_FILM,
+          });
+        case "lens":
+          return dispatch({
+            payload,
+            type: FILTERFORM_ACTIONS.SET_LENS,
+          });
+      }
+    },
+    [dispatch]
+  );
+
+  const handleModalToggle = useCallback((e: MouseEvent) => {
+    e.defaultPrevented ?? e.preventDefault();
+
+    dispatch({ payload: "", type: FILTERFORM_ACTIONS.TOGGLE_MODAL });
+  }, []);
+
   return {
-    dispatch,
+    handleChange,
+    handleModalToggle,
+    isModalOpen,
     cameras: mappedCameras,
     films: mappedFilms,
     lenses: mappedLenses,
