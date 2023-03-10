@@ -1,5 +1,5 @@
 import { useEditContext } from "@utils/context/EditBlockContext";
-import { useCallback, useReducer } from "preact/hooks";
+import { useCallback, useEffect, useReducer, useRef } from "preact/hooks";
 import type { ComboboxProps } from ".";
 
 enum COMBOBOX_ACTIONS {
@@ -59,6 +59,7 @@ export const useCombobox = (initialState: ComboboxHookParams) => {
     placeholder: _placeholder,
     ...rest
   } = initialState;
+  const ref = useRef<HTMLDivElement>(null);
   const [state, dispatch] = useReducer(reducer, rest, init);
   const [_, setIsEditing] = useEditContext() ?? [];
 
@@ -107,6 +108,27 @@ export const useCombobox = (initialState: ComboboxHookParams) => {
     });
   }, []);
 
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (ref.current) {
+      const elements = ref.current.childNodes;
+
+      switch (e.key) {
+        case "Enter":
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          (elements.item(elements.length - 1) as HTMLButtonElement).focus();
+          break;
+        case "ArrowDown":
+          e.preventDefault();
+          (elements.item(0) as HTMLButtonElement).focus();
+          break;
+        default:
+          e.preventDefault();
+      }
+    }
+  }, []);
+
   const handleInput = useCallback(
     (e: Event) => {
       e.preventDefault();
@@ -127,11 +149,29 @@ export const useCombobox = (initialState: ComboboxHookParams) => {
     [rest.options]
   );
 
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.childNodes.forEach((child: ChildNode) => {
+        (child as HTMLButtonElement).addEventListener("keydown", handleKeyDown);
+      });
+    }
+    return () => {
+      ref.current?.childNodes.forEach((child: ChildNode) =>
+        (child as HTMLButtonElement).removeEventListener(
+          "keydown",
+          handleKeyDown
+        )
+      );
+    };
+  }, [rest.options]);
+
   return {
     ...state,
     handleBlur,
     handleClick,
     handleFocus,
     handleInput,
+    handleKeyDown,
+    ref,
   };
 };

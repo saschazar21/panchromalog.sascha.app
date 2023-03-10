@@ -1,6 +1,6 @@
 import { ReactComponent as CloseIcon } from "@icons/x.svg";
 import type { FunctionalComponent } from "preact";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 
 import styles from "./Combobox.module.css";
 import { useCombobox } from "./useCombobox";
@@ -15,7 +15,6 @@ export interface ComboboxProps {
 
 export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
   const { name, options, placeholder } = props;
-  const ref = useRef<HTMLDivElement>(null);
   const [clientHeight, setClientHeight] = useState(0);
   const {
     filtered,
@@ -24,7 +23,9 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
     handleClick,
     handleFocus,
     handleInput,
+    handleKeyDown,
     hasFocus,
+    ref,
   } = useCombobox(props);
 
   useEffect(() => {
@@ -71,6 +72,7 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
           onBlur={handleBlur}
           onFocus={handleFocus}
           onInput={handleInput}
+          onKeyDown={handleKeyDown}
           {...(!import.meta.env.SSR
             ? {
                 role: "combobox",
