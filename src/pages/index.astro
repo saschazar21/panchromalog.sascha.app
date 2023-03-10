@@ -1,5 +1,5 @@
 ---
-import Filters from "@components/Filters.astro";
+import Controls from "@components/Controls.astro";
 import { InfiniteGallery } from "@components/preact/InfiniteGallery";
 import Default from "@layouts/Default.astro";
 import type { Image } from "@utils/graphql/images/image";
@@ -48,7 +48,7 @@ try {
 {
   status === 200 && (
     <Default {...props}>
-      <Filters />
+      <Controls />
       <InfiniteGallery client:visible gallery={gallery} />
     </Default>
   )

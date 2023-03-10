@@ -20,6 +20,44 @@
   flex: 1 0 100%;
 }
 
+.button {
+  --gap: var(--space-m);
+  --link-color: var(--color-text-muted);
+  --bg-color: var(--color-bg-muted);
+
+  display: inline-flex;
+  gap: var(--gap);
+  border-radius: unset;
+  border-bottom-right-radius: var(--border-radius-s);
+  border-bottom-left-radius: var(--border-radius-s);
+  border: none;
+  transition: background-color var(--duration) ease-out,
+    color var(--duration) ease-out, border-color var(--duration) ease-out;
+}
+
+.button:hover,
+.button:focus {
+  --link-color: var(--color-bg-muted);
+  --bg-color: var(--color-text-muted);
+}
+
+.button > svg {
+  color: var(--color-shadow);
+  transition: color var(--duration) ease-out;
+  height: var(--font-size-h4);
+  width: var(--font-size-h4);
+  aspect-ratio: 1;
+}
+
+.button > .active {
+  color: var(--color-text-muted);
+}
+
+.button:hover > .active,
+.button:focus > .active {
+  color: var(--color-bg);
+}
+
 .modalContent {
   --padding: var(--space-m);
 

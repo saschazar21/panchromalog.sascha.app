@@ -1,3 +1,6 @@
+import { ReactComponent as ApertureIcon } from "@icons/aperture.svg";
+import { ReactComponent as CameraIcon } from "@icons/camera.svg";
+import { ReactComponent as FilmIcon } from "@icons/film.svg";
 import { Combobox } from "@components/preact/Combobox";
 import type { FilterInit } from "@utils/helpers";
 import type { FunctionalComponent } from "preact";
@@ -24,9 +27,9 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
     lenses,
   } = useFilterForm(rest);
 
-  const prerenderedContent = useMemo(
+  const noscript = useMemo(
     () =>
-      import.meta.env.SSR ? (
+      import.meta.env.SSR && (
         <noscript>
           <form className={styles.form} method="GET" action="/">
             {Array.isArray(rest.cameras) && (
@@ -58,21 +61,37 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
             </button>
           </form>
         </noscript>
-      ) : (
-        <button
-          type="button"
-          className={styles.button}
-          onClick={handleModalToggle}
-        >
-          Filters
-        </button>
       ),
     []
   );
 
   return (
     <>
-      {prerenderedContent}
+      {noscript}
+      {!import.meta.env.SSR && (
+        <button
+          type="button"
+          className={styles.button}
+          onClick={handleModalToggle}
+          title="Edit filters"
+        >
+          <CameraIcon
+            className={camera ? styles.active : undefined}
+            role="presentation"
+            aria-hidden
+          />
+          <ApertureIcon
+            className={lens ? styles.active : undefined}
+            role="presentation"
+            aria-hidden
+          />
+          <FilmIcon
+            className={film ? styles.active : undefined}
+            role="presentation"
+            aria-hidden
+          />
+        </button>
+      )}
       {isModalOpen && (
         <Modal
           onClose={handleModalToggle}

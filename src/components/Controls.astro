@@ -7,4 +7,13 @@ const params = new URL(Astro.url).searchParams;
 const props = await fetchFilters(params);
 ---
 
-<FilterForm client:idle {...props} />
+<section>
+  <FilterForm client:idle {...props} />
+</section>
+
+<style>
+  section {
+    display: flex;
+    justify-content: center;
+  }
+</style>
