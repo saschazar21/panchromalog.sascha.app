@@ -4,6 +4,7 @@ import type { ComboboxProps } from ".";
 
 enum COMBOBOX_ACTIONS {
   SET_FILTERED_OPTIONS,
+  SET_FOCUS,
   SET_VALUE,
 }
 
@@ -16,6 +17,7 @@ export interface ComboboxAction {
 
 export interface ComboboxState {
   filtered: string[];
+  hasFocus?: boolean;
   value?: string;
 }
 
@@ -27,6 +29,11 @@ const reducer = (state: ComboboxState, action: ComboboxAction) => {
       return {
         ...state,
         filtered: [...(payload.filtered as string[])],
+      };
+    case COMBOBOX_ACTIONS.SET_FOCUS:
+      return {
+        ...state,
+        hasFocus: !!payload.hasFocus,
       };
     case COMBOBOX_ACTIONS.SET_VALUE:
       return {
@@ -41,6 +48,7 @@ const reducer = (state: ComboboxState, action: ComboboxAction) => {
 const init = (customInitialState: Partial<ComboboxHookParams>): ComboboxState =>
   ({
     filtered: customInitialState.options,
+    hasFocus: false,
     value: customInitialState.value,
   } as ComboboxState);
 
@@ -63,6 +71,11 @@ export const useCombobox = (initialState: ComboboxHookParams) => {
 
         (e.currentTarget as HTMLInputElement).value =
           filtered.find((available) => available === value) ?? value ?? "";
+
+        dispatch({
+          payload: { hasFocus: false },
+          type: COMBOBOX_ACTIONS.SET_FOCUS,
+        });
       }
     },
     [value]
@@ -84,6 +97,15 @@ export const useCombobox = (initialState: ComboboxHookParams) => {
     },
     [filtered]
   );
+
+  const handleFocus = useCallback((_e: Event) => {
+    dispatch({
+      payload: {
+        hasFocus: true,
+      },
+      type: COMBOBOX_ACTIONS.SET_FOCUS,
+    });
+  }, []);
 
   const handleInput = useCallback(
     (e: Event) => {
@@ -109,6 +131,7 @@ export const useCombobox = (initialState: ComboboxHookParams) => {
     ...state,
     handleBlur,
     handleClick,
+    handleFocus,
     handleInput,
   };
 };

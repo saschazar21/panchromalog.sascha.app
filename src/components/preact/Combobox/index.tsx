@@ -17,8 +17,15 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
   const { name, options, placeholder } = props;
   const ref = useRef<HTMLDivElement>(null);
   const [clientHeight, setClientHeight] = useState(0);
-  const { filtered, value, handleBlur, handleClick, handleInput } =
-    useCombobox(props);
+  const {
+    filtered,
+    value,
+    handleBlur,
+    handleClick,
+    handleFocus,
+    handleInput,
+    hasFocus,
+  } = useCombobox(props);
 
   useEffect(() => {
     setClientHeight(ref.current?.clientHeight ?? 0);
@@ -62,7 +69,15 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
           placeholder={placeholder}
           value={value}
           onBlur={handleBlur}
+          onFocus={handleFocus}
           onInput={handleInput}
+          {...(!import.meta.env.SSR
+            ? {
+                role: "combobox",
+                "aria-controls": name + "-options",
+                "aria-expanded": hasFocus,
+              }
+            : {})}
         />
         {import.meta.env.SSR && options.length > 0 && (
           <datalist id={name + "-datalist"}>{dataListOptions}</datalist>
@@ -80,6 +95,7 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
       </div>
       {!import.meta.env.SSR && filteredOptions.length > 0 && (
         <div
+          id={name + "-options"}
           className={styles.options}
           style={{
             "--height": clientHeight + "px",
