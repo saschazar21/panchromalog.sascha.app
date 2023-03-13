@@ -6,6 +6,7 @@ enum FilmType {
 input CameraInput {
   model: String!
   make: String!
+  mount: String
 }
 
 input FilmInput {
@@ -18,6 +19,7 @@ input FilmInput {
 input LensInput {
   model: String!
   make: String!
+  mount: String!
 }
 
 input DeveloperInput @embedded {
@@ -57,15 +59,21 @@ input ImageInput {
   title: String
 }
 
+type Mount @collection(name: "mounts") {
+  name: String! @unique(index: "mount_by_name")
+}
+
 type Camera @collection(name: "cameras") {
   model: String! @unique(index: "camera_by_model")
   make: String
+  mount: Mount @relation(name: "mount")
   created_at: Time
 }
 
 type Lens @collection(name: "lenses") {
   model: String! @unique(index: "lens_by_model")
   make: String
+  mount: Mount @relation(name: "mount")
   created_at: Time
 }
 
@@ -126,13 +134,13 @@ type Mutation {
 }
 
 type Query {
-  cameras: [Camera!]! @resolver(name: "all_cameras")
+  cameras(mount: String): [Camera!]! @resolver(name: "all_cameras")
   camera(model: String!): Camera @resolver(name: "camera_by_model")
   films: [Film!]! @resolver(name: "all_films")
   film(name: String!): Film @resolver(name: "film_by_name")
   images(camera: String, film: String, lens: String): [Image!]!
     @resolver(name: "all_images", paginated: true)
   image(id: String!): Image @resolver(name: "image_by_id")
-  lenses: [Lens!]! @resolver(name: "all_lenses")
+  lenses(mount: String): [Lens!]! @resolver(name: "all_lenses")
   lens(model: String): Lens @resolver(name: "lens_by_model")
 }

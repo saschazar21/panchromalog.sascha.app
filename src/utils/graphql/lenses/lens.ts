@@ -3,6 +3,9 @@ import { graphQLRequest } from "../request";
 export interface Lens {
   model: string;
   make: string;
+  mount: {
+    name: string;
+  };
   created_at: string;
 }
 
@@ -15,6 +18,9 @@ query lens($model: String!) {
   lens(model: $model) {
       model
       make
+      mount {
+        name
+      }
       created_at
   }
 }

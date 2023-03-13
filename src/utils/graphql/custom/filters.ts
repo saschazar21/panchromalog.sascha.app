@@ -4,6 +4,9 @@ export interface Filters {
   camera: {
     model: string;
     make: string;
+    mount: {
+      name: string;
+    } | null;
   }[];
   films: {
     brand: string;
@@ -13,6 +16,9 @@ export interface Filters {
   lenses: {
     model: string;
     make: string;
+    mount: {
+      name: string;
+    };
   }[];
 }
 
@@ -21,6 +27,9 @@ query filters {
   cameras {
       model
       make
+      mount {
+        name
+      }
   }
   films {
       brand
@@ -30,6 +39,9 @@ query filters {
   lenses {
       model
       make
+      mount {
+        name
+      }
   }
 }
 `;
