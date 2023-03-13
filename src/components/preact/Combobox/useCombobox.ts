@@ -5,6 +5,7 @@ import type { ComboboxProps } from ".";
 enum COMBOBOX_ACTIONS {
   SET_FILTERED_OPTIONS,
   SET_FOCUS,
+  SET_FOCUS_ITEM,
   SET_VALUE,
 }
 
@@ -16,6 +17,7 @@ export interface ComboboxAction {
 }
 
 export interface ComboboxState {
+  focusedItem: number;
   filtered: string[];
   hasFocus?: boolean;
   value?: string;
@@ -35,6 +37,12 @@ const reducer = (state: ComboboxState, action: ComboboxAction) => {
         ...state,
         hasFocus: !!payload.hasFocus,
       };
+    case COMBOBOX_ACTIONS.SET_FOCUS_ITEM:
+      return {
+        ...state,
+        focusedItem: payload.focusedItem as number,
+        value: payload.value as string,
+      };
     case COMBOBOX_ACTIONS.SET_VALUE:
       return {
         ...state,
@@ -48,6 +56,7 @@ const reducer = (state: ComboboxState, action: ComboboxAction) => {
 const init = (customInitialState: Partial<ComboboxHookParams>): ComboboxState =>
   ({
     filtered: customInitialState.options,
+    focusedItem: -1,
     hasFocus: false,
     value: customInitialState.value,
   } as ComboboxState);
@@ -63,7 +72,7 @@ export const useCombobox = (initialState: ComboboxHookParams) => {
   const [state, dispatch] = useReducer(reducer, rest, init);
   const [_, setIsEditing] = useEditContext() ?? [];
 
-  const { filtered, value } = state;
+  const { filtered, focusedItem } = state;
 
   const handleBlur = useCallback(
     (e: Event) => {
@@ -79,7 +88,7 @@ export const useCombobox = (initialState: ComboboxHookParams) => {
         });
       }
     },
-    [value]
+    [filtered]
   );
 
   const handleClick = useCallback(
@@ -96,7 +105,7 @@ export const useCombobox = (initialState: ComboboxHookParams) => {
         typeof setIsEditing === "function" &&
         setIsEditing(false);
     },
-    [filtered]
+    [onChange, setIsEditing]
   );
 
   const handleFocus = useCallback((_e: Event) => {
@@ -108,26 +117,52 @@ export const useCombobox = (initialState: ComboboxHookParams) => {
     });
   }, []);
 
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (ref.current) {
-      const elements = ref.current.childNodes;
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (ref.current) {
+        const elements = ref.current.childNodes;
+        const next = (focusedItem + 1) % elements.length;
+        const previous =
+          ((focusedItem > 0 ? focusedItem : elements.length) - 1) %
+          elements.length;
 
-      switch (e.key) {
-        case "Enter":
-          break;
-        case "ArrowUp":
-          e.preventDefault();
-          (elements.item(elements.length - 1) as HTMLButtonElement).focus();
-          break;
-        case "ArrowDown":
-          e.preventDefault();
-          (elements.item(0) as HTMLButtonElement).focus();
-          break;
-        default:
-          e.preventDefault();
+        switch (e.key) {
+          case "Tab":
+          case "Enter":
+            break;
+          case "Escape":
+            e.preventDefault();
+            (e.currentTarget as HTMLElement)?.blur();
+            break;
+          case "ArrowDown":
+            e.preventDefault();
+            dispatch({
+              payload: {
+                focusedItem: next,
+                value: (elements.item(next) as HTMLElement).innerText,
+              },
+              type: COMBOBOX_ACTIONS.SET_FOCUS_ITEM,
+            });
+            (elements.item(next) as HTMLElement).focus();
+            break;
+          case "ArrowUp":
+            e.preventDefault();
+            dispatch({
+              payload: {
+                focusedItem: previous,
+                value: (elements.item(previous) as HTMLElement).innerText,
+              },
+              type: COMBOBOX_ACTIONS.SET_FOCUS_ITEM,
+            });
+            (elements.item(previous) as HTMLElement).focus();
+            break;
+          default:
+            e.preventDefault();
+        }
       }
-    }
-  }, []);
+    },
+    [focusedItem]
+  );
 
   const handleInput = useCallback(
     (e: Event) => {
@@ -150,20 +185,22 @@ export const useCombobox = (initialState: ComboboxHookParams) => {
   );
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.childNodes.forEach((child: ChildNode) => {
+    const el = ref.current;
+
+    if (el) {
+      el.childNodes.forEach((child) => {
         (child as HTMLButtonElement).addEventListener("keydown", handleKeyDown);
       });
     }
     return () => {
-      ref.current?.childNodes.forEach((child: ChildNode) =>
+      el?.childNodes.forEach((child) =>
         (child as HTMLButtonElement).removeEventListener(
           "keydown",
           handleKeyDown
         )
       );
     };
-  }, [rest.options]);
+  }, [handleKeyDown, rest.options]);
 
   return {
     ...state,

@@ -6,6 +6,7 @@ import { FILTER_ACTIONS } from "@utils/stores/filters";
 import type { Gallery } from "@utils/stores/gallery";
 import { useCallback, useEffect, useMemo, useRef } from "preact/hooks";
 
+// eslint-disable-next-line no-undef
 const DEFAULT_SETTINGS: Partial<IntersectionObserverInit> = {
   root: null,
   rootMargin: "0px",
@@ -21,6 +22,7 @@ export const useObservedGallery = (galleryInit?: Partial<Gallery>) => {
   const refFirst = useRef<HTMLPictureElement>(null);
   const refLast = useRef<HTMLPictureElement>(null);
 
+  // eslint-disable-next-line no-undef
   const handleObserve: IntersectionObserverCallback = useCallback(
     ([el]) => {
       if (el?.isIntersecting) {
@@ -35,10 +37,8 @@ export const useObservedGallery = (galleryInit?: Partial<Gallery>) => {
           });
       }
     },
-    [after, before]
+    [after, before, dispatch]
   );
-
-  const observer = new IntersectionObserver(handleObserve, DEFAULT_SETTINGS);
 
   const pictures = useMemo(
     () =>
@@ -54,20 +54,22 @@ export const useObservedGallery = (galleryInit?: Partial<Gallery>) => {
           ...(i === data.length - 1 ? { ref: refLast } : {}),
         })
       ),
-    [data]
+    [data, mutations]
   );
 
   useEffect(() => {
-    if (observer) {
-      before && refFirst.current && observer.observe(refFirst.current);
-      after && refLast.current && observer.observe(refLast.current);
+    const observer = new IntersectionObserver(handleObserve, DEFAULT_SETTINGS);
+    const firstEl = refFirst.current;
+    const lastEl = refLast.current;
 
-      return () => {
-        refFirst.current && observer.unobserve(refFirst.current);
-        refLast.current && observer.unobserve(refLast.current);
-      };
-    }
-  }, [after, before, pictures]);
+    before && firstEl && observer.observe(firstEl);
+    after && lastEl && observer.observe(lastEl);
+
+    return () => {
+      firstEl && observer.unobserve(firstEl);
+      lastEl && observer.unobserve(lastEl);
+    };
+  }, [after, before, handleObserve, pictures]);
 
   return pictures;
 };

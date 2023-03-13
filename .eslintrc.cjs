@@ -2,12 +2,14 @@ module.exports = {
   env: {
     browser: true,
     node: true,
+    serviceworker: true,
   },
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:astro/jsx-a11y-recommended",
     "plugin:prettier/recommended",
+    "preact",
   ],
   overrides: [
     {
@@ -17,6 +19,9 @@ module.exports = {
         parser: "@typescript-eslint/parser",
         extraFileExtensions: [".astro"],
       },
+      rules: {
+        "react/self-closing-comp": ["off"],
+      },
     },
   ],
   parser: "@typescript-eslint/parser",
@@ -24,6 +29,14 @@ module.exports = {
   root: true,
   rules: {
     "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_",
+      },
+    ],
+    "no-unused-vars": [
       "error",
       {
         argsIgnorePattern: "^_",

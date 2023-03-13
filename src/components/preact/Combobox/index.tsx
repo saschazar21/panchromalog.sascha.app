@@ -30,7 +30,7 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
 
   useEffect(() => {
     setClientHeight(ref.current?.clientHeight ?? 0);
-  }, [filtered]);
+  }, [filtered, ref]);
 
   const filteredOptions = useMemo(
     () =>
@@ -44,13 +44,13 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
           {option}
         </button>
       )),
-    [filtered]
+    [filtered, handleClick]
   );
 
   const dataListOptions = useMemo(
     () =>
       options.map((option) => (
-        <option value={option} key={"datalist-" + option} />
+        <option value={option} key={`datalist-${option}`} />
       )),
     [options]
   );
@@ -65,7 +65,7 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
           className={styles.input}
           type="text"
           id={name}
-          list={import.meta.env.SSR ? name + "-datalist" : undefined}
+          list={import.meta.env.SSR ? `${name}-datalist` : undefined}
           name={name}
           placeholder={placeholder}
           value={value}
@@ -76,13 +76,13 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
           {...(!import.meta.env.SSR
             ? {
                 role: "combobox",
-                "aria-controls": name + "-options",
+                "aria-controls": `${name}-options`,
                 "aria-expanded": hasFocus,
               }
             : {})}
         />
         {import.meta.env.SSR && options.length > 0 && (
-          <datalist id={name + "-datalist"}>{dataListOptions}</datalist>
+          <datalist id={`${name}-datalist`}>{dataListOptions}</datalist>
         )}
         {!import.meta.env.SSR && (
           <button
@@ -97,13 +97,15 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
       </div>
       {!import.meta.env.SSR && filteredOptions.length > 0 && (
         <div
-          id={name + "-options"}
+          id={`${name}-options`}
           className={styles.options}
           style={{
-            "--height": clientHeight + "px",
+            "--height": `${clientHeight}px`,
           }}
         >
-          <div ref={ref}>{filteredOptions}</div>
+          <div ref={ref} role="listbox" aria-label={`${name} options`}>
+            {filteredOptions}
+          </div>
         </div>
       )}
     </section>

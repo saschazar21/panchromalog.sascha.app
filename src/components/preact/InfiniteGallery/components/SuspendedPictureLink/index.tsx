@@ -31,12 +31,12 @@ export const SuspendedPictureLink = forwardRef<
 
         setImageDetailProps(imageData);
 
-        const url = new URL("/p/" + props.id, import.meta.env.SITE);
+        const url = new URL(`/p/${props.id}`, import.meta.env.SITE);
         !import.meta.env.SSR &&
           window.history.pushState({ id: props.id }, "", url);
       }
     },
-    [props]
+    [imageData, props.id]
   );
 
   const handleOnClose = useCallback((e: MouseEvent) => {
@@ -49,10 +49,10 @@ export const SuspendedPictureLink = forwardRef<
   return (
     <>
       <a
-        href={"/p/" + props.id}
+        href={`/p/${props.id}`}
         onClick={handleOnClick}
         target="_blank"
-        rel="opener"
+        rel="opener noreferrer"
       >
         <SuspendedPicture {...props} ref={ref} />
       </a>
@@ -67,9 +67,9 @@ export const SuspendedPictureLink = forwardRef<
           aria-labelledby={imageDetailProps.title ? "imagetitle" : undefined}
           modalControls={
             <a
-              href={"/p/" + imageDetailProps.id}
+              href={`/p/${imageDetailProps.id}`}
               target="_blank"
-              rel="opener"
+              rel="opener noreferrer"
               className={styles.detailLink}
             >
               View image details

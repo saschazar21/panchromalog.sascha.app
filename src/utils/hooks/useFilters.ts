@@ -17,6 +17,7 @@ export const useFilters = (filterInit?: Partial<Filters>) => {
         payload: filterInit,
         type: FILTER_ACTIONS.RESET,
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

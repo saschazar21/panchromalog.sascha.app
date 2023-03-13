@@ -74,7 +74,7 @@ export const useFilterForm = (filterInit: FilterInit) => {
           return setIsModalOpen((value) => !value);
       }
     },
-    [cameras, films, lenses]
+    [cameras, films, filterDispatch, lenses]
   );
 
   const mappedCameras = useMemo(
@@ -110,11 +110,14 @@ export const useFilterForm = (filterInit: FilterInit) => {
     [dispatch]
   );
 
-  const handleModalToggle = useCallback((e: MouseEvent) => {
-    e.defaultPrevented ?? e.preventDefault();
+  const handleModalToggle = useCallback(
+    (e: MouseEvent) => {
+      e.defaultPrevented ?? e.preventDefault();
 
-    dispatch({ payload: "", type: FILTERFORM_ACTIONS.TOGGLE_MODAL });
-  }, []);
+      dispatch({ payload: "", type: FILTERFORM_ACTIONS.TOGGLE_MODAL });
+    },
+    [dispatch]
+  );
 
   return {
     handleChange,

@@ -9,9 +9,17 @@ export const useFilterHistory = () => {
     if (!import.meta.env.SSR) {
       const url = new URL(window.location.href);
       const params = buildParams(state);
-      url.search = params.toString();
+      const search = params.toString();
 
-      window.history.pushState(Object.fromEntries(params), "", url.toString());
+      if (url.search !== `?${search}`) {
+        url.search = search;
+
+        window.history.pushState(
+          Object.fromEntries(params),
+          "",
+          url.toString()
+        );
+      }
     }
   }, [state]);
 };

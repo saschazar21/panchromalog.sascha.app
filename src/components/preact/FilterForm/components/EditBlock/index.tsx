@@ -42,7 +42,7 @@ export const EditBlock: FunctionalComponent<EditBlockProps> = ({
           <button
             className={customStyles.button}
             type="button"
-            title={"Edit " + name}
+            title={`Edit ${name}`}
             onClick={handleClick}
           >
             <EditIcon role="presentation" aria-hidden />

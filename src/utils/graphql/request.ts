@@ -25,7 +25,7 @@ export const graphQLRequest = async <T>(
       method: "POST",
       headers: {
         accept: "application/json",
-        authorization: "Bearer " + import.meta.env.FAUNA_KEY,
+        authorization: `Bearer ${import.meta.env.FAUNA_KEY}`,
         "content-type": "application/json",
       },
       body: JSON.stringify({

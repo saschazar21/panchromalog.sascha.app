@@ -14,15 +14,18 @@ export const useModal = (onClose: (e: Event) => void = () => undefined) => {
     }
   }, []);
 
-  const handleKeyUp = useCallback((e: KeyboardEvent) => {
-    e.preventDefault();
+  const handleKeyUp = useCallback(
+    (e: KeyboardEvent) => {
+      e.preventDefault();
 
-    switch (e.key) {
-      case "Enter":
-      case "Escape":
-        return onClose(e);
-    }
-  }, []);
+      switch (e.key) {
+        case "Enter":
+        case "Escape":
+          return onClose(e);
+      }
+    },
+    [onClose]
+  );
 
   return {
     handleKeyUp,

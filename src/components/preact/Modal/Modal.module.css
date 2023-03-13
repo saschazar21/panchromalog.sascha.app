@@ -92,9 +92,12 @@
     color var(--duration) ease-in;
 }
 
-.button:hover {
+.button:hover,
+.button:focus {
   --link-color: var(--color-bg-light);
   --bg-color: var(--color-text-muted);
+
+  outline-color: var(--link-color);
 }
 
 @media screen and (min-width: 940px) {

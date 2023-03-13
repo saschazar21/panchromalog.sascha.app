@@ -105,7 +105,7 @@ export const fetchFilters = async (
 };
 
 export const getImageUrl = (path: string) => {
-  const p = path?.startsWith("/") ? path : "/" + path;
+  const p = path?.startsWith("/") ? path : `/${path}`;
 
   return new URL(`/api/image${p}`, import.meta.env.SITE).toString();
 };
@@ -153,7 +153,7 @@ export const parseParams = async (
     throw new Error(
       Array.isArray(errors)
         ? errors[0].message
-        : "Failed to fetch images filtered by: " + params.toString()
+        : `Failed to fetch images filtered by: ${params.toString()}`
     );
   }
 

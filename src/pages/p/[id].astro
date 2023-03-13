@@ -7,7 +7,7 @@ import ErrorPage from "../404.astro";
 const id = Astro.params.id;
 
 const { data, errors } = await fetch(
-  new URL("/api/images/" + id, Astro.site)
+  new URL(`/api/images/${id}`, Astro.site)
 ).then((res) => res.json());
 
 if (!data?.image || errors?.length) {
@@ -28,8 +28,8 @@ const imageUrl = buildImageLink({
 
 const props = {
   alt: meta.alt,
-  title: title,
-  description: description,
+  title,
+  description,
   image: imageUrl,
 };
 ---

@@ -62,7 +62,14 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
           </form>
         </noscript>
       ),
-    []
+    [
+      rest.camera?.model,
+      rest.cameras,
+      rest.film?.name,
+      rest.films,
+      rest.lens?.model,
+      rest.lenses,
+    ]
   );
 
   return (

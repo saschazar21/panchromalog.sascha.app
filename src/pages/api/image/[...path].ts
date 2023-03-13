@@ -12,7 +12,7 @@ export const get: APIRoute = async ({ params }): Promise<Response> => {
 
   try {
     const url = new URL(
-      "/" + import.meta.env.IMAGEKIT_ID + "/" + path,
+      `/${import.meta.env.IMAGEKIT_ID}/${path}`,
       IMAGEKIT_BASE_URL
     );
 

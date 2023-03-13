@@ -4,4 +4,4 @@ import { useContext } from "preact/hooks";
 
 export const FilterContext = createContext<Filters | null>(null);
 
-export const useFilterContext = useContext(FilterContext);
+export const useFilterContext = () => useContext(FilterContext);

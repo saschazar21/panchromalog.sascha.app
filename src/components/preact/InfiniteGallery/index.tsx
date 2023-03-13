@@ -43,13 +43,13 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
   return (
     <div className={styles.container}>
       {gallery?.before && (
-        <a className={className} href={"/?cursor=" + gallery.before} rel="prev">
+        <a className={className} href={`/?cursor=${gallery.before}`} rel="prev">
           Load previous images
         </a>
       )}
       <section className={styles.gallery}>{pictures}</section>
       {gallery?.after ? (
-        <a className={className} href={"/?cursor=" + gallery.after} rel="next">
+        <a className={className} href={`/?cursor=${gallery.after}`} rel="next">
           Load next images
         </a>
       ) : (

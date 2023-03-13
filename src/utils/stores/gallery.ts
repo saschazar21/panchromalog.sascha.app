@@ -80,7 +80,7 @@ const galleryUpdate = ({
     Object.assign(
       {},
       camera ? { camera: camera.model } : {},
-      cursor ? { cursor: cursor } : {},
+      cursor ? { cursor } : {},
       film ? { film: film.name } : {},
       lens ? { lens: lens.model } : {}
     )
