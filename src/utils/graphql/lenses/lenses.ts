@@ -18,5 +18,5 @@ query lenses($mount: String) {
 }
 `;
 
-export const getLenses = async (variables: LensesVariables) =>
+export const getLenses = async (variables?: LensesVariables) =>
   graphQLRequest<{ lenses: Lens[] }>(GET_LENSES_QUERY, variables);

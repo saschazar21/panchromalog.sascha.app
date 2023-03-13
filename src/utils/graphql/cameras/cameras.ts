@@ -18,5 +18,5 @@ query cameras($mount: String) {
 }
 `;
 
-export const getCameras = async (variables: CamerasVariables) =>
+export const getCameras = async (variables?: CamerasVariables) =>
   graphQLRequest<{ cameras: Camera[] }>(GET_CAMERAS_QUERY, variables);

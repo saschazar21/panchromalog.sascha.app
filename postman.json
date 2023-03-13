@@ -449,6 +449,54 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "cameras",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/cameras?mount=",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"cameras"
+					],
+					"query": [
+						{
+							"key": "mount",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "lenses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/lenses?mount=",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"lenses"
+					],
+					"query": [
+						{
+							"key": "mount",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
