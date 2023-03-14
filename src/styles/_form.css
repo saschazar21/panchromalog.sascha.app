@@ -9,6 +9,9 @@ button,
   background-color: var(--bg-color, var(--color-text));
   color: var(--link-color);
   cursor: pointer;
+  transition: color var(--duration) ease-out,
+    background-color var(--duration) ease-out,
+    outline-color var(--duration) ease-out;
 }
 
 button:hover,

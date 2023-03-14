@@ -96,7 +96,8 @@ import { ReactComponent as PixelfedIcon } from "@icons/pixelfed.svg";
   }
 
   .button.button {
-    background-color: var(--color-bg-muted);
+    --link-color: var(--color-text-muted);
+    --bg-color: var(--color-bg-muted);
 
     display: flex;
     border-radius: 9999px;
@@ -106,8 +107,14 @@ import { ReactComponent as PixelfedIcon } from "@icons/pixelfed.svg";
     aspect-ratio: 1;
   }
 
+  .button.button:hover,
+  .button.button:focus {
+    --link-color: var(--color-bg-muted);
+    --bg-color: var(--color-text-muted);
+  }
+
   .icon {
-    fill: var(--color-text);
+    fill: currentColor;
   }
 
   [data-avatar] {
