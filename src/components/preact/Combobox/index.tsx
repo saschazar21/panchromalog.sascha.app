@@ -6,6 +6,7 @@ import styles from "./Combobox.module.css";
 import { useCombobox } from "./useCombobox";
 
 export interface ComboboxProps {
+  disabled?: boolean;
   name: string;
   onChange?: (value: string) => void;
   options: string[];
@@ -14,7 +15,7 @@ export interface ComboboxProps {
 }
 
 export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
-  const { name, options, placeholder } = props;
+  const { disabled, name, options, placeholder } = props;
   const [clientHeight, setClientHeight] = useState(0);
   const {
     filtered,
@@ -39,12 +40,13 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
           className={styles.option}
           type="button"
           onClick={(e: MouseEvent) => handleClick(e, option)}
+          onKeyDown={handleKeyDown}
           key={option}
         >
           {option}
         </button>
       )),
-    [filtered, handleClick]
+    [filtered, handleClick, handleKeyDown]
   );
 
   const dataListOptions = useMemo(
@@ -63,6 +65,7 @@ export const Combobox: FunctionalComponent<ComboboxProps> = (props) => {
       <div className={styles.inputWrapper}>
         <input
           className={styles.input}
+          disabled={disabled}
           type="text"
           id={name}
           list={import.meta.env.SSR ? `${name}-datalist` : undefined}

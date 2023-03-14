@@ -114,43 +114,40 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
               Decrease or increase the displayed collection of images by
               adjusting the controls below.
             </p>
-            {cameras.length > 0 && (
-              <EditBlock
+            <EditBlock
+              name="camera"
+              subtitle={camera?.make}
+              title={camera?.model}
+            >
+              <Combobox
+                disabled={!cameras.length}
                 name="camera"
-                subtitle={camera?.make}
-                title={camera?.model}
-              >
-                <Combobox
-                  name="camera"
-                  options={cameras}
-                  placeholder="Enter camera model"
-                  value={camera?.model ?? null}
-                  onChange={(payload) => handleChange(payload, "camera")}
-                />
-              </EditBlock>
-            )}
-            {lenses.length > 0 && (
-              <EditBlock name="lens" subtitle={lens?.make} title={lens?.model}>
-                <Combobox
-                  name="lens"
-                  options={lenses}
-                  placeholder="Enter lens model"
-                  value={lens?.model ?? null}
-                  onChange={(payload) => handleChange(payload, "lens")}
-                />
-              </EditBlock>
-            )}
-            {films.length > 0 && (
-              <EditBlock name="film" subtitle={film?.brand} title={film?.name}>
-                <Combobox
-                  name="film"
-                  options={films}
-                  placeholder="Enter film name"
-                  value={film?.name ?? null}
-                  onChange={(payload) => handleChange(payload, "film")}
-                />
-              </EditBlock>
-            )}
+                options={cameras}
+                placeholder="Enter camera model"
+                value={camera?.model ?? null}
+                onChange={(payload) => handleChange(payload, "camera")}
+              />
+            </EditBlock>
+            <EditBlock name="lens" subtitle={lens?.make} title={lens?.model}>
+              <Combobox
+                disabled={!lenses.length}
+                name="lens"
+                options={lenses}
+                placeholder="Enter lens model"
+                value={lens?.model ?? null}
+                onChange={(payload) => handleChange(payload, "lens")}
+              />
+            </EditBlock>
+            <EditBlock name="film" subtitle={film?.brand} title={film?.name}>
+              <Combobox
+                disabled={!films.length}
+                name="film"
+                options={films}
+                placeholder="Enter film name"
+                value={film?.name ?? null}
+                onChange={(payload) => handleChange(payload, "film")}
+              />
+            </EditBlock>
           </section>
         </Modal>
       )}

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useReducer, useRef } from "preact/hooks";
 import type { ComboboxProps } from ".";
 
 enum COMBOBOX_ACTIONS {
+  RESET,
   SET_FILTERED_OPTIONS,
   SET_FOCUS,
   SET_FOCUS_ITEM,
@@ -23,10 +24,23 @@ export interface ComboboxState {
   value?: string;
 }
 
+const initialState: ComboboxState = {
+  filtered: [],
+  focusedItem: -1,
+  hasFocus: false,
+  value: "",
+};
+
 const reducer = (state: ComboboxState, action: ComboboxAction) => {
   const { payload, type } = action;
 
   switch (type) {
+    case COMBOBOX_ACTIONS.RESET:
+      return {
+        ...state,
+        focusedItem: -1,
+        filtered: [...(payload.filtered as string[])],
+      };
     case COMBOBOX_ACTIONS.SET_FILTERED_OPTIONS:
       return {
         ...state,
@@ -55,9 +69,8 @@ const reducer = (state: ComboboxState, action: ComboboxAction) => {
 
 const init = (customInitialState: Partial<ComboboxHookParams>): ComboboxState =>
   ({
+    ...initialState,
     filtered: customInitialState.options,
-    focusedItem: -1,
-    hasFocus: false,
     value: customInitialState.value,
   } as ComboboxState);
 
@@ -73,6 +86,13 @@ export const useCombobox = (initialState: ComboboxHookParams) => {
   const [_, setIsEditing] = useEditContext() ?? [];
 
   const { filtered, focusedItem } = state;
+
+  useEffect(() => {
+    dispatch({
+      payload: { filtered: rest.options },
+      type: COMBOBOX_ACTIONS.RESET,
+    });
+  }, [rest.options]);
 
   const handleBlur = useCallback(
     (e: Event) => {
@@ -183,24 +203,6 @@ export const useCombobox = (initialState: ComboboxHookParams) => {
     },
     [rest.options]
   );
-
-  useEffect(() => {
-    const el = ref.current;
-
-    if (el) {
-      el.childNodes.forEach((child) => {
-        (child as HTMLButtonElement).addEventListener("keydown", handleKeyDown);
-      });
-    }
-    return () => {
-      el?.childNodes.forEach((child) =>
-        (child as HTMLButtonElement).removeEventListener(
-          "keydown",
-          handleKeyDown
-        )
-      );
-    };
-  }, [handleKeyDown, rest.options]);
 
   return {
     ...state,
