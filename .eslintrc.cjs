@@ -20,6 +20,7 @@ module.exports = {
         extraFileExtensions: [".astro"],
       },
       rules: {
+        "react/jsx-key": ["off"],
         "react/self-closing-comp": ["off"],
       },
     },

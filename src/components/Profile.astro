@@ -1,6 +1,10 @@
 ---
 import { Picture } from "@astrojs/image/components";
+import social from "@data/social.json";
 import pkg from "../../package.json";
+
+import { ReactComponent as InstagramIcon } from "@icons/instagram.svg";
+import { ReactComponent as PixelfedIcon } from "@icons/pixelfed.svg";
 ---
 
 <header aria-labelledby="title">
@@ -21,6 +25,30 @@ import pkg from "../../package.json";
   <div>
     <h1 id="title">{pkg.short_name}</h1>
     <p>{pkg.description}</p>
+    <ul>
+      <li>
+        <a
+          class="button"
+          href={social.instagram.href}
+          title={`${social.instagram.username} on ${social.instagram.provider}`}
+          rel="noindex nofollow noreferrer"
+          target="_blank"
+        >
+          <InstagramIcon className="icon" role="presentation" aria-hidden />
+        </a>
+      </li>
+      <li>
+        <a
+          class="button"
+          href={social.pixelfed.href}
+          title={`${social.pixelfed.username} on ${social.pixelfed.provider}`}
+          rel="noindex nofollow noreferrer"
+          target="_blank"
+        >
+          <PixelfedIcon className="icon" role="presentation" aria-hidden />
+        </a>
+      </li>
+    </ul>
   </div>
 </header>
 
@@ -53,6 +81,33 @@ import pkg from "../../package.json";
     margin: 0;
     font-size: var(--font-size-h4);
     text-align: left;
+  }
+
+  ul {
+    display: flex;
+    gap: var(--space-m);
+    margin: 0;
+    margin-top: var(--space-xl);
+    list-style-type: none;
+  }
+
+  li {
+    padding: 0;
+  }
+
+  .button.button {
+    background-color: var(--color-bg-muted);
+
+    display: flex;
+    border-radius: 9999px;
+    padding: var(--space-s);
+    height: 44px;
+    width: 44px;
+    aspect-ratio: 1;
+  }
+
+  .icon {
+    fill: var(--color-text);
   }
 
   [data-avatar] {
