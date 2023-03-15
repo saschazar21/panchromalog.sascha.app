@@ -6,7 +6,7 @@ export const manifest: Partial<ManifestOptions> = {
   short_name: pkg.short_name,
   description: pkg.description,
   theme_color: pkg.color,
-  background_color: "#E9ECEF",
+  background_color: "#f6f6f6",
   display: "standalone",
   icons: [
     {

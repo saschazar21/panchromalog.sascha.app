@@ -14,6 +14,34 @@ const props = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content={pkg.color} />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="192x192"
+      href="/img/apple-touch-192.png"
+    /><link
+      rel="apple-touch-icon"
+      sizes="512x512"
+      href="/img/apple-touch-512.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/img/favicon-32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/img/favicon-16.png"
+    />
+    <link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#222222" />
+    <link rel="shortcut icon" href="/img/favicon.ico" sizes="any" />
+    <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
+    <meta name="msapplication-TileColor" content={pkg.color} />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+
     <link
       rel="preload"
       href="/fonts/linowrite.ttf"
