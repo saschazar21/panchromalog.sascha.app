@@ -11,7 +11,7 @@ export const useImageLink = (options: ImageOptions) => {
         options.href ?? contextOptions.href,
         import.meta.env.SITE
       ).toString(),
-    [options.href, contextOptions.href]
+    [options?.href, contextOptions?.href]
   );
 
   return useMemo(

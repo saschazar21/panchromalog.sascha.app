@@ -78,7 +78,7 @@ const refetch = async (endpoint: string, url: URL) => {
   try {
     const { data, errors } = await fetch(url).then((res) => res.json());
 
-    if (!data || errors?.length) {
+    if (!data && errors?.length) {
       throw new Error(errors[0].message);
     }
 

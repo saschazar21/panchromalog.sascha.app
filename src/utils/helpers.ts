@@ -149,12 +149,8 @@ export const parseParams = async (
 
   const { data: gallery, errors } = await fetch(url).then((res) => res.json());
 
-  if (!gallery || errors?.length) {
-    throw new Error(
-      Array.isArray(errors)
-        ? errors[0].message
-        : `Failed to fetch images filtered by: ${params.toString()}`
-    );
+  if (!gallery && errors?.length) {
+    throw new Error(errors[0].message);
   }
 
   return gallery?.images ?? null;

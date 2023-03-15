@@ -10,7 +10,7 @@ const { data, errors } = await fetch(
   new URL(`/api/images/${id}`, Astro.site)
 ).then((res) => res.json());
 
-if (!data?.image || errors?.length) {
+if (!data?.image && errors?.length) {
   Astro.response.status = 404;
   Astro.response.statusText = "This image could not be found.";
 }
