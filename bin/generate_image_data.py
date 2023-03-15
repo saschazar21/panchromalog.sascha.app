@@ -87,6 +87,11 @@ class ImageData:
             image_dict.update([(i, image)])
 
         return image_dict
+    
+    def find_image_path(self, suffix):
+        result = list(filter(lambda entry: entry.endswith(suffix), self.args.images))
+
+        return result[0]
 
     def format_file_paths(self):
 
@@ -155,7 +160,8 @@ class ImageData:
                     if self.images and self.images.get(i + 1) == None:
                         continue
 
-                    width, height = get_image_size(self.images.get(i + 1))
+                    path = self.find_image_path(self.images.get(i + 1))
+                    width, height = get_image_size(path)
 
                     # https://stackoverflow.com/a/58859083
                     row = {k: v if v else None for k, v in row.items()}
