@@ -1,5 +1,7 @@
 <div align="center">
-  <h1>Panchromalog</h1>
+  <img alt="The icon of the website, showing stylized film perforations surrounding stylized diaphragm blades" src="public/img/rounded-512.png" width="192px" />
+  <br />
+  <h1><a href="https://panchromalog.sascha.app">Panchromalog</a></h1>
   <strong>This is Sascha's collection of analog photographs. 📸🎞️</strong>
   <br />
   <br />
