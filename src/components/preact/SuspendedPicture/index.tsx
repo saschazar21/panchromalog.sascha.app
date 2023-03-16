@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "preact/hooks";
 import { forwardRef, HTMLAttributes } from "preact/compat";
 import { SuspendedImage } from "@components/preact/SuspendedImage";
-import { useImageLink } from "@utils/hooks/useImageLink";
+import { buildImageLink } from "@utils/helpers";
 
 export interface SuspendedPictureProps
   extends Omit<HTMLAttributes<HTMLImageElement>, "ref"> {
@@ -19,24 +19,24 @@ export const SuspendedPicture = forwardRef<
   SuspendedPictureProps
 >((props, ref) => {
   const { color, formats = ["jpeg"], sizes, widths = [], ...rest } = props;
+  const { height, width, src } = props;
 
   const sourceSet = useCallback(
     (format: string) =>
       widths
         .map((w) => {
-          const { height, width, src } = props;
           const ratio = w / width;
-          const url = useImageLink({
+          const url = buildImageLink({
             f: format as "avif" | "webp" | "jpeg",
             h: Math.floor(height * ratio),
-            href: src,
+            href: new URL(src, import.meta.env.SITE).toString(),
             w: Math.floor(width * ratio),
           });
 
-          return [url, w + "w"].join(" ");
+          return [url, `${w}w`].join(" ");
         })
         .join(", "),
-    [widths]
+    [height, src, width, widths]
   );
 
   const sources = useMemo(
@@ -44,12 +44,12 @@ export const SuspendedPicture = forwardRef<
       formats.map((format) => (
         <source
           key={props.src + format}
-          type={"image/" + format}
+          type={`image/${format}`}
           sizes={sizes}
           srcset={sourceSet(format)}
         />
       )),
-    [formats]
+    [formats, props.src, sizes, sourceSet]
   );
 
   return (

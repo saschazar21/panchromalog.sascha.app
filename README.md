@@ -57,7 +57,7 @@ The following prerequisites are needed to successfully launch this project local
 
 ### Prerequisites
 
-- A [Vercel](https://vercel.com) account
+- A [Netlify](https://netlify.com) account
 
   - Astro supports other integrations as well - check the docs for more information: https://docs.astro.build/en/guides/integrations-guide/. Adapt the `astro.config.mjs` configuration accordingly.
 

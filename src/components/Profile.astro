@@ -1,26 +1,77 @@
 ---
 import { Picture } from "@astrojs/image/components";
+import social from "@data/social.json";
+import { manifest } from "@utils/manifest";
 import pkg from "../../package.json";
+
+import { ReactComponent as GitHubIcon } from "@icons/github.svg";
+import { ReactComponent as InstagramIcon } from "@icons/instagram.svg";
+import { ReactComponent as PixelfedIcon } from "@icons/pixelfed.svg";
 ---
 
 <header aria-labelledby="title">
   <div data-avatar>
-    <Picture
-      src="https://via.placeholder.com/192x192.png"
-      alt={`Avatar of ${pkg.author.name}`}
-      sizes="(min-width: 640px) 96px, 64px"
-      widths={[64, 96, 128, 192]}
-      aspectRatio={1}
-      formats={["avif", "webp", "jpeg"]}
-      loading="eager"
-      background={undefined}
-      width={64}
-      height={64}
-    />
+    <a href={import.meta.env.SITE} title="Return to home page">
+      <Picture
+        src="/img/apple-touch-512.png"
+        alt={`Logo of ${manifest.name}`}
+        sizes="(min-width: 640px) 96px, 64px"
+        widths={[64, 128, 192, 256]}
+        aspectRatio={1}
+        formats={["avif", "webp", "jpeg"]}
+        loading="eager"
+        background={undefined}
+        width={64}
+        height={64}
+      />
+    </a>
   </div>
   <div>
     <h1 id="title">{pkg.short_name}</h1>
     <p>{pkg.description}</p>
+    <ul>
+      {
+        social.instagram && (
+          <li>
+            <a
+              class="button"
+              href={social.instagram.href}
+              title={`${social.instagram.username} on ${social.instagram.provider}`}
+              rel="noindex nofollow noreferrer"
+              target="_blank"
+            >
+              <InstagramIcon className="icon" role="presentation" aria-hidden />
+            </a>
+          </li>
+        )
+      }
+      {
+        social.pixelfed && (
+          <li>
+            <a
+              class="button"
+              href={social.pixelfed.href}
+              title={`${social.pixelfed.username} on ${social.pixelfed.provider}`}
+              rel="noindex nofollow noreferrer"
+              target="_blank"
+            >
+              <PixelfedIcon className="icon" role="presentation" aria-hidden />
+            </a>
+          </li>
+        )
+      }
+      <li>
+        <a
+          class="button"
+          href={pkg.repository.url}
+          title="Source code on GitHub"
+          rel="noindex nofollow noreferrer"
+          target="_blank"
+        >
+          <GitHubIcon className="icon" role="presentation" aria-hidden />
+        </a>
+      </li>
+    </ul>
   </div>
 </header>
 
@@ -35,8 +86,12 @@ import pkg from "../../package.json";
     margin: var(--space-xl) 0 var(--space-xxl);
   }
 
+  a,
   img {
     border-radius: 9999px;
+  }
+
+  img {
     height: 64px;
     width: 64px;
   }
@@ -53,6 +108,40 @@ import pkg from "../../package.json";
     margin: 0;
     font-size: var(--font-size-h4);
     text-align: left;
+  }
+
+  ul {
+    display: flex;
+    gap: var(--space-m);
+    margin: 0;
+    margin-top: var(--space-xl);
+    list-style-type: none;
+  }
+
+  li {
+    padding: 0;
+  }
+
+  .button.button {
+    --link-color: var(--color-text-muted);
+    --bg-color: var(--color-bg-muted);
+
+    display: flex;
+    border-radius: 9999px;
+    padding: var(--space-s);
+    height: 36px;
+    width: 36px;
+    aspect-ratio: 1;
+  }
+
+  .button.button:hover,
+  .button.button:focus {
+    --link-color: var(--color-bg-muted);
+    --bg-color: var(--color-text-muted);
+  }
+
+  .icon {
+    fill: currentColor;
   }
 
   [data-avatar] {
@@ -74,8 +163,8 @@ import pkg from "../../package.json";
     }
 
     img {
-      height: 96px;
-      width: 96px;
+      height: 128px;
+      width: 128px;
     }
   }
 

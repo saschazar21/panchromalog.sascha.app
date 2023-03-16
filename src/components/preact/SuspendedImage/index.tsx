@@ -37,7 +37,7 @@ export const SuspendedImage: FunctionComponent<SuspendedImageProps> = ({
 
   const handleOnLoad = useCallback(() => {
     setIsLoaded(true);
-  }, [href]);
+  }, []);
 
   const className = classNames(styles.img, customClassName as string);
 

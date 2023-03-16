@@ -1,0 +1,109 @@
+.wrapper,
+.options > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+.wrapper {
+  --padding: var(--space-m);
+  --margin: calc(var(--padding) * 0.5);
+
+  position: relative;
+  border: var(--border-width-s) solid var(--color-shadow);
+  margin-top: calc(var(--padding) * 2);
+  padding: calc(var(--padding) * 2) var(--padding)
+    calc(var(--padding) + var(--space-s));
+  transition: box-shadow var(--duration) ease-out;
+}
+
+.label {
+  position: absolute;
+  padding: 0 var(--margin);
+  top: 0;
+  left: calc(var(--space-l) + var(--padding) * 0.5);
+  background-color: var(--color-bg);
+  transform: translateY(-50%);
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.input {
+  border: none;
+  padding-right: calc(var(--space-m) + 44px);
+}
+
+.options {
+  --max-height: 230px;
+
+  position: absolute;
+  border-radius: inherit;
+  border: var(--border-width-s) solid var(--color-shadow);
+  border-top-style: dashed;
+  border-top-color: var(--color-bg-muted);
+  padding: calc(var(--padding) + var(--space-m)) var(--padding) var(--padding);
+  top: 100%;
+  right: 0;
+  left: calc(var(--border-width-s) * -1);
+  height: 0;
+  max-height: var(--max-height);
+  width: calc(100% + var(--border-width-s) * 2);
+  background-color: var(--bg-color, var(--color-bg));
+  transition: height var(--duration) ease-out, opacity var(--duration) ease-out,
+    box-shadow var(--duration) ease-out;
+  overflow: hidden;
+  overflow-y: scroll;
+  opacity: 0;
+  z-index: 10;
+}
+
+.option {
+  --link-color: var(--color-text-muted);
+  --bg-color: var(--color-bg-muted);
+  border: none;
+  min-height: 44px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.option:hover,
+.option:focus {
+  --link-color: var(--color-text-muted);
+}
+
+.wrapper:focus-within,
+.wrapper:focus-within .options {
+  box-shadow: 0 5px 12px -1px var(--color-shadow);
+}
+
+.wrapper:focus-within .options {
+  height: min(
+    var(--max-height),
+    calc(
+      var(--height) + var(--padding) * 2 + var(--space-m) +
+        var(--border-width-s) * 2
+    )
+  );
+  opacity: 1;
+}
+
+.inputWrapper > button {
+  position: absolute;
+  display: block;
+  padding: var(--space-s);
+  right: 0;
+  top: 50%;
+  height: 100%;
+  width: auto;
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+}
+
+@media screen and (min-width: 768px) {
+  .wrapper {
+    --padding: var(--space-l);
+  }
+}

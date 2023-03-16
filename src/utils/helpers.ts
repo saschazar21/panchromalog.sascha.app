@@ -1,10 +1,11 @@
 import type { SuspendedPictureProps } from "@components/preact/SuspendedPicture";
-import { getCamera } from "@utils/graphql/cameras/camera";
-import { getFilm } from "@utils/graphql/films/film";
+import { Camera, getCamera } from "@utils/graphql/cameras/camera";
+import { getFilters } from "@utils/graphql/custom/filters";
+import { Film, getFilm } from "@utils/graphql/films/film";
 import type { Image } from "@utils/graphql/images/image";
-import { getLens } from "@utils/graphql/lenses/lens";
+import { getLens, Lens } from "@utils/graphql/lenses/lens";
+import type { Filters } from "@utils/stores/filters";
 import type { Gallery as GalleryState } from "@utils/stores/gallery";
-import type { Filters as FilterState } from "@utils/stores/filters";
 
 export const IMAGE_API_PATH = "/api/image";
 
@@ -31,6 +32,16 @@ export interface ImageOptions {
   bg?: string;
 }
 
+export interface FilterInit {
+  cursor: string | null;
+  cameras?: Camera[];
+  films?: Film[];
+  lenses?: Lens[];
+  camera?: Camera | null;
+  film?: Film | null;
+  lens?: Lens | null;
+}
+
 export const DEFAULT_OPTIONS: Partial<ImageOptions> = {
   q: 80,
   f: "jpeg",
@@ -54,7 +65,9 @@ export const buildImageLink = (options: ImageOptions): string => {
   return url.toString();
 };
 
-const fetchFilters = async (params: URLSearchParams) => {
+export const fetchFilters = async (
+  params: URLSearchParams
+): Promise<FilterInit> => {
   const keys = [];
 
   if (params.has("camera")) {
@@ -82,11 +95,17 @@ const fetchFilters = async (params: URLSearchParams) => {
     ]);
   }
 
-  return keys.filter(([_, val]) => !!val);
+  const filters = (await (await getFilters())?.data) ?? {};
+
+  return {
+    ...Object.fromEntries(keys.filter(([_, val]) => !!val)),
+    ...filters,
+    cursor: params.get("cursor") ?? null,
+  };
 };
 
 export const getImageUrl = (path: string) => {
-  const p = path?.startsWith("/") ? path : "/" + path;
+  const p = path?.startsWith("/") ? path : `/${path}`;
 
   return new URL(`/api/image${p}`, import.meta.env.SITE).toString();
 };
@@ -108,12 +127,21 @@ export const mapImageDataToProps = ({
   src: getImageUrl(path) as string,
 });
 
+export const buildParams = (state: Filters): URLSearchParams => {
+  const params = [
+    ...(state.camera ? [["camera", state.camera.model]] : []),
+    ...(state.film ? [["film", state.film.name]] : []),
+    ...(state.lens ? [["lens", state.lens.model]] : []),
+    ...(state.cursor ? [["cursor", state.cursor]] : []),
+  ];
+
+  return new URLSearchParams(params);
+};
+
 export const parseParams = async (
   params: URLSearchParams
-): Promise<Partial<FilterState> & { gallery: GalleryState | null }> => {
+): Promise<GalleryState | null> => {
   console.log(Object.fromEntries(params));
-
-  const filters = Object.fromEntries(await fetchFilters(params));
 
   const search = params.toString();
   const url = new URL("/api/images", import.meta.env.SITE);
@@ -121,9 +149,9 @@ export const parseParams = async (
 
   const { data: gallery, errors } = await fetch(url).then((res) => res.json());
 
-  return {
-    ...filters,
-    gallery: gallery?.images ?? { error: new Error(errors[0].message) },
-    cursor: params.get("cursor"),
-  };
+  if (!gallery && errors?.length) {
+    throw new Error(errors[0].message);
+  }
+
+  return gallery?.images ?? null;
 };

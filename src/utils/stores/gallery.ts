@@ -80,7 +80,7 @@ const galleryUpdate = ({
     Object.assign(
       {},
       camera ? { camera: camera.model } : {},
-      cursor ? { cursor: cursor } : {},
+      cursor ? { cursor } : {},
       film ? { film: film.name } : {},
       lens ? { lens: lens.model } : {}
     )
@@ -98,12 +98,8 @@ const galleryUpdate = ({
   fetch(url)
     .then((res) => res.json())
     .then(({ data, errors }) => {
-      if (!data || errors?.length) {
-        throw new Error(
-          errors
-            ? errors[0].message
-            : "Something went wrong while fetching the images."
-        );
+      if (!data && errors?.length) {
+        throw new Error(errors[0].message);
       }
 
       if (resetGallery) {

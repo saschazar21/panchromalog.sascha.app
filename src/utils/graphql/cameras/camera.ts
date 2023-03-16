@@ -3,6 +3,9 @@ import { graphQLRequest } from "../request";
 export interface Camera {
   model: string;
   make: string;
+  mount: {
+    name: string;
+  } | null;
   created_at: string;
 }
 
@@ -15,6 +18,9 @@ query camera($model: String!) {
   camera(model: $model) {
       model
       make
+      mount {
+        name
+      }
       created_at
   }
 }

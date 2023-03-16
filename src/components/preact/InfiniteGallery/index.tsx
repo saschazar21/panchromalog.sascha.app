@@ -1,6 +1,7 @@
 import { SuspendedPictureLink } from "@components/preact/InfiniteGallery/components/SuspendedPictureLink";
 import type { PaginatedImages } from "@utils/graphql/images/images";
 import { mapImageDataToProps } from "@utils/helpers";
+import { useFilterHistory } from "@utils/hooks/useFilterHistory";
 import classNames from "classnames";
 import type { FunctionComponent } from "preact";
 import { useMemo } from "preact/hooks";
@@ -15,6 +16,7 @@ export interface InfiniteGalleryProps {
 export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
   gallery,
 }) => {
+  useFilterHistory();
   const data = useObservedGallery(gallery ?? {});
 
   const pictures = useMemo(
@@ -41,13 +43,13 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
   return (
     <div className={styles.container}>
       {gallery?.before && (
-        <a className={className} href={"/?cursor=" + gallery.before} rel="prev">
+        <a className={className} href={`/?cursor=${gallery.before}`} rel="prev">
           Load previous images
         </a>
       )}
       <section className={styles.gallery}>{pictures}</section>
       {gallery?.after ? (
-        <a className={className} href={"/?cursor=" + gallery.after} rel="next">
+        <a className={className} href={`/?cursor=${gallery.after}`} rel="next">
           Load next images
         </a>
       ) : (

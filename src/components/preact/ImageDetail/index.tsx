@@ -55,7 +55,7 @@ export const ImageDetail: FunctionComponent<ImageDetailProps> = (props) => {
       [
         [meta.camera.make, meta.camera.model, "camera"],
         ...(meta.lens ? [[meta.lens.make, meta.lens.model, "lens"]] : []),
-        ...(meta.film ? [[meta.film.brand], [meta.film.name], "film"] : []),
+        ...(meta.film ? [[meta.film.brand, meta.film.name, "film"]] : []),
       ].map(([key, value, category]) => (
         <a
           key={category + value}
@@ -80,8 +80,8 @@ export const ImageDetail: FunctionComponent<ImageDetailProps> = (props) => {
         </section>
         <section className={styles.content}>
           <time dateTime={dateTime}>{date}</time>
-          {title && <h2>{title}</h2>}
-          {description && <p>{description}</p>}
+          {title && <h2 id="imagetitle">{title}</h2>}
+          {description && <p id="description">{description}</p>}
         </section>
         <section className={styles.extra}>{gear}</section>
       </div>

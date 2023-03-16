@@ -1,6 +1,5 @@
 import { ImageDetail } from "@components/preact/ImageDetail";
 import { Modal } from "@components/preact/Modal";
-import { CloseButton } from "@components/preact/Modal/components/CloseButton";
 import {
   SuspendedPicture,
   SuspendedPictureProps,
@@ -32,12 +31,12 @@ export const SuspendedPictureLink = forwardRef<
 
         setImageDetailProps(imageData);
 
-        const url = new URL("/p/" + props.id, import.meta.env.SITE);
+        const url = new URL(`/p/${props.id}`, import.meta.env.SITE);
         !import.meta.env.SSR &&
           window.history.pushState({ id: props.id }, "", url);
       }
     },
-    [props]
+    [imageData, props.id]
   );
 
   const handleOnClose = useCallback((e: MouseEvent) => {
@@ -50,29 +49,33 @@ export const SuspendedPictureLink = forwardRef<
   return (
     <>
       <a
-        href={"/p/" + props.id}
+        href={`/p/${props.id}`}
         onClick={handleOnClick}
         target="_blank"
-        rel="opener"
+        rel="opener noreferrer"
       >
         <SuspendedPicture {...props} ref={ref} />
       </a>
       {imageDetailProps && (
-        <Modal onClose={handleOnClose} className={styles.modal}>
-          <div className={styles.modalControls}>
+        <Modal
+          onClose={handleOnClose}
+          className={styles.modal}
+          role="dialog"
+          aria-describedby={
+            imageDetailProps.description ? "description" : undefined
+          }
+          aria-labelledby={imageDetailProps.title ? "imagetitle" : undefined}
+          modalControls={
             <a
-              href={"/p/" + imageDetailProps.id}
+              href={`/p/${imageDetailProps.id}`}
               target="_blank"
-              rel="opener"
+              rel="opener noreferrer"
               className={styles.detailLink}
             >
               View image details
             </a>
-            <CloseButton
-              onClick={handleOnClose}
-              className={styles.closeButton}
-            />
-          </div>
+          }
+        >
           <ImageDetail {...imageDetailProps} />
         </Modal>
       )}

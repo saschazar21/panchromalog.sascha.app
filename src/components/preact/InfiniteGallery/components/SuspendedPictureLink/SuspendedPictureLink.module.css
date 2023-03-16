@@ -1,19 +1,4 @@
-.modal {
-  display: flex;
-  flex-direction: column;
-}
-
-.modalControls {
-  --padding: var(--space-m);
-
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding: 0 var(--padding) var(--space-l);
-}
-
-.detailLink,
-.closeButton {
+.detailLink {
   --link-color: var(--color-bg-muted);
   --bg-color: var(--color-text);
 
@@ -21,8 +6,7 @@
     color var(--duration) ease-in;
 }
 
-.detailLink:hover,
-.closeButton:hover {
+.detailLink:hover {
   --link-color: var(--color-bg-light);
   --bg-color: var(--color-text-muted);
 }
@@ -41,27 +25,9 @@
   margin-left: var(--space-s);
 }
 
-.closeButton {
-  display: block;
-  border-radius: 9999px;
-  border: none;
-  padding: var(--space-l);
-  height: 64px;
-  width: 64px;
-  color: var(--link-color);
-  background-color: var(--bg-color);
-  stroke-width: 0.75;
-}
-
 .modal > article {
   flex-grow: 1;
   min-height: 0;
   max-height: 100%;
   overflow-y: auto;
-}
-
-@media screen and (min-width: 580px) {
-  .modalControls {
-    --padding: 0;
-  }
 }

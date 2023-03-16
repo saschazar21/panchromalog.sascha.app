@@ -1,0 +1,12 @@
+{
+  "instagram": {
+    "provider": "Instagram",
+    "href": "https://instagram.com/panchromalog",
+    "username": "panchromalog"
+  },
+  "pixelfed": {
+    "provider": "Pixelfed",
+    "href": "https://pixelfed.de/panchromalog",
+    "username": "panchromalog"
+  }
+}

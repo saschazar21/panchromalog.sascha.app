@@ -3,7 +3,7 @@ import { ImageOptions, buildImageLink } from "@utils/helpers";
 import { useMemo } from "preact/hooks";
 
 export const useImageLink = (options: ImageOptions) => {
-  const contextOptions = (useImageContext() as ImageOptions) ?? {};
+  const contextOptions = useImageContext() as ImageOptions;
 
   const href = useMemo(
     () =>
@@ -11,7 +11,7 @@ export const useImageLink = (options: ImageOptions) => {
         options.href ?? contextOptions.href,
         import.meta.env.SITE
       ).toString(),
-    [options.href, contextOptions.href]
+    [options?.href, contextOptions?.href]
   );
 
   return useMemo(
@@ -21,6 +21,6 @@ export const useImageLink = (options: ImageOptions) => {
         ...options,
         href,
       }),
-    [options]
+    [contextOptions, href, options]
   );
 };

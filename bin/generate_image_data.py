@@ -1,7 +1,19 @@
 #!/usr/bin/env python
 
+"""
+generate_image_data.py
+====================
+    :Name:        generate_image_data
+    :Purpose:     map image metadata in a CSV-file into a JSON-file
+    :Author:      Sascha Zarhuber
+    :Created:     15/03/2023
+    :Copyright:   (c) Sascha Zarhuber 2023
+    :Licence:     MIT
+"""
+
 from argparse import ArgumentParser
 from csv import DictReader
+from get_image_size import get_image_size
 import json
 import os
 import random
@@ -75,6 +87,11 @@ class ImageData:
             image_dict.update([(i, image)])
 
         return image_dict
+    
+    def find_image_path(self, suffix):
+        result = list(filter(lambda entry: entry.endswith(suffix), self.args.images))
+
+        return result[0]
 
     def format_file_paths(self):
 
@@ -143,10 +160,16 @@ class ImageData:
                     if self.images and self.images.get(i + 1) == None:
                         continue
 
+                    path = self.find_image_path(self.images.get(i + 1))
+                    width, height = get_image_size(path)
+
                     # https://stackoverflow.com/a/58859083
                     row = {k: v if v else None for k, v in row.items()}
 
                     row_data = self.csv_to_dict(row)
+                    row_data_meta = row_data["meta"]
+                    row_data_meta.update(
+                        [("height", height), ("width", width)])
                     row_data.update([
                         ("id", generate_id()),
                         ("path", self.images.get(i + 1))
@@ -164,5 +187,6 @@ class ImageData:
                 len(data)))
 
 
-image_data = ImageData()
-image_data.write_json()
+if __name__ == '__main__':
+    image_data = ImageData()
+    image_data.write_json()

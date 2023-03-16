@@ -1,35 +1,29 @@
 @import url("./_typography.css");
 
 :root {
-  /* URL: https://coolors.co/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529 */
+  /* URL: https://coolors.co/222222-434343-a5a5a5-dfdfdf-f6f6f6-f9f9f9 */
   /* CSS HEX */
-  --cultured: #f8f9faff;
-  --cultured-2: #e9ecefff;
-  --gainsboro: #dee2e6ff;
-  --light-gray: #ced4daff;
-  --cadet-blue-crayola: #adb5bdff;
-  --sonic-silver: #6c757dff;
-  --davys-grey: #495057ff;
-  --onyx: #343a40ff;
-  --eerie-black: #212529ff;
+  --eerie-black: #222222ff;
+  --onyx: #434343ff;
+  --silver: #a5a5a5ff;
+  --platinum: #dfdfdfff;
+  --seasalt: #f6f6f6ff;
+  --seasalt-2: #f9f9f9ff;
 
   /* CSS HSL */
-  --cultured: hsla(210, 17%, 99%, 1);
-  --cultured-2: hsla(210, 16%, 95%, 1);
-  --gainsboro: hsla(210, 14%, 89%, 1);
-  --light-gray: hsla(210, 14%, 83%, 1);
-  --cadet-blue-crayola: hsla(210, 11%, 71%, 1);
-  --sonic-silver: hsla(208, 7%, 46%, 1);
-  --davys-grey: hsla(210, 9%, 31%, 1);
-  --onyx: hsla(210, 10%, 23%, 1);
-  --eerie-black: hsla(210, 11%, 15%, 1);
+  --eerie-black: hsla(0, 0%, 13%, 1);
+  --onyx: hsla(0, 0%, 26%, 1);
+  --silver: hsla(0, 0%, 65%, 1);
+  --platinum: hsla(0, 0%, 87%, 1);
+  --seasalt: hsla(0, 0%, 96%, 1);
+  --seasalt-2: hsla(0, 0%, 98%, 1);
 
-  --color-bg: var(--cultured-2);
-  --color-bg-light: var(--cultured);
-  --color-bg-muted: var(--gainsboro);
+  --color-bg: var(--seasalt);
+  --color-bg-light: var(--seasalt-2);
+  --color-bg-muted: var(--platinum);
   --color-text: var(--eerie-black);
-  --color-text-muted: var(--davys-grey);
-  --color-shadow: var(--cadet-blue-crayola);
+  --color-text-muted: var(--onyx);
+  --color-shadow: var(--silver);
 
   --space-s: 0.25rem;
   --space-m: 0.5rem;
@@ -62,6 +56,11 @@ html {
   color: var(--color-text-muted);
 }
 
+* {
+  scrollbar-color: var(--color-shadow) var(--color-bg);
+  scrollbar-width: thin;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -87,6 +86,23 @@ picture {
 ::selection {
   background-color: var(--color-text-muted);
   color: var(--color-bg);
+}
+
+::-webkit-scrollbar {
+  width: var(--space-s);
+}
+
+::-webkit-scrollbar-button {
+  background-color: transparent;
+  height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-shadow);
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--color-bg);
 }
 
 :focus {
@@ -120,5 +136,11 @@ picture {
 @media screen and (min-width: 940px) {
   body {
     margin: 0 auto;
+  }
+}
+
+@media print {
+  [data-noprint] {
+    display: none !important;
   }
 }

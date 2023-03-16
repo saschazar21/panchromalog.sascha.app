@@ -13,9 +13,11 @@ import preact from "@astrojs/preact";
 // https://astro.build/config
 import netlify from "@astrojs/netlify/functions";
 
+import svgr from "vite-plugin-svgr";
+
 const define = Object.fromEntries(
   Object.keys(process.env).map((key) => [
-    "process.env." + key,
+    `process.env.${key}`,
     JSON.stringify(process.env[key]),
   ])
 );
@@ -53,5 +55,6 @@ export default defineConfig({
   ],
   vite: {
     define,
+    plugins: [svgr()],
   },
 });

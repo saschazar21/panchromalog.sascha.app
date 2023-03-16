@@ -16,7 +16,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query image($id: String!) {\n    image(id: $id) {\n        id\n        created_at\n        description\n        meta {\n            alt\n            aperture\n            camera {\n                model\n                make\n                created_at\n            }\n            color\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                speed\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                latitude\n                longitude\n                place\n            }\n            hash\n            height\n            iso\n            lens {\n                model\n                make\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n    }\n}",
+								"query": "query image($id: String!) {\n    image(id: $id) {\n        id\n        created_at\n        description\n        meta {\n            alt\n            aperture\n            camera {\n                model\n                make\n                mount {\n                    name\n                }\n                created_at\n            }\n            color\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                iso\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                latitude\n                longitude\n                place\n            }\n            hash\n            height\n            iso\n            lens {\n                model\n                make\n                mount {\n                    name\n                }\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n    }\n}",
 								"variables": "{\n    \"id\": \"{{image_id}}\"\n}"
 							}
 						},
@@ -37,7 +37,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query images($camera: String, $film: String, $lens: String, $_size: Int, $_cursor: String) {\n  images(camera: $camera, film: $film, lens: $lens, _size: $_size, _cursor: $_cursor) {\n      after\n      before\n      data {\n        id\n        created_at\n        description\n        meta {\n            alt\n            aperture\n            camera {\n                model\n                make\n                created_at\n            }\n            color\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                speed\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                latitude\n                longitude\n                place\n            }\n            hash\n            height\n            iso\n            lens {\n                model\n                make\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n      }\n  }\n}",
+								"query": "query images($camera: String, $film: String, $lens: String, $_size: Int, $_cursor: String) {\n  images(camera: $camera, film: $film, lens: $lens, _size: $_size, _cursor: $_cursor) {\n      after\n      before\n      data {\n        id\n        created_at\n        description\n        meta {\n            alt\n            aperture\n            camera {\n                model\n                make\n                mount {\n                    name\n                }\n                created_at\n            }\n            color\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                iso\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                latitude\n                longitude\n                place\n            }\n            hash\n            height\n            iso\n            lens {\n                model\n                make\n                mount {\n                    name\n                }\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n      }\n  }\n}",
 								"variables": "{}"
 							}
 						},
@@ -58,7 +58,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query camera($model: String!) {\n    camera(model: $model) {\n        model\n        make\n        created_at\n    }\n}",
+								"query": "query camera($model: String!) {\n    camera(model: $model) {\n        model\n        make\n        mount {\n            name\n        }\n        created_at\n    }\n}",
 								"variables": "{\n    \"model\": \"{{camera_model}}\"\n}"
 							}
 						},
@@ -79,8 +79,8 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query cameras {\n    cameras {\n        model\n        make\n        created_at\n    }\n}",
-								"variables": ""
+								"query": "query cameras($mount: String) {\n    cameras(mount: $mount) {\n        model\n        make\n        mount {\n            name\n        }\n        created_at\n    }\n}",
+								"variables": "{\n    \n}"
 							}
 						},
 						"url": {
@@ -142,7 +142,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query lens($model: String!) {\n    lens(model: $model) {\n        model\n        make\n        created_at\n    }\n}",
+								"query": "query lens($model: String!) {\n    lens(model: $model) {\n        model\n        make\n        mount {\n            name\n        }\n        created_at\n    }\n}",
 								"variables": "{\n    \"model\": \"{{lens_model}}\"\n}"
 							}
 						},
@@ -163,8 +163,8 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query lenses {\n    lenses {\n        model\n        make\n        created_at\n    }\n}",
-								"variables": ""
+								"query": "query lenses($mount: String) {\n    lenses(mount: $mount) {\n        model\n        make\n        mount {\n            name\n        }\n        created_at\n    }\n}",
+								"variables": "{\n    \n}"
 							}
 						},
 						"url": {
@@ -196,7 +196,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation createImage($image: ImageInput!) {\n    createImage(image: $image) {\n        id\n        created_at\n        description\n        meta {\n            alt\n            aperture\n            camera {\n                model\n                make\n                created_at\n            }\n            color\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                speed\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                latitude\n                longitude\n                place\n            }\n            hash\n            height\n            iso\n            lens {\n                model\n                make\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n    }\n}",
+								"query": "mutation createImage($image: ImageInput!) {\n    createImage(image: $image) {\n        id\n        created_at\n        description\n        meta {\n            alt\n            aperture\n            camera {\n                model\n                make\n                mount {\n                    name\n                }\n                created_at\n            }\n            color\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                iso\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                latitude\n                longitude\n                place\n            }\n            hash\n            height\n            iso\n            lens {\n                model\n                make\n                mount {\n                    name\n                }\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n    }\n}",
 								"variables": "{\n    \"image\": {\n        \"id\": \"{{image_id}}\",\n        \"meta\": {\n            \"alt\": \"A sample image\",\n            \"aperture\": 1.9,\n            \"camera\": \"{{camera_model}}\",\n            \"date\": \"2023-02-09T00:00:00.000Z\",\n            \"focal_length\": 50,\n            \"height\": 2048,\n            \"shutter\": 0.01666667,\n            \"width\": 3072\n        },\n        \"path\": \"APX_100/IMG_001.png\"\n    }\n}"
 							}
 						},
@@ -229,7 +229,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation createImage($images: [ImageInput!]!) {\n    createImage(images: $images) {\n        id\n        created_at\n        description\n        meta {\n            alt\n            aperture\n            camera {\n                model\n                make\n                created_at\n            }\n            color\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                speed\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                latitude\n                longitude\n                place\n            }\n            hash\n            height\n            iso\n            lens {\n                model\n                make\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n    }\n}",
+								"query": "mutation createImages($images: [ImageInput!]!) {\n    createImages(images: $images) {\n        id\n        created_at\n        description\n        meta {\n            alt\n            aperture\n            camera {\n                model\n                make\n                mount {\n                    name\n                }\n                created_at\n            }\n            color\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                iso\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                latitude\n                longitude\n                place\n            }\n            hash\n            height\n            iso\n            lens {\n                model\n                make\n                mount {\n                    name\n                }\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n    }\n}",
 								"variables": "{\n    \"images\": [{\n        \"id\": \"{{image_id}}\"\n    }]\n}"
 							}
 						},
@@ -250,8 +250,8 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation createCamera($camera: CameraInput!) {\n    createCamera(camera: $camera) {\n        model\n        make\n        created_at\n    }\n}",
-								"variables": "{\n    \"camera\": {\n        \"model\": \"{{camera_model}}\",\n        \"make\": \"Test Factory\"\n    }\n}"
+								"query": "mutation createCamera($camera: CameraInput!) {\n    createCamera(camera: $camera) {\n        model\n        make\n        mount {\n            name\n        }\n        created_at\n    }\n}",
+								"variables": "{\n    \"camera\": {\n        \"model\": \"{{camera_model}}\",\n        \"make\": \"Test Factory\",\n        \"mount\": null\n    }\n}"
 							}
 						},
 						"url": {
@@ -292,8 +292,8 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation createLens($lens: LensInput!) {\n    createLens(lens: $lens) {\n        model\n        make\n        created_at\n    }\n}",
-								"variables": "{\n    \"lens\": {\n        \"model\": \"{{lens_model}}\",\n        \"make\": \"Test Brand\"\n    }\n}"
+								"query": "mutation createLens($lens: LensInput!) {\n    createLens(lens: $lens) {\n        model\n        make\n        mount {\n            name\n        }\n        created_at\n    }\n}",
+								"variables": "{\n    \"lens\": {\n        \"model\": \"{{lens_model}}\",\n        \"make\": \"Test Brand\",\n        \"mount\": \"Test Mount\"\n    }\n}"
 							}
 						},
 						"url": {
@@ -313,7 +313,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation deleteImage($id: String!) {\n    deleteImage(id: $id) {\n        id\n        created_at\n        description\n        meta {\n            aperture\n            camera {\n                model\n                make\n                created_at\n            }\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                speed\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                description\n                latitude\n                longitude\n            }\n            height\n            lens {\n                model\n                make\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n    }\n}",
+								"query": "mutation deleteImage($id: String!) {\n    deleteImage(id: $id) {\n        id\n        created_at\n        description\n        meta {\n            aperture\n            camera {\n                model\n                make\n                mount {\n                    name\n                }\n                created_at\n            }\n            color\n            date\n            developer {\n                name\n                duration\n            }\n            film {\n                name\n                brand\n                iso\n                type\n                created_at\n            }\n            focal_length\n            geo {\n                description\n                latitude\n                longitude\n            }\n            hash\n            height\n            iso\n            lens {\n                model\n                make\n                mount {\n                    name\n                }\n                created_at\n            }\n            shutter\n            width\n        }\n        path\n        title\n    }\n}",
 								"variables": "{\n    \"id\": \"{{image_id}}\"\n}"
 							}
 						},
@@ -445,6 +445,54 @@
 						"api",
 						"images",
 						"{{image_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cameras",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/cameras?mount=",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"cameras"
+					],
+					"query": [
+						{
+							"key": "mount",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "lenses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/lenses?mount=",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"lenses"
+					],
+					"query": [
+						{
+							"key": "mount",
+							"value": ""
+						}
 					]
 				}
 			},

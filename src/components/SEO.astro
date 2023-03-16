@@ -3,12 +3,16 @@ import { SEO } from "astro-seo";
 import { manifest } from "@utils/manifest";
 import pkg from "../../package.json";
 
-const { alt, description, image, title } = Astro.props;
+const { alt, description, image, title: customTitle } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const title = customTitle
+  ? `${customTitle} on ${manifest.name}`
+  : (manifest.name as string);
 ---
 
 <SEO
-  title={title ?? manifest.name}
+  title={title}
   charset="utf-8"
   description={description ?? manifest.description}
   canonical={canonicalURL.toString()}
@@ -17,7 +21,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   openGraph={image
     ? {
         basic: {
-          title: title ?? manifest.name,
+          title,
           type: "website",
           image,
         },
@@ -40,7 +44,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         card: "summary_large_image",
         site: Astro.site?.toString(),
         creator: "@saschazar",
-        title: title || manifest.name,
+        title,
         description: description || manifest.description,
         image,
         imageAlt: alt,

@@ -1,12 +1,3 @@
-if (
-  import.meta.env.PROD &&
-  (!import.meta.env.FAUNA_KEY || !import.meta.env.FAUNA_GRAPHQL_HOST)
-) {
-  throw new Error(
-    "ERROR: FAUNA_KEY and/or FAUNA_GRAPHQL_HOST env not defined!"
-  );
-}
-
 export const graphQLRequest = async <T>(
   query: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,6 +12,12 @@ export const graphQLRequest = async <T>(
       ]
     | null;
 }> => {
+  if (!import.meta.env.FAUNA_KEY || !import.meta.env.FAUNA_GRAPHQL_HOST) {
+    throw new Error(
+      "ERROR: FAUNA_KEY and/or FAUNA_GRAPHQL_HOST env not defined!"
+    );
+  }
+
   const url = new URL("/graphql", import.meta.env.FAUNA_GRAPHQL_HOST);
 
   try {
@@ -28,7 +25,7 @@ export const graphQLRequest = async <T>(
       method: "POST",
       headers: {
         accept: "application/json",
-        authorization: "Bearer " + import.meta.env.FAUNA_KEY,
+        authorization: `Bearer ${import.meta.env.FAUNA_KEY}`,
         "content-type": "application/json",
       },
       body: JSON.stringify({

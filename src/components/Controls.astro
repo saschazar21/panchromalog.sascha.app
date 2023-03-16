@@ -1,0 +1,27 @@
+---
+import { FilterForm } from "@components/preact/FilterForm";
+import { fetchFilters } from "@utils/helpers";
+
+const params = new URL(Astro.url).searchParams;
+
+const props = await fetchFilters(params);
+---
+
+<section>
+  <FilterForm client:idle {...props} />
+</section>
+
+<style>
+  section {
+    display: flex;
+    justify-content: center;
+    border-top: var(--border-width-s) solid var(--color-shadow);
+    margin-bottom: var(--space-xl);
+  }
+
+  @media screen and (min-width: 768px) {
+    section {
+      margin-bottom: var(--space-xxl);
+    }
+  }
+</style>

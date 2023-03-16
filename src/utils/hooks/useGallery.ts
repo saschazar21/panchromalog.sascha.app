@@ -17,7 +17,7 @@ export const useGallery = (galleryInit?: Partial<Gallery>) => {
         payload: galleryInit,
         type: GALLERY_ACTIONS.RESET,
       });
-  }, []);
+  }, [dispatch, galleryInit]);
 
   return {
     dispatch,
