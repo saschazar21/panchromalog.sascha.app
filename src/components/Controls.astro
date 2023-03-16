@@ -15,5 +15,13 @@ const props = await fetchFilters(params);
   section {
     display: flex;
     justify-content: center;
+    border-top: var(--border-width-s) solid var(--color-shadow);
+    margin-bottom: var(--space-xl);
+  }
+
+  @media screen and (min-width: 768px) {
+    section {
+      margin-bottom: var(--space-xxl);
+    }
   }
 </style>

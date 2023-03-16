@@ -20,7 +20,7 @@ export const get: APIRoute = async ({ params }): Promise<Response> => {
 
     const headers = res.headers;
 
-    const buffer = await res.arrayBuffer();
+    const buffer = await res.blob();
 
     return new Response(buffer, {
       status: 200,
