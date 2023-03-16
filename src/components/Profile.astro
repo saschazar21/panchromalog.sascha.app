@@ -1,6 +1,7 @@
 ---
 import { Picture } from "@astrojs/image/components";
 import social from "@data/social.json";
+import { manifest } from "@utils/manifest";
 import pkg from "../../package.json";
 
 import { ReactComponent as GitHubIcon } from "@icons/github.svg";
@@ -10,18 +11,20 @@ import { ReactComponent as PixelfedIcon } from "@icons/pixelfed.svg";
 
 <header aria-labelledby="title">
   <div data-avatar>
-    <Picture
-      src="/img/apple-touch-512.png"
-      alt={`Avatar of ${pkg.author.name}`}
-      sizes="(min-width: 640px) 96px, 64px"
-      widths={[64, 128, 192, 256]}
-      aspectRatio={1}
-      formats={["avif", "webp", "jpeg"]}
-      loading="eager"
-      background={undefined}
-      width={64}
-      height={64}
-    />
+    <a href={import.meta.env.SITE} title="Return to home page">
+      <Picture
+        src="/img/apple-touch-512.png"
+        alt={`Logo of ${manifest.name}`}
+        sizes="(min-width: 640px) 96px, 64px"
+        widths={[64, 128, 192, 256]}
+        aspectRatio={1}
+        formats={["avif", "webp", "jpeg"]}
+        loading="eager"
+        background={undefined}
+        width={64}
+        height={64}
+      />
+    </a>
   </div>
   <div>
     <h1 id="title">{pkg.short_name}</h1>
@@ -83,8 +86,12 @@ import { ReactComponent as PixelfedIcon } from "@icons/pixelfed.svg";
     margin: var(--space-xl) 0 var(--space-xxl);
   }
 
+  a,
   img {
     border-radius: 9999px;
+  }
+
+  img {
     height: 64px;
     width: 64px;
   }
