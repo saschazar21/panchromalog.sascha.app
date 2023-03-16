@@ -4,17 +4,27 @@ if (!import.meta.env.IMAGEKIT_ID) {
   throw new Error("ERROR: IMAGEKIT_ID env not defined!");
 }
 
+export const IMAGE_ROUTE_PATH = "/_image";
 const IMAGEKIT_BASE_URL = "https://ik.imagekit.io";
 const CACHE_DURATION = 3.15576e7;
 
-export const get: APIRoute = async ({ params }): Promise<Response> => {
+export const get: APIRoute = async ({
+  params,
+  url: currentUrl,
+}): Promise<Response> => {
   const { path } = params;
+  const { searchParams } = new URL(currentUrl);
 
   try {
-    const url = new URL(
+    const href = new URL(
       `/${import.meta.env.IMAGEKIT_ID}/${path}`,
       IMAGEKIT_BASE_URL
     );
+
+    searchParams.set("href", href.toString());
+
+    const url = new URL(IMAGE_ROUTE_PATH, import.meta.env.SITE);
+    url.search = searchParams.toString();
 
     const res = await fetch(url);
 

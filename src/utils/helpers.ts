@@ -50,16 +50,25 @@ export const DEFAULT_OPTIONS: Partial<ImageOptions> = {
 };
 
 export const buildImageLink = (options: ImageOptions): string => {
-  const opts = {
+  const { href, ...opts } = {
     ...DEFAULT_OPTIONS,
     ...options,
   };
 
-  const searchParams = new URLSearchParams(
-    opts as unknown as Record<string, string>
-  );
+  const originalUrl = new URL(href);
 
-  const url = new URL(IMAGE_ROUTE_PATH, import.meta.env.SITE);
+  const isImageFromCDN =
+    originalUrl.origin === import.meta.env.SITE &&
+    originalUrl.pathname.startsWith(IMAGE_API_PATH);
+
+  const searchParams = new URLSearchParams({
+    ...opts,
+    ...(!isImageFromCDN ? { href } : {}),
+  } as unknown as Record<string, string>);
+
+  const url = isImageFromCDN
+    ? originalUrl
+    : new URL(IMAGE_ROUTE_PATH, import.meta.env.SITE);
   url.search = searchParams.toString();
 
   return url.toString();
