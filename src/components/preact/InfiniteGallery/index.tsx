@@ -21,11 +21,8 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
 
   const pictures = useMemo(
     () =>
-      data.length
-        ? data.map((props) => (
-            <SuspendedPictureLink {...props} key={props.id} />
-          ))
-        : (gallery?.data ?? []).map((img) => (
+      import.meta.env.SSR
+        ? (gallery?.data ?? []).map((img) => (
             <SuspendedPictureLink
               {...mapImageDataToProps(img)}
               height={123}
@@ -34,6 +31,9 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
               width={123}
               widths={[123, 256, 512, 600, 900]}
             />
+          ))
+        : data.map((props) => (
+            <SuspendedPictureLink {...props} key={props.id} />
           )),
     [data, gallery]
   );
