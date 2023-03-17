@@ -38,6 +38,24 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
     [data, gallery]
   );
 
+  const endMessage = useMemo(
+    () =>
+      pictures.length ? (
+        <span className={styles.end}>This is the end.</span>
+      ) : (
+        <div className={styles.end}>
+          <span>
+            No images found. Try removing the filters or start over at the home
+            page.
+          </span>
+          <br />
+          <br />
+          <a href={import.meta.env.SITE}>Go back to the home page.</a>
+        </div>
+      ),
+    [pictures]
+  );
+
   const className = classNames("button", styles.cursor);
 
   return (
@@ -53,7 +71,7 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
           Load next images
         </a>
       ) : (
-        <span className={styles.end}>This is the end.</span>
+        endMessage
       )}
     </div>
   );

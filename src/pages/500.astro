@@ -11,3 +11,11 @@ import Default from "@layouts/Default.astro";
     <a href="/">Go back to the home page.</a>
   </center>
 </Default>
+
+<style>
+  a::before {
+    content: "\2190";
+    display: inline-block;
+    margin-right: var(--space-s);
+  }
+</style>
