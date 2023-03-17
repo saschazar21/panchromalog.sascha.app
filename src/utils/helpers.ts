@@ -7,10 +7,6 @@ import { getLens, Lens } from "@utils/graphql/lenses/lens";
 import type { Filters } from "@utils/stores/filters";
 import type { Gallery as GalleryState } from "@utils/stores/gallery";
 
-export const IMAGE_API_PATH = "/api/image";
-
-export const IMAGE_ROUTE_PATH = "/_image";
-
 export interface ImageOptions {
   /** original image url */
   href: string;
@@ -42,12 +38,95 @@ export interface FilterInit {
   lens?: Lens | null;
 }
 
+export const IMAGE_API_PATH = "/api/image";
+
+export const IMAGE_ROUTE_PATH = "/_image";
+
 export const DEFAULT_OPTIONS: Partial<ImageOptions> = {
   q: 80,
   f: "jpeg",
   fit: "cover",
   bg: "white",
 };
+
+export const ISO_MAP = new Map<number, Map<number, string>>([
+  [
+    50,
+    new Map<number, string>([
+      [100, "+1"],
+      [125, "+1¼"],
+      [160, "+1⅔"],
+      [200, "+2"],
+      [400, "+3"],
+    ]),
+  ],
+  [
+    100,
+    new Map<number, string>([
+      [50, "-1"],
+      [125, "+⅓"],
+      [160, "+¾"],
+      [200, "+1"],
+      [400, "+2"],
+      [800, "+3"],
+    ]),
+  ],
+  [
+    125,
+    new Map<number, string>([
+      [50, "-1¼"],
+      [100, "-¼"],
+      [160, "+⅓"],
+      [200, "+¾"],
+      [400, "+2"],
+      [800, "+3"],
+    ]),
+  ],
+  [
+    160,
+    new Map<number, string>([
+      [50, "-1⅔"],
+      [100, "-⅔"],
+      [125, "-⅓"],
+      [200, "+⅓"],
+      [400, "+1⅓"],
+      [800, "+2½"],
+    ]),
+  ],
+  [
+    200,
+    new Map<number, string>([
+      [50, "-2"],
+      [100, "-1"],
+      [125, "-¾"],
+      [160, "-⅔"],
+      [400, "+1"],
+      [800, "+2"],
+      [1600, "+3"],
+    ]),
+  ],
+  [
+    400,
+    new Map<number, string>([
+      [100, "-2"],
+      [125, "-1⅔"],
+      [160, "-1⅓"],
+      [200, "-1"],
+      [800, "+1"],
+      [1600, "+2"],
+      [3200, "+3"],
+    ]),
+  ],
+  [
+    800,
+    new Map<number, string>([
+      [200, "-2"],
+      [400, "-1"],
+      [1600, "+1"],
+      [3200, "+2"],
+    ]),
+  ],
+]);
 
 export const buildImageLink = (options: ImageOptions): string => {
   const { href, ...opts } = {
@@ -163,4 +242,8 @@ export const parseParams = async (
   }
 
   return gallery?.images ?? null;
+};
+
+export const getPushPullFactor = (box: number, iso: number): string | null => {
+  return ISO_MAP.has(box) ? ISO_MAP.get(box)?.get(iso) ?? null : null;
 };

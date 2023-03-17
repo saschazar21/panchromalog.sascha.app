@@ -75,6 +75,7 @@
 }
 
 .pill {
+  position: relative;
   flex: 1 1 auto;
   display: inline-flex;
   flex-direction: column;
@@ -82,6 +83,20 @@
   padding: var(--gap);
   background-color: var(--bg-color);
   text-decoration: none;
+}
+
+.pill[data-extra]::before {
+  content: attr(data-extra);
+  position: absolute;
+  border-radius: var(--border-radius-s);
+  border: var(--border-width-s) solid var(--color-bg);
+  padding: var(--space-s) var(--space-m);
+  top: 0;
+  right: 0;
+  background-color: inherit;
+  font-size: var(--font-size-s);
+  text-align: center;
+  transform: translateX(25%) translateY(-25%);
 }
 
 .pill > small {
