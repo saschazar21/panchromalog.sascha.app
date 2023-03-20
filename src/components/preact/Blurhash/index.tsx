@@ -1,10 +1,22 @@
-import { decode } from "blurhash";
+import BlurhashWorker from "@workers/blurhash?worker";
 import type { FunctionalComponent } from "preact";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "preact/hooks";
 import type { HTMLAttributes } from "preact/compat";
 
 import styles from "./Blurhash.module.css";
 import classNames from "classnames";
+
+export interface BlurhashWorkerMessage {
+  height: number;
+  pixels: Uint8ClampedArray;
+  width: number;
+}
 
 export interface BlurhashProps extends HTMLAttributes<HTMLCanvasElement> {
   hash: string;
@@ -27,8 +39,30 @@ export const Blurhash: FunctionalComponent<BlurhashProps> = ({
     [originalHeight, originalWidth]
   );
 
+  const handleOnMessage = useCallback(
+    ({
+      data: { height, pixels, width },
+    }: MessageEvent<BlurhashWorkerMessage>) => {
+      if (ref.current) {
+        const canvas = ref.current as HTMLCanvasElement;
+
+        const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+
+        const imageData = ctx.createImageData(width, height);
+        imageData.data.set(pixels);
+
+        ctx.putImageData(imageData, 0, 0);
+
+        setIsLoaded(true);
+      }
+    },
+    []
+  );
+
   useEffect(() => {
     if (ref.current) {
+      setIsLoaded(false);
+
       const canvas = ref.current;
       const { clientHeight, clientWidth } = canvas;
 
@@ -44,18 +78,21 @@ export const Blurhash: FunctionalComponent<BlurhashProps> = ({
       canvas.height = height;
       canvas.width = width;
 
-      const pixels = decode(hash, width, height);
+      const worker = new BlurhashWorker();
 
-      const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+      worker.onmessage = handleOnMessage;
 
-      const imageData = ctx.createImageData(width, height);
-      imageData.data.set(pixels);
+      worker.postMessage({
+        hash,
+        height,
+        width,
+      });
 
-      ctx.putImageData(imageData, 0, 0);
-
-      setIsLoaded(true);
+      return () => {
+        worker.terminate();
+      };
     }
-  }, [hash, isPortrait, originalHeight, originalWidth]);
+  }, [handleOnMessage, hash, isPortrait, originalHeight, originalWidth]);
 
   const className = classNames(styles.canvas, { [styles.isLoaded]: isLoaded });
 
