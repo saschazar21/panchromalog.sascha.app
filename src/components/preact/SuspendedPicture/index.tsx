@@ -1,13 +1,20 @@
-import { useCallback, useMemo } from "preact/hooks";
+import { useCallback, useMemo, useState } from "preact/hooks";
 import { forwardRef, HTMLAttributes } from "preact/compat";
+import { Blurhash } from "@components/preact/Blurhash";
 import { SuspendedImage } from "@components/preact/SuspendedImage";
 import { buildImageLink } from "@utils/helpers";
+import classNames from "classnames";
+
+import styles from "./SuspendedPicture.module.css";
 
 export interface SuspendedPictureProps
   extends Omit<HTMLAttributes<HTMLImageElement>, "ref"> {
   color?: string;
   formats?: Array<"avif" | "webp" | "jpeg">;
+  hash?: string;
   height: number;
+  originalHeight?: number;
+  originalWidth?: number;
   sizes: string;
   src: string;
   width: number;
@@ -18,8 +25,21 @@ export const SuspendedPicture = forwardRef<
   HTMLPictureElement,
   SuspendedPictureProps
 >((props, ref) => {
-  const { color, formats = ["jpeg"], sizes, widths = [], ...rest } = props;
+  const {
+    formats = ["jpeg"],
+    originalHeight,
+    originalWidth,
+    sizes,
+    widths = [],
+    ...rest
+  } = props;
   const { height, width, src } = props;
+  const [isLoaded, setIsLoaded] = useState(true);
+
+  const handleOnLoaded = useCallback(
+    (value: boolean) => setIsLoaded(value),
+    []
+  );
 
   const sourceSet = useCallback(
     (format: string) =>
@@ -52,10 +72,26 @@ export const SuspendedPicture = forwardRef<
     [formats, props.src, sizes, sourceSet]
   );
 
+  const className = classNames(styles.wrapper, rest.className as string);
+
   return (
-    <picture ref={ref} style={{ "--bg-color": color ?? "var(--color-shadow)" }}>
-      {sources}
-      <SuspendedImage {...rest} />
-    </picture>
+    <div
+      className={className}
+      height={rest.height}
+      width={rest.width}
+      style={{ "--bg-color": rest.color ?? "var(--color-shadow)" }}
+    >
+      {!isLoaded && rest.hash && (
+        <Blurhash
+          hash={rest.hash}
+          height={originalHeight as number}
+          width={originalWidth as number}
+        />
+      )}
+      <picture ref={ref}>
+        {sources}
+        <SuspendedImage {...rest} onLoaded={handleOnLoaded} />
+      </picture>
+    </div>
   );
 });

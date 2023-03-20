@@ -1,0 +1,10 @@
+.canvas {
+  height: var(--height);
+  width: var(--width);
+  opacity: 0;
+  transition: opacity var(--duration) ease-out;
+}
+
+.isLoaded {
+  opacity: 1;
+}

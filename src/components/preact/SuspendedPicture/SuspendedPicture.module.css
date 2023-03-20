@@ -1,0 +1,17 @@
+.wrapper {
+  position: relative;
+  height: auto;
+  width: 100%;
+  background-color: var(--bg-color);
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.wrapper > canvas,
+.wrapper img {
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
