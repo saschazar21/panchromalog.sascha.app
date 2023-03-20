@@ -25,6 +25,8 @@
   --color-text-muted: var(--onyx);
   --color-shadow: var(--silver);
 
+  --shadow-color: var(--color-shadow);
+
   --space-s: 0.25rem;
   --space-m: 0.5rem;
   --space-l: 1rem;
@@ -41,6 +43,17 @@
 
   --duration: 300ms;
   --animation-duration: 900ms;
+}
+
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --color-text: var(--seasalt);
+    --color-text-muted: var(--platinum);
+    --color-bg-light: hsla(0, 0%, 10%, 1);
+    --color-bg: var(--eerie-black);
+    --color-bg-muted: var(--onyx);
+    --color-shadow: hsla(0, 0%, 38.2%, 1);
+  }
 }
 
 @media (prefers-reduced-motion) {

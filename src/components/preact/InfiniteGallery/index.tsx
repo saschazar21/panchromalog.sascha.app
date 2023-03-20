@@ -21,11 +21,8 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
 
   const pictures = useMemo(
     () =>
-      data.length
-        ? data.map((props) => (
-            <SuspendedPictureLink {...props} key={props.id} />
-          ))
-        : (gallery?.data ?? []).map((img) => (
+      import.meta.env.SSR
+        ? (gallery?.data ?? []).map((img) => (
             <SuspendedPictureLink
               {...mapImageDataToProps(img)}
               height={123}
@@ -34,8 +31,29 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
               width={123}
               widths={[123, 256, 512, 600, 900]}
             />
+          ))
+        : data.map((props) => (
+            <SuspendedPictureLink {...props} key={props.id} />
           )),
     [data, gallery]
+  );
+
+  const endMessage = useMemo(
+    () =>
+      pictures.length ? (
+        <span className={styles.end}>This is the end.</span>
+      ) : (
+        <div className={styles.end}>
+          <span>
+            No images found. Try removing the filters or start over at the home
+            page.
+          </span>
+          <br />
+          <br />
+          <a href={import.meta.env.SITE}>Go back to the home page.</a>
+        </div>
+      ),
+    [pictures]
   );
 
   const className = classNames("button", styles.cursor);
@@ -53,7 +71,7 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
           Load next images
         </a>
       ) : (
-        <span className={styles.end}>This is the end.</span>
+        endMessage
       )}
     </div>
   );

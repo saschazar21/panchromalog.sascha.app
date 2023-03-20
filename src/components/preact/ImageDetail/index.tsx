@@ -3,7 +3,7 @@ import {
   SuspendedPictureProps,
 } from "@components/preact/SuspendedPicture";
 import type { Image } from "@utils/graphql/images/image";
-import { getImageUrl } from "@utils/helpers";
+import { getImageUrl, getPushPullFactor } from "@utils/helpers";
 import type { FunctionComponent } from "preact";
 import { useMemo } from "preact/hooks";
 
@@ -55,12 +55,22 @@ export const ImageDetail: FunctionComponent<ImageDetailProps> = (props) => {
       [
         [meta.camera.make, meta.camera.model, "camera"],
         ...(meta.lens ? [[meta.lens.make, meta.lens.model, "lens"]] : []),
-        ...(meta.film ? [[meta.film.brand, meta.film.name, "film"]] : []),
-      ].map(([key, value, category]) => (
+        ...(meta.film
+          ? [
+              [
+                meta.film.brand,
+                meta.film.name,
+                "film",
+                getPushPullFactor(meta.film.iso, meta.iso) as string,
+              ],
+            ]
+          : []),
+      ].map(([key, value, category, extra]) => (
         <a
           key={category + value}
           className={styles.pill}
           href={`/?${category}=${encodeURIComponent(value)}`}
+          data-extra={extra}
         >
           <small>{key}</small>
           <strong>{value}</strong>
