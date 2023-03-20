@@ -1,11 +1,16 @@
 import { useCallback, useMemo, useState } from "preact/hooks";
-import { forwardRef, HTMLAttributes } from "preact/compat";
-import { Blurhash } from "@components/preact/Blurhash";
+import { forwardRef, lazy, HTMLAttributes, Suspense } from "preact/compat";
 import { SuspendedImage } from "@components/preact/SuspendedImage";
 import { buildImageLink } from "@utils/helpers";
 import classNames from "classnames";
 
 import styles from "./SuspendedPicture.module.css";
+
+const Blurhash = lazy(() =>
+  import("@components/preact/Blurhash").then(
+    ({ Blurhash: Component }) => Component
+  )
+);
 
 export interface SuspendedPictureProps
   extends Omit<HTMLAttributes<HTMLImageElement>, "ref"> {
@@ -82,11 +87,13 @@ export const SuspendedPicture = forwardRef<
       style={{ "--bg-color": rest.color ?? "var(--color-shadow)" }}
     >
       {!isLoaded && rest.hash && (
-        <Blurhash
-          hash={rest.hash}
-          height={originalHeight as number}
-          width={originalWidth as number}
-        />
+        <Suspense fallback={null}>
+          <Blurhash
+            hash={rest.hash}
+            height={originalHeight as number}
+            width={originalWidth as number}
+          />
+        </Suspense>
       )}
       <picture ref={ref}>
         {sources}

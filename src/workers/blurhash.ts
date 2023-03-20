@@ -11,8 +11,6 @@ self.addEventListener(
   ({ data }: MessageEvent<BlurhashWorkerMessage>) => {
     const { hash, height, width } = data;
 
-    console.log(hash);
-
     const message = {
       height,
       pixels: decode(hash, height, width),
