@@ -13,7 +13,7 @@ self.addEventListener(
 
     const message = {
       height,
-      pixels: decode(hash, height, width),
+      pixels: decode(hash, width, height),
       width,
     };
 
