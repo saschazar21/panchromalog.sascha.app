@@ -8,7 +8,7 @@ import json
 import numpy as np
 import os
 
-MIN_HASH_COMPONENTS = 4
+MIN_HASH_COMPONENTS = 8
 MIN_WIDTH = 128
 
 

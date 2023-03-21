@@ -81,7 +81,13 @@ export const ImageDetail: FunctionComponent<ImageDetailProps> = (props) => {
 
   return (
     <article className={styles.container}>
-      <SuspendedPicture {...imageProps} className={styles.picture} />
+      <SuspendedPicture
+        {...imageProps}
+        hash={meta.hash}
+        originalHeight={meta.height}
+        originalWidth={meta.width}
+        className={styles.picture}
+      />
       <div className={styles.info}>
         <section className={styles.meta}>
           <span>{meta.focal_length}mm</span>

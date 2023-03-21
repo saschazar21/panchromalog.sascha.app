@@ -54,7 +54,7 @@
   transition: height var(--duration) ease-out, opacity var(--duration) ease-out,
     box-shadow var(--duration) ease-out;
   overflow: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   opacity: 0;
   z-index: 10;
 }

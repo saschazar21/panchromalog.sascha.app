@@ -54,7 +54,13 @@ export const SuspendedPictureLink = forwardRef<
         target="_blank"
         rel="opener noreferrer"
       >
-        <SuspendedPicture {...props} ref={ref} />
+        <SuspendedPicture
+          {...props}
+          hash={imageData?.meta.hash}
+          originalHeight={imageData?.meta.height}
+          originalWidth={imageData?.meta.width}
+          ref={ref}
+        />
       </a>
       {imageDetailProps && (
         <Modal

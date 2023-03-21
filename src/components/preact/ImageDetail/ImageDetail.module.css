@@ -14,7 +14,7 @@
   flex: 1 1 auto;
 }
 
-.container > picture {
+.container .picture {
   width: 100%;
   height: auto;
   max-width: 580px;
