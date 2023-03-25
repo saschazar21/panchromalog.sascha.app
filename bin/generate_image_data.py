@@ -13,6 +13,7 @@ generate_image_data.py
 
 from argparse import ArgumentParser
 from csv import DictReader
+from datetime import datetime
 from get_image_size import get_image_size
 import json
 import os
@@ -87,9 +88,10 @@ class ImageData:
             image_dict.update([(i, image)])
 
         return image_dict
-    
+
     def find_image_path(self, suffix):
-        result = list(filter(lambda entry: entry.endswith(suffix), self.args.images))
+        result = list(
+            filter(lambda entry: entry.endswith(suffix), self.args.images))
 
         return result[0]
 
@@ -128,6 +130,8 @@ class ImageData:
 
         data.update([
             ("aperture", data['aperture'] and float(data['aperture']) or None),
+            ("date", datetime.strptime(
+                data['date'], "%Y-%m-%d").isoformat() + "Z"),
             ("focal_length", data['focal_length']
              and int(data['focal_length']) or None),
             ("iso", data['iso'] and int(data['iso']) or None),
@@ -172,7 +176,7 @@ class ImageData:
                         [("height", height), ("width", width)])
                     row_data.update([
                         ("id", generate_id()),
-                        ("path", self.images.get(i + 1))
+                        ("path", self.images.get(i + 1).replace(" ", "_"))
                     ])
                     data.append(row_data)
 

@@ -8,7 +8,7 @@ import json
 import numpy as np
 import os
 
-MIN_HASH_COMPONENTS = 8
+MIN_HASH_COMPONENTS = 6
 MIN_WIDTH = 128
 
 
@@ -48,6 +48,7 @@ class MeanColorHash:
 
         def decode_image(path):
             with Image.open(path) as img:
+                img = img.convert('RGB')
                 width, height = img.size
                 factor = min(width, height) / max(width, height)
                 new_width = width < height and min(MIN_WIDTH, max(MIN_WIDTH, width)) or min(
