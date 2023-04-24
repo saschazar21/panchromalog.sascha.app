@@ -21,6 +21,7 @@ export enum OBSERVED_GALLERY_ACTIONS {
 export interface ObservedGalleryState {
   isIntersectingAfter: boolean;
   isIntersectingBefore: boolean;
+  target: Element | null;
 }
 
 export interface ObservedGalleryAction {
@@ -31,6 +32,7 @@ export interface ObservedGalleryAction {
 const initialState = {
   isIntersectingAfter: false,
   isIntersectingBefore: false,
+  target: null,
 };
 
 const reducer = (
@@ -46,11 +48,13 @@ const reducer = (
       return {
         ...state,
         isIntersectingAfter: !!payload?.isIntersectingAfter,
+        target: payload?.target ?? null,
       };
     case OBSERVED_GALLERY_ACTIONS.SET_INTERSECTING_BEFORE:
       return {
         ...state,
         isIntersectingBefore: !!payload?.isIntersectingBefore,
+        target: payload?.target ?? null,
       };
     default:
       return state;
@@ -61,7 +65,7 @@ const reducer = (
 const DEFAULT_SETTINGS: Partial<IntersectionObserverInit> = {
   root: null,
   rootMargin: "0px",
-  threshold: 0.9,
+  threshold: 0,
 };
 
 // https://dev.to/hey_yogini/infinite-scrolling-in-react-with-intersection-observer-22fh
@@ -70,15 +74,24 @@ export const useObservedGallery = (galleryInit?: Partial<Gallery>) => {
   const {
     state: { after, before, data, isLoading, mutations },
   } = useGallery(galleryInit);
-  const [{ isIntersectingAfter, isIntersectingBefore }, loadingDispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { isIntersectingAfter, isIntersectingBefore, target },
+    loadingDispatch,
+  ] = useReducer(reducer, initialState);
   const refFirst = useRef<HTMLPictureElement>(null);
   const refLast = useRef<HTMLPictureElement>(null);
 
   useEffect(() => {
     if (!isLoading) {
+      if (target) {
+        const rect = target.getBoundingClientRect();
+
+        (rect.top < 0 || rect.bottom > window.innerHeight) &&
+          target.scrollIntoView();
+      }
       loadingDispatch({ payload: {}, type: OBSERVED_GALLERY_ACTIONS.RESET });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 
   // eslint-disable-next-line no-undef
@@ -87,10 +100,12 @@ export const useObservedGallery = (galleryInit?: Partial<Gallery>) => {
       if (el?.isIntersecting) {
         if (el.target === refFirst.current) {
           loadingDispatch({
-            payload: { isIntersectingBefore: true },
+            payload: {
+              isIntersectingBefore: true,
+              target: el.target,
+            },
             type: OBSERVED_GALLERY_ACTIONS.SET_INTERSECTING_BEFORE,
           });
-          el.target.scrollIntoView();
         }
         if (el.target === refLast.current) {
           loadingDispatch({
@@ -123,7 +138,7 @@ export const useObservedGallery = (galleryInit?: Partial<Gallery>) => {
           sizes: "(min-width: 940px) 300px, 30vw",
           width: 123,
           widths: [123, 256, 512, 600, 900],
-          ...(i === 0 ? { ref: refFirst } : {}),
+          ...(i === (data.length > 9 ? 9 : 0) ? { ref: refFirst } : {}),
           ...(i === data.length - 1 ? { ref: refLast } : {}),
         })
       ),
