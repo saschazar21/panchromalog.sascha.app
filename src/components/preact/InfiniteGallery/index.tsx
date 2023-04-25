@@ -1,4 +1,5 @@
 import { SuspendedPictureLink } from "@components/preact/InfiniteGallery/components/SuspendedPictureLink";
+import { DEFAULT_SIZE } from "@pages/api/images";
 import type { PaginatedImages } from "@utils/graphql/images/images";
 import { mapImageDataToProps } from "@utils/helpers";
 import { useFilterHistory } from "@utils/hooks/useFilterHistory";
@@ -8,6 +9,7 @@ import { useMemo } from "preact/hooks";
 import { useObservedGallery } from "./useObservedGallery";
 
 import styles from "./InfiniteGallery.module.css";
+import { Placeholder } from "./components/Placeholder";
 
 export interface InfiniteGalleryProps {
   gallery: PaginatedImages | null;
@@ -17,7 +19,21 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
   gallery,
 }) => {
   useFilterHistory();
-  const data = useObservedGallery(gallery ?? {});
+  const {
+    after: storeAfter,
+    before: storeBefore,
+    isIntersectingAfter,
+    isIntersectingBefore,
+    pictures: data,
+  } = useObservedGallery(gallery ?? {});
+
+  const [after, before] = useMemo(
+    () => [
+      import.meta.env.SSR ? gallery?.after : storeAfter,
+      import.meta.env.SSR ? gallery?.before : storeBefore,
+    ],
+    [gallery, storeAfter, storeBefore]
+  );
 
   const pictures = useMemo(
     () =>
@@ -36,6 +52,14 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
             <SuspendedPictureLink {...props} key={props.id} />
           )),
     [data, gallery]
+  );
+
+  const placeholders = useMemo(
+    () =>
+      new Array(DEFAULT_SIZE)
+        .fill(null)
+        .map((_, i) => <Placeholder key={`placeholder-${i}`} />),
+    []
   );
 
   const endMessage = useMemo(
@@ -60,14 +84,18 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
 
   return (
     <div className={styles.container}>
-      {gallery?.before && (
-        <a className={className} href={`/?cursor=${gallery.before}`} rel="prev">
+      {before && (
+        <a className={className} href={`/?cursor=${before}`} rel="prev">
           Load previous images
         </a>
       )}
-      <section className={styles.gallery}>{pictures}</section>
-      {gallery?.after ? (
-        <a className={className} href={`/?cursor=${gallery.after}`} rel="next">
+      <section className={styles.gallery}>
+        {isIntersectingBefore && placeholders}
+        {pictures}
+        {isIntersectingAfter && placeholders}
+      </section>
+      {after ? (
+        <a className={className} href={`/?cursor=${after}`} rel="next">
           Load next images
         </a>
       ) : (

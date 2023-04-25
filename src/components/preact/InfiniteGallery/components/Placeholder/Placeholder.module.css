@@ -1,0 +1,4 @@
+.placeholder {
+  background-color: var(--bg-color, var(--color-shadow));
+  aspect-ratio: 1;
+}
