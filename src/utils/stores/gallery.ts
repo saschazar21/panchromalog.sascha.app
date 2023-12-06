@@ -1,6 +1,6 @@
 import type { PaginatedImages } from "@utils/graphql/images/images";
 import { atom } from "nanostores";
-import { Filters, filters } from "./filters";
+import { type Filters, filters } from "./filters";
 
 export enum GALLERY_ACTIONS {
   RESET,

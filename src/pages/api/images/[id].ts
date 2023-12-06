@@ -3,7 +3,7 @@ import type { APIRoute } from "astro";
 
 const CACHE_DURATION = 3.15576e7;
 
-export const get: APIRoute = async ({ params }): Promise<Response> => {
+export const GET: APIRoute = async ({ params }): Promise<Response> => {
   const variables = {
     id: params.id as string,
   };

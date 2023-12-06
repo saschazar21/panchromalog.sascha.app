@@ -3,7 +3,7 @@ import type { APIRoute } from "astro";
 
 export const DEFAULT_SIZE = 15;
 
-export const get: APIRoute = async ({ request }): Promise<Response> => {
+export const GET: APIRoute = async ({ request }): Promise<Response> => {
   const url = new URL(request.url);
   const params = url.searchParams;
 

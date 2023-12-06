@@ -1,9 +1,9 @@
 import type { SuspendedPictureProps } from "@components/preact/SuspendedPicture";
-import { Camera, getCamera } from "@utils/graphql/cameras/camera";
+import { type Camera, getCamera } from "@utils/graphql/cameras/camera";
 import { getFilters } from "@utils/graphql/custom/filters";
-import { Film, getFilm } from "@utils/graphql/films/film";
+import { type Film, getFilm } from "@utils/graphql/films/film";
 import type { Image } from "@utils/graphql/images/image";
-import { getLens, Lens } from "@utils/graphql/lenses/lens";
+import { getLens, type Lens } from "@utils/graphql/lenses/lens";
 import type { Filters } from "@utils/stores/filters";
 import type { Gallery as GalleryState } from "@utils/stores/gallery";
 
