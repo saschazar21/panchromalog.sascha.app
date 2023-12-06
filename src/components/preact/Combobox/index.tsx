@@ -1,4 +1,4 @@
-import { ReactComponent as CloseIcon } from "@icons/x.svg";
+import CloseIcon from "@icons/x.svg?react";
 import type { FunctionalComponent } from "preact";
 import { useEffect, useMemo, useState } from "preact/hooks";
 

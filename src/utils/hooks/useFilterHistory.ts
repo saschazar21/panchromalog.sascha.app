@@ -23,3 +23,5 @@ export const useFilterHistory = () => {
     }
   }, [state]);
 };
+
+export default useFilterHistory;

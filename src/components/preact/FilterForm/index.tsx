@@ -1,6 +1,6 @@
-import { ReactComponent as ApertureIcon } from "@icons/aperture.svg";
-import { ReactComponent as CameraIcon } from "@icons/camera.svg";
-import { ReactComponent as FilmIcon } from "@icons/film.svg";
+import ApertureIcon from "@icons/aperture.svg?react";
+import CameraIcon from "@icons/camera.svg?react";
+import FilmIcon from "@icons/film.svg?react";
 import { Combobox } from "@components/preact/Combobox";
 import type { FilterInit } from "@utils/helpers";
 import type { FunctionalComponent } from "preact";

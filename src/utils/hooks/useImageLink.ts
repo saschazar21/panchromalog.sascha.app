@@ -1,5 +1,5 @@
 import { useImageContext } from "@utils/context/ImageContext";
-import { ImageOptions, buildImageLink } from "@utils/helpers";
+import { type ImageOptions, buildImageLink } from "@utils/helpers";
 import { useMemo } from "preact/hooks";
 
 export const useImageLink = (options: ImageOptions) => {
@@ -24,3 +24,5 @@ export const useImageLink = (options: ImageOptions) => {
     [contextOptions, href, options]
   );
 };
+
+export default useImageLink;

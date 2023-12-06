@@ -1,6 +1,6 @@
 import {
   SuspendedPicture,
-  SuspendedPictureProps,
+  type SuspendedPictureProps,
 } from "@components/preact/SuspendedPicture";
 import type { Image } from "@utils/graphql/images/image";
 import { getImageUrl, getPushPullFactor } from "@utils/helpers";

@@ -1,7 +1,7 @@
 import { useStore } from "@nanostores/preact";
 import {
   filters,
-  Filters,
+  type Filters,
   mutateFilters,
   FILTER_ACTIONS,
 } from "@utils/stores/filters";
@@ -25,3 +25,5 @@ export const useFilters = (filterInit?: Partial<Filters>) => {
     dispatch,
   };
 };
+
+export default useFilters;

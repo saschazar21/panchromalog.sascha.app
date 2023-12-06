@@ -1,6 +1,6 @@
 import { useStore } from "@nanostores/preact";
 import {
-  Gallery,
+  type Gallery,
   gallery,
   GALLERY_ACTIONS,
   mutateGallery,
@@ -24,3 +24,5 @@ export const useGallery = (galleryInit?: Partial<Gallery>) => {
     state,
   };
 };
+
+export default useGallery;
