@@ -29,6 +29,7 @@
     "@astrojs/netlify": "^3.0.4",
     "@astrojs/preact": "^3.0.1",
     "@nanostores/preact": "^0.3.1",
+    "@neondatabase/serverless": "^0.6.0",
     "@vite-pwa/astro": "^0.2.0",
     "astro": "^4.0.2",
     "astro-seo": "^0.7.0",

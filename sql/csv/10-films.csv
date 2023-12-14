@@ -1,0 +1,11 @@
+id,name,brand,iso,type,created_at
+Kodak Tri-X 400,Tri-X 400,Kodak,400,bw,2023-12-12 12:00:00
+Ilford HP5 Plus,HP5 Plus,Ilford,400,bw,2023-12-12 12:00:00
+Fujifilm Neopan Acros 100,Neopan Acros 100,Fujifilm,100,bw,2023-12-12 12:00:00
+Kodak T-MAX 400,T-MAX 400,Kodak,400,bw,2023-12-12 12:00:00
+Ilford Delta 3200,Delta 3200,Ilford,3200,bw,2023-12-12 12:00:00
+Kodak Portra 400,Portra 400,Kodak,400,color,2023-12-12 12:00:00
+Fujifilm Pro 400H,Pro 400H,Fujifilm,400,color,2023-12-12 12:00:00
+Kodak Ektar 100,Ektar 100,Kodak,100,color,2023-12-12 12:00:00
+Ilford XP2 Super,XP2 Super,Ilford,400,color,2023-12-12 12:00:00
+Fujifilm Fujicolor Pro 400H,Fujicolor Pro 400H,Fujifilm,400,color,2023-12-12 12:00:00

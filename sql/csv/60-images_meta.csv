@@ -1,0 +1,4 @@
+id,alt,aperture,camera,color,date,film,focal_length,hash,height,iso,lens,shutter,width
+asdf,Mount Everest,8.0,Nikon D850,#FF0000,2023-12-12 12:00:00,Kodak Tri-X 400,50,123456,1080,400,Nikon AF-S Nikkor 50mm f/1.8G,0.0001,1920
+bsda,Golden Gate Bridge,5.6,Canon EOS 5D Mark IV,#00FF00,2023-12-13 12:00:00,Kodak Portra 400,50,654321,1080,400,Canon EF 50mm f/1.8 STM,0.005,1920
+edfs,Statue of Liberty,11.0,Sony Alpha a7 III,#0000FF,2023-12-14 12:00:00,Fujifilm Pro 400H,50,987654,1080,400,Sony FE 50mm f/1.8,0.0002,1920

@@ -1,5 +1,5 @@
 import { executeQuery } from "@utils/db/neon";
-import { getCamerasQuery, type Camera } from "@utils/db/neon/cameras";
+import { type Film, type FilmType, getFilmsQuery } from "@utils/db/neon/films";
 import type { Page, WithSearchResult } from "@utils/db/sql";
 import { parsePaginationParams } from "@utils/helpers";
 import type { APIRoute } from "astro";
@@ -9,16 +9,16 @@ const DURATION_STALE = 86400;
 
 export const GET: APIRoute = async ({ url }) => {
   const { searchParams } = new URL(url);
-  const mount = searchParams.get("mount");
+  const type = searchParams.get("type");
   const searchTerm = searchParams.get("search");
   const [size, offset] = parsePaginationParams(searchParams);
 
-  const [result] = await executeQuery<Page<WithSearchResult<Camera>>>(
-    getCamerasQuery({
+  const [result] = await executeQuery<Page<WithSearchResult<Film>>>(
+    getFilmsQuery({
       size,
       offset,
       searchTerm,
-      mount,
+      type: type as FilmType,
     })
   );
 

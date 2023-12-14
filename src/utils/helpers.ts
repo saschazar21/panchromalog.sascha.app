@@ -38,6 +38,8 @@ export interface FilterInit {
   lens?: Lens | null;
 }
 
+export const DEFAULT_PAGE_SIZE = 10;
+
 export const IMAGE_API_PATH = "/api/image";
 
 export const IMAGE_ROUTE_PATH = "/_image";
@@ -246,4 +248,16 @@ export const parseParams = async (
 
 export const getPushPullFactor = (box: number, iso: number): string | null => {
   return ISO_MAP.has(box) ? ISO_MAP.get(box)?.get(iso) ?? null : null;
+};
+
+export const parsePaginationParams = (params: URLSearchParams) => {
+  const parsedPage = parseInt(params.get("page") ?? "", 10);
+  const parsedSize = parseInt(params.get("size") ?? "", 10);
+
+  const page = !isNaN(parsedPage) && parsedPage > 0 ? parsedPage : 0;
+  const size =
+    !isNaN(parsedSize) && parsedSize > 0 ? parsedSize : DEFAULT_PAGE_SIZE;
+  const offset = (page > 0 ? page - 1 : 0) * size;
+
+  return [size, offset];
 };
