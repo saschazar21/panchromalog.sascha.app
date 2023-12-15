@@ -1,16 +1,15 @@
-import { getImage } from "@utils/graphql/images/image";
+import { executeQuery } from "@utils/db/neon";
+import { type Image, getImageByIdQuery } from "@utils/db/neon/images";
 import type { APIRoute } from "astro";
 
 const CACHE_DURATION = 3.15576e7;
 
 export const GET: APIRoute = async ({ params }): Promise<Response> => {
-  const variables = {
-    id: params.id as string,
-  };
+  const id = params.id as string;
 
-  const res = await getImage(variables);
+  const [result] = await executeQuery<Image>(getImageByIdQuery(id));
 
-  return new Response(JSON.stringify(res), {
+  return new Response(JSON.stringify(result), {
     status: 200,
     headers: {
       "content-type": "application/json",

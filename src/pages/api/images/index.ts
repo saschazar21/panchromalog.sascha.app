@@ -12,7 +12,7 @@ export const GET: APIRoute = async ({ request }): Promise<Response> => {
   const lens = searchParams.get("lens");
   const film = searchParams.get("film");
 
-  const res = await executeQuery<Page<Image>>(
+  const [result] = await executeQuery<Page<Image>>(
     getImagesQuery({
       size,
       offset,
@@ -22,7 +22,7 @@ export const GET: APIRoute = async ({ request }): Promise<Response> => {
     })
   );
 
-  return new Response(JSON.stringify(res), {
+  return new Response(JSON.stringify(result), {
     status: 200,
     headers: {
       "content-type": "application/json",

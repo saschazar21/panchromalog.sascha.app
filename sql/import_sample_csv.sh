@@ -10,5 +10,10 @@ fi
 
 for filename in ${csv_path}; do
   table=$(echo \"$filename\" | sed 's/.*-//;s/\..*//')
-  psql -U ${POSTGRES_USER:-postgres} -c "\\copy $table from $filename delimiter ',' csv header"
+  
+  if [[ ! -z $DATABASE_URL ]]; then
+    psql $DATABASE_URL -c "\\copy $table from $filename delimiter ',' csv header"
+  else 
+    psql -U ${POSTGRES_USER:-postgres} -c "\\copy $table from $filename delimiter ',' csv header"
+  fi
 done

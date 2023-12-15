@@ -79,9 +79,9 @@ CREATE TABLE IF NOT EXISTS developers (
 );
 
 CREATE TABLE IF NOT EXISTS developers_images_meta (
+  image TEXT PRIMARY KEY REFERENCES images(id) ON DELETE CASCADE,
   developer TEXT REFERENCES developers(name) ON DELETE CASCADE,
-  duration REAL NOT NULL,
-  image TEXT REFERENCES images(id) ON DELETE CASCADE
+  duration REAL NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS points (

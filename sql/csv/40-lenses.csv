@@ -1,8 +1,7 @@
 id,model,make,mount,max_aperture,min_focal_length,max_focal_length,created_at
-Canon EF 50mm f/1.8 STM,EF 50mm f/1.8 STM,Canon,Canon EF,1.8,50,50,2023-12-12 12:00:00
-Nikon AF-S Nikkor 50mm f/1.8G,AF-S Nikkor 50mm f/1.8G,Nikon,Nikon F,1.8,50,50,2023-12-12 12:00:00
-Sony FE 50mm f/1.8,FE 50mm f/1.8,Sony,Sony E,1.8,50,50,2023-12-12 12:00:00
-Leica Summicron-M 50mm f/2,Summicron-M 50mm f/2,Leica,Leica M,2,50,50,2023-12-12 12:00:00
-Pentax SMC DA 50mm f/1.8,SMC DA 50mm f/1.8,Pentax,Pentax K,1.8,50,50,2023-12-12 12:00:00
-Olympus M.Zuiko Digital ED 12-40mm f/2.8 PRO,M.Zuiko Digital ED 12-40mm f/2.8 PRO,Olympus,Olympus OM,2.8,12,40,2023-12-12 12:00:00
-Contax Carl Zeiss Planar T* 50mm f/1.7,Carl Zeiss Planar T* 50mm f/1.7,Contax,Yashica C/Y,1.7,50,50,2023-12-12 12:00:00
+Yashica ML Zoom 35-105mm,ML Zoom 35-105mm 1:3.5-4.5,Yashica,Contax/Yashica,3.5,35,105,2023-02-28T07:21:35.755256Z
+Makinon MC Zoom 28-80mm 1:3.5,MC Zoom 28-80mm 1:3.5,Makinon,Contax/Yashica,3.5,28,80,2023-02-28T07:19:56.290897Z
+Yashica DSB 50mm 1:1.9,DSB 50mm 1:1.9,Yashica,Contax/Yashica,1.9,50,50,2023-02-28T07:19:15.861783Z
+Carenar 35mm 1:2.8,35mm 1:2.8,Carenar,M42,2.8,35,35,2023-02-28T07:15:51.416531Z
+Sun Auto Zoom 85-210mm F:3.8,Auto Zoom 85-210mm F:3.8,Sun,M42,3.8,85,210,2023-02-28T07:15:24.508895Z
+"aus Jena DDR T 2,8/50","T 2,8/50",aus Jena DDR,M42,2.8,50,50,2023-02-28T07:14:35.945453Z

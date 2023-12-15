@@ -1,9 +1,3 @@
 id,make,mount
-Nikon F,Nikon,F
-Canon EF,Canon,EF
-Canon FD,Canon,FD
-Sony E,Sony,E
-Leica M,Leica,M
-Pentax K,Pentax,K
-Olympus OM,Olympus,OM
-Yashica C/Y,Yashica,C/Y
+M42,,M42
+Contax/Yashica,Contax/Yashica,C/Y
