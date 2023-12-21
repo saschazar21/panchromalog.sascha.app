@@ -1,18 +1,17 @@
 import { SuspendedPictureLink } from "@components/preact/InfiniteGallery/components/SuspendedPictureLink";
-import { DEFAULT_SIZE } from "@pages/api/images";
-import type { PaginatedImages } from "@utils/graphql/images/images";
-import { mapImageDataToProps } from "@utils/helpers";
+import { DEFAULT_PAGE_SIZE, mapImageDataToProps } from "@utils/helpers";
 import { useFilterHistory } from "@utils/hooks/useFilterHistory";
 import classNames from "classnames";
 import type { FunctionComponent } from "preact";
 import { useMemo } from "preact/hooks";
+import type { Gallery } from "@utils/stores/gallery";
+import { Placeholder } from "./components/Placeholder";
 import { useObservedGallery } from "./useObservedGallery";
 
 import styles from "./InfiniteGallery.module.css";
-import { Placeholder } from "./components/Placeholder";
 
 export interface InfiniteGalleryProps {
-  gallery: PaginatedImages | null;
+  gallery?: Gallery;
 }
 
 export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
@@ -25,7 +24,7 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
     isIntersectingAfter,
     isIntersectingBefore,
     pictures: data,
-  } = useObservedGallery(gallery ?? {});
+  } = useObservedGallery(gallery);
 
   const [after, before] = useMemo(
     () => [
@@ -56,7 +55,7 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
 
   const placeholders = useMemo(
     () =>
-      new Array(DEFAULT_SIZE)
+      new Array(DEFAULT_PAGE_SIZE)
         .fill(null)
         .map((_, i) => <Placeholder key={`placeholder-${i}`} />),
     []

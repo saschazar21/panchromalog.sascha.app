@@ -1,27 +1,24 @@
-import { CAMERAS } from "../cameras/queries";
-import { MOUNTS } from "../mounts/queries";
-
-export const LENSES = "lenses";
+import { CAMERAS, LENSES, MOUNTS } from "..";
 
 const MIN_ACCURACY = 0.2;
 
 const BASE_SELECT = `SELECT ${LENSES}.*,
 to_jsonb(${MOUNTS}.*) as mount,
 CASE
-  WHEN ${CAMERAS}.* IS NULL
-  THEN '[]'::jsonb
-  ELSE jsonb_agg(${CAMERAS}.*)
+  WHEN COUNT(${CAMERAS}.id) > 0
+  THEN jsonb_agg(${CAMERAS}.*)
+  ELSE '[]'::jsonb
 END as ${CAMERAS}`;
 
 const JOINS = `FROM ${LENSES}
-JOIN ${CAMERAS} ON ${LENSES}.mount = ${CAMERAS}.mount
-JOIN ${MOUNTS} ON ${LENSES}.mount = ${MOUNTS}.id`;
+JOIN ${MOUNTS} ON ${LENSES}.mount = ${MOUNTS}.id
+JOIN ${CAMERAS} ON ${LENSES}.mount = ${CAMERAS}.mount`;
 
-const GROUP_BY = `GROUP BY ${LENSES}.id, ${MOUNTS}.id, ${CAMERAS}.id`;
+const GROUP_BY = `GROUP BY ${LENSES}.id, ${MOUNTS}.*`;
 
 export const SELECT_LENS_BY_ID = `${BASE_SELECT}
 ${JOINS}
-WHERE id = $1
+WHERE ${LENSES}.id = $1
 ${GROUP_BY};
 `;
 
@@ -31,13 +28,14 @@ export const SELECT_LENSES = `WITH data AS (
   ${JOINS}
   WHERE (SIMILARITY(${LENSES}.id, $3) > ${MIN_ACCURACY} OR $3 IS NULL) AND (${LENSES}.mount = $4 OR $4 IS NULL)
   ${GROUP_BY}
+  ORDER BY SIMILARITY(${LENSES}.id, $3) DESC, ${LENSES}.min_focal_length ASC, ${LENSES}.max_focal_length ASC
   LIMIT $1
   OFFSET $2
 ),
 meta AS (
-  SELECT COUNT(*) as entries,
-  CEIL(COUNT(*) / $1::REAL) as pages,
-  SUM(FLOOR($2 / $1::REAL) + 1) as page
+  SELECT COUNT(*) AS entries,
+  CEIL(COUNT(*) / $1::REAL) AS pages,
+  CEIL(($2 + 1) / $1::REAL) AS page
   FROM ${LENSES}
   WHERE (SIMILARITY(${LENSES}.id, $3) > ${MIN_ACCURACY} OR $3 IS NULL) AND (${LENSES}.mount = $4 OR $4 IS NULL)
 )

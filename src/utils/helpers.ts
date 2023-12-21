@@ -1,11 +1,16 @@
 import type { SuspendedPictureProps } from "@components/preact/SuspendedPicture";
-import { type Camera, getCamera } from "@utils/graphql/cameras/camera";
-import { getFilters } from "@utils/graphql/custom/filters";
-import { type Film, getFilm } from "@utils/graphql/films/film";
-import type { Image } from "@utils/graphql/images/image";
-import { getLens, type Lens } from "@utils/graphql/lenses/lens";
 import type { Filters } from "@utils/stores/filters";
 import type { Gallery as GalleryState } from "@utils/stores/gallery";
+import {
+  getCameraByIdQuery,
+  type Camera,
+  getCamerasQuery,
+} from "./db/neon/cameras";
+import { getFilmByIdQuery, type Film, getFilmsQuery } from "./db/neon/films";
+import { getLensByIdQuery, getLensesQuery, type Lens } from "./db/neon/lenses";
+import type { Image, WithImageMeta } from "./db/neon/images";
+import { executeTransaction } from "./db/neon";
+import type { Page } from "./db/sql";
 
 export interface ImageOptions {
   /** original image url */
@@ -160,37 +165,50 @@ export const fetchFilters = async (
 ): Promise<FilterInit> => {
   const keys = [];
 
-  if (params.has("camera")) {
-    keys.push([
-      "camera",
-      (await (
-        await getCamera({ model: params.get("camera") as string })
-      )?.data?.camera) ?? null,
+  if (
+    [params.get("camera"), params.get("film"), params.get("lens")].some(
+      (param) => param?.length
+    )
+  ) {
+    const [[camera], [film], [lens]] = await executeTransaction<
+      [[Camera], [Film], [Lens]]
+    >([
+      getCameraByIdQuery(params.get("camera") as string),
+      getFilmByIdQuery(params.get("film") as string),
+      getLensByIdQuery(params.get("lens") as string),
     ]);
-  }
-  if (params.has("film")) {
-    keys.push([
-      "film",
-      (await (
-        await getFilm({ name: params.get("film") as string })
-      )?.data?.film) ?? null,
-    ]);
-  }
-  if (params.has("lens")) {
-    keys.push([
-      "lens",
-      (await (
-        await getLens({ model: params.get("lens") as string })
-      )?.data?.lens) ?? null,
-    ]);
+
+    if (camera) {
+      keys.push(["camera", camera]);
+    }
+    if (film) {
+      keys.push(["film", film]);
+    }
+    if (lens) {
+      keys.push(["lens", lens]);
+    }
   }
 
-  const filters = (await (await getFilters())?.data) ?? {};
+  const size = 25;
+
+  const [[camerasPage], [filmsPage], [lensesPage]] = await executeTransaction<
+    [[Page<Camera>], [Page<Film>], [Page<Lens>]]
+  >([
+    getCamerasQuery({ size, offset: 0, searchTerm: null, mount: null }),
+    getFilmsQuery({ size, offset: 0, searchTerm: null, type: null }),
+    getLensesQuery({ size, offset: 0, searchTerm: null, mount: null }),
+  ]);
+
+  const { data: cameras = [] } = camerasPage ?? {};
+  const { data: films = [] } = filmsPage ?? {};
+  const { data: lenses = [] } = lensesPage ?? {};
+
+  const filters = { cameras, films, lenses };
 
   return {
     ...Object.fromEntries(keys.filter(([_, val]) => !!val)),
     ...filters,
-    cursor: params.get("cursor") ?? null,
+    page: params.get("page") ?? null,
   };
 };
 
@@ -204,7 +222,7 @@ export const mapImageDataToProps = ({
   id,
   meta,
   path,
-}: Image): Omit<
+}: WithImageMeta<Image>): Omit<
   SuspendedPictureProps,
   "height" | "sizes" | "width" | "widths"
 > => ({
@@ -222,7 +240,7 @@ export const buildParams = (state: Filters): URLSearchParams => {
     ...(state.camera ? [["camera", state.camera.model]] : []),
     ...(state.film ? [["film", state.film.name]] : []),
     ...(state.lens ? [["lens", state.lens.model]] : []),
-    ...(state.cursor ? [["cursor", state.cursor]] : []),
+    ...(state.page ? [["page", state.page.toString()]] : []),
   ];
 
   return new URLSearchParams(params);
@@ -230,20 +248,32 @@ export const buildParams = (state: Filters): URLSearchParams => {
 
 export const parseParams = async (
   params: URLSearchParams
-): Promise<GalleryState | null> => {
-  console.log(Object.fromEntries(params));
-
+): Promise<GalleryState | undefined> => {
   const search = params.toString();
   const url = new URL("/api/images", import.meta.env.SITE);
   url.search = search.toString();
 
-  const { data: gallery, errors } = await fetch(url).then((res) => res.json());
+  const images: Page<WithImageMeta<Image>> | null = await fetch(url).then(
+    (res) => res.json()
+  );
 
-  if (!gallery && errors?.length) {
-    throw new Error(errors[0].message);
+  if (!images?.data) {
+    return undefined;
   }
 
-  return gallery?.images ?? null;
+  const meta = images.meta;
+
+  const gallery: GalleryState = {
+    after: meta.page < meta.pages ? meta.page + 1 : null,
+    before: meta.page > 1 ? meta.page - 1 : null,
+    error: null,
+    data: images.data,
+    isLoading: false,
+    meta,
+    mutations: 0,
+  };
+
+  return gallery;
 };
 
 export const getPushPullFactor = (box: number, iso: number): string | null => {

@@ -1,4 +1,5 @@
-import type { PaginatedImages } from "@utils/graphql/images/images";
+import type { Page } from "@utils/db/sql";
+import type { Image, WithImageMeta } from "@utils/db/neon/images";
 import { atom } from "nanostores";
 import { type Filters, filters } from "./filters";
 
@@ -15,7 +16,9 @@ export interface GalleryAction {
   type: GALLERY_ACTIONS;
 }
 
-export interface Gallery extends PaginatedImages {
+export interface Gallery extends Page<WithImageMeta<Image>> {
+  after: number | null;
+  before: number | null;
   error: Error | null;
   isLoading: boolean;
   mutations: number;
@@ -27,6 +30,11 @@ const initialState: Gallery = {
   data: [],
   error: null,
   isLoading: false,
+  meta: {
+    entries: 0,
+    page: 0,
+    pages: 0,
+  },
   mutations: 0,
 };
 
@@ -44,6 +52,7 @@ export const mutateGallery = (action: GalleryAction) => {
       return gallery.set({
         ...state,
         ...action.payload,
+        after: action.payload.meta?.page as number,
         before: state.before,
         data: [...state.data, ...(action.payload.data ?? [])],
         mutations: ++state.mutations,
@@ -53,6 +62,7 @@ export const mutateGallery = (action: GalleryAction) => {
         ...state,
         ...action.payload,
         after: state.after,
+        before: action.payload.meta?.page as number,
         data: [...(action.payload.data ?? []), ...state.data],
         mutations: ++state.mutations,
       });
@@ -69,18 +79,12 @@ export const mutateGallery = (action: GalleryAction) => {
   }
 };
 
-const galleryUpdate = ({
-  camera,
-  cursor,
-  film,
-  lens,
-  resetGallery,
-}: Filters) => {
+const galleryUpdate = ({ camera, film, lens, page, resetGallery }: Filters) => {
   const params: URLSearchParams = new URLSearchParams(
     Object.assign(
       {},
       camera ? { camera: camera.model } : {},
-      cursor ? { cursor } : {},
+      page ? { page } : {},
       film ? { film: film.name } : {},
       lens ? { lens: lens.model } : {}
     )
@@ -111,7 +115,7 @@ const galleryUpdate = ({
 
       const { before } = gallery.get();
 
-      if (cursor === before) {
+      if (page === before) {
         return mutateGallery({
           payload: data.images,
           type: GALLERY_ACTIONS.PREPEND,

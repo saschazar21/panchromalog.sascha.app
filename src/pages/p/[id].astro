@@ -6,17 +6,17 @@ import ErrorPage from "../404.astro";
 
 const id = Astro.params.id;
 
-const { data, errors } = await fetch(
+const data = await fetch(
   new URL(`/api/images/${id}`, Astro.site)
 ).then((res) => res.json());
 
-if (!data?.image && errors?.length) {
-  Astro.response.status = 404;
-  Astro.response.statusText = "This image could not be found.";
-}
+// if (!data?.image && errors?.length) {
+//   Astro.response.status = 404;
+//   Astro.response.statusText = "This image could not be found.";
+// }
 
-const { image = {} } = data ?? {};
-const { description, meta, path, title } = image;
+// const { image = {} } = data ?? {};
+const { description, meta, path, title } = data;
 
 const imageUrl = buildImageLink({
   f: "jpeg",
@@ -35,11 +35,11 @@ const props = {
 ---
 
 {
-  !image ? (
+  !data ? (
     <ErrorPage />
   ) : (
     <Default {...props}>
-      <ImageDetail client:visible {...image} />
+      <ImageDetail client:visible {...data} />
     </Default>
   )
 }

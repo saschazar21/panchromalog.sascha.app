@@ -15,9 +15,9 @@ export enum FILTER_ACTIONS {
 
 export interface Filters {
   camera: Camera | null;
-  cursor: string | null;
   film: Film | null;
   lens: Lens | null;
+  page: number | null;
   resetGallery: boolean;
 }
 
@@ -28,9 +28,9 @@ export interface FilterAction {
 
 const initialState = {
   camera: null,
-  cursor: null,
   film: null,
   lens: null,
+  page: null,
   resetGallery: true,
 };
 
@@ -48,26 +48,26 @@ export const mutateFilters = (action: FilterAction) => {
       return filters.set({
         ...state,
         camera: action.payload.camera as Camera,
-        cursor: null,
+        page: null,
         resetGallery: true,
       });
     case FILTER_ACTIONS.SET_CURSOR:
       return filters.set({
         ...state,
-        cursor: action.payload.cursor as string,
+        page: action.payload.page as number,
         resetGallery: false,
       });
     case FILTER_ACTIONS.SET_FILM:
       return filters.set({
         ...state,
-        cursor: null,
+        page: null,
         film: action.payload.film as Film,
         resetGallery: true,
       });
     case FILTER_ACTIONS.SET_LENS:
       return filters.set({
         ...state,
-        cursor: null,
+        page: null,
         lens: action.payload.lens as Lens,
         resetGallery: true,
       });

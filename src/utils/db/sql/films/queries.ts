@@ -1,4 +1,5 @@
-export const FILMS = "films";
+import { FILMS } from "..";
+
 const MIN_ACCURACY = 0.2;
 
 export const SELECT_FILM_BY_ID = `SELECT ${FILMS}.*
@@ -10,14 +11,14 @@ export const SELECT_FILMS = `WITH data AS (
   SELECT ${FILMS}.*, SIMILARITY(${FILMS}.id, $3) AS accuracy
   FROM ${FILMS}
   WHERE (SIMILARITY(${FILMS}.id, $3) > ${MIN_ACCURACY} OR $3 IS NULL) AND (${FILMS}.type = $4 OR $4 IS NULL)
-  ORDER BY SIMILARITY(${FILMS}.id, $3) DESC
+  ORDER BY SIMILARITY(${FILMS}.id, $3) DESC, ${FILMS}.iso ASC, ${FILMS}.id ASC
   LIMIT $1
   OFFSET $2
 ),
 meta AS (
-  SELECT COUNT(*) as entries,
-  CEIL(COUNT(*) / $1::REAL) as pages,
-  CEIL(($2 + 1) / $1::REAL) as page
+  SELECT COUNT(*) AS entries,
+  CEIL(COUNT(*) / $1::REAL) AS pages,
+  CEIL(($2 + 1) / $1::REAL) AS page
   FROM ${FILMS}
   WHERE (SIMILARITY(${FILMS}.id, $3) > ${MIN_ACCURACY} OR $3 IS NULL) AND (${FILMS}.type = $4 OR $4 IS NULL)
 )

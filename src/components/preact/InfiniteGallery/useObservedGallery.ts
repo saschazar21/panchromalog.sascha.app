@@ -114,13 +114,13 @@ export const useObservedGallery = (galleryInit?: Partial<Gallery>) => {
           });
         }
 
-        let cursor = null;
-        cursor = el.target === refFirst.current ? before : cursor;
-        cursor = el.target === refLast.current ? after : cursor;
+        let page = null;
+        page = el.target === refFirst.current ? before : page;
+        page = el.target === refLast.current ? after : page;
 
-        cursor &&
+        page &&
           dispatch({
-            payload: { cursor },
+            payload: { page },
             type: FILTER_ACTIONS.SET_CURSOR,
           });
       }

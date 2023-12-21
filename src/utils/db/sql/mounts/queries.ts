@@ -1,27 +1,24 @@
-import { CAMERAS } from "../cameras/queries";
-import { LENSES } from "../lenses/queries";
-
-export const MOUNTS = "mounts";
+import { CAMERAS, LENSES, MOUNTS } from "..";
 
 const MIN_ACCURACY = 0.2;
 
 const BASE_SELECT = `SELECT ${MOUNTS}.*,
 CASE
-  WHEN ${CAMERAS}.* IS NULL
-  THEN '[]'::jsonb
-  ELSE jsonb_agg(${CAMERAS}.*)
+  WHEN COUNT(${CAMERAS}.id) > 0
+  THEN jsonb_agg(${CAMERAS}.*)
+  ELSE '[]'::jsonb
 END as ${CAMERAS},
 CASE 
-  WHEN ${LENSES}.* IS NULL
-  THEN '[]'::jsonb
-  ELSE jsonb_agg(${LENSES}.*)
+  WHEN COUNT(${LENSES}.id) > 0
+  THEN jsonb_agg(${LENSES}.*)
+  ELSE '[]'::jsonb
 END as ${LENSES}`;
 
 const JOINS = `FROM ${MOUNTS}
 JOIN ${CAMERAS} ON ${MOUNTS}.id = ${CAMERAS}.mount
 JOIN ${LENSES} ON ${MOUNTS}.id = ${LENSES}.mount`;
 
-const GROUP_BY = `GROUP BY ${MOUNTS}.id, ${CAMERAS}.id, ${LENSES}.id`;
+const GROUP_BY = `GROUP BY ${MOUNTS}.id`;
 
 export const SELECT_MOUNT_BY_ID = `${BASE_SELECT}
 ${JOINS}
@@ -39,9 +36,9 @@ export const SELECT_MOUNTS = `WITH data AS (
   OFFSET $2
 ),
 meta AS (
-  SELECT COUNT(*) as entries,
-  CEIL(COUNT(*) / $1::REAL) as pages,
-  CEIL(($2 + 1) / $1::REAL) as page
+  SELECT COUNT(*) AS entries,
+  CEIL(COUNT(*) / $1::REAL) AS pages,
+  CEIL(($2 + 1) / $1::REAL) AS page
   FROM ${MOUNTS}
   WHERE SIMILARITY(${MOUNTS}.id, $3) > ${MIN_ACCURACY} OR $3 IS NULL
 )

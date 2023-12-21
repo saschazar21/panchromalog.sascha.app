@@ -8,10 +8,10 @@ export const executeQuery = async <T>(query: QueryTuple) => {
   return sql(...query) as NeonQueryPromise<false, false, [T]>;
 };
 
-export const executeTransaction = async (queries: QueryTuple[]) => {
+export const executeTransaction = async <T>(queries: QueryTuple[]) => {
   const sql = await getQuery();
 
   const segments = queries.map((query) => sql(...query));
 
-  return sql.transaction(segments);
+  return sql.transaction(segments) as Promise<T>;
 };
