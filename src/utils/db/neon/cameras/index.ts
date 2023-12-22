@@ -22,7 +22,7 @@ export interface GetCamerasParams {
 }
 
 export type WithCameras<
-  T extends Omit<Lens, "cameras"> | Omit<Mount, "cameras">
+  T extends Omit<Lens, "cameras"> | Omit<Mount, "cameras">,
 > = T & {
   cameras: Camera[];
 };

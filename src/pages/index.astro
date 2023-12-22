@@ -2,7 +2,7 @@
 import Controls from "@components/Controls.astro";
 import { InfiniteGallery } from "@components/preact/InfiniteGallery";
 import Default from "@layouts/Default.astro";
-import type { Image } from "@utils/graphql/images/image";
+import type { Image, WithImageMeta } from "@utils/db/neon/images";
 import { buildImageLink, getImageUrl, parseParams } from "@utils/helpers";
 import type { Gallery } from "@utils/stores/gallery";
 import NotFoundPage from "./404.astro";
@@ -23,7 +23,7 @@ try {
 
   const { meta: { alt = "" } = {}, path } = gallery?.data?.length
     ? gallery.data[0]
-    : ({} as Image);
+    : ({} as WithImageMeta<Image>);
 
   const imageUrl = buildImageLink({
     f: "jpeg",
