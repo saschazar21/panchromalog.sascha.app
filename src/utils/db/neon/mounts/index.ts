@@ -14,9 +14,10 @@ export interface Mount {
   mount: string;
 }
 
-export type WithMount<T extends Camera & Lens> = T & {
-  mount: Mount | null;
-};
+export type WithMount<T extends Omit<Camera, "mount"> | Omit<Lens, "mount">> =
+  T & {
+    mount: Mount | null;
+  };
 
 export const createMountQuery = (data: Mount): QueryTuple => {
   const params = [data.id, data.make, data.mount];

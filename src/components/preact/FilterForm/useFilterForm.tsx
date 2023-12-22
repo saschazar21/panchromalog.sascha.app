@@ -25,18 +25,18 @@ export const useFilterForm = (filterInit: FilterInit) => {
     films: filmsInit,
     lenses: lensesInit,
     camera = null,
-    cursor = null,
     film = null,
     lens = null,
+    page = null,
   } = filterInit;
   const cameras = useStore(camerasStore);
   const films = useStore(filmsStore);
   const lenses = useStore(lensesStore);
   const { dispatch: filterDispatch, state } = useFilters({
     camera,
-    cursor,
     film,
     lens,
+    page,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 

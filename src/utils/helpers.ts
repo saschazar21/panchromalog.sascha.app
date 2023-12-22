@@ -5,12 +5,19 @@ import {
   getCameraByIdQuery,
   type Camera,
   getCamerasQuery,
+  type WithCameras,
 } from "./db/neon/cameras";
 import { getFilmByIdQuery, type Film, getFilmsQuery } from "./db/neon/films";
-import { getLensByIdQuery, getLensesQuery, type Lens } from "./db/neon/lenses";
+import {
+  getLensByIdQuery,
+  getLensesQuery,
+  type Lens,
+  type WithLenses,
+} from "./db/neon/lenses";
 import type { Image, WithImageMeta } from "./db/neon/images";
 import { executeTransaction } from "./db/neon";
 import type { Page } from "./db/sql";
+import type { WithMount } from "./db/neon/mounts";
 
 export interface ImageOptions {
   /** original image url */
@@ -34,13 +41,13 @@ export interface ImageOptions {
 }
 
 export interface FilterInit {
-  cursor: string | null;
-  cameras?: Camera[];
+  cameras?: WithMount<WithLenses<Camera>>[];
   films?: Film[];
-  lenses?: Lens[];
-  camera?: Camera | null;
+  lenses?: WithMount<WithCameras<Lens>>[];
+  camera?: WithMount<WithLenses<Camera>> | null;
   film?: Film | null;
-  lens?: Lens | null;
+  lens?: WithMount<WithCameras<Lens>> | null;
+  page: number | null;
 }
 
 export const DEFAULT_PAGE_SIZE = 10;
@@ -212,6 +219,12 @@ export const fetchFilters = async (
   };
 };
 
+export const nextPageNo = (page: Page<Image>) =>
+  page.meta.page < page.meta.pages ? page.meta.page + 1 : null;
+
+export const prevPageNo = (page: Page<Image>) =>
+  page.meta.page > 1 ? page.meta.page - 1 : null;
+
 export const getImageUrl = (path: string) => {
   const p = path?.startsWith("/") ? path : `/${path}`;
 
@@ -264,8 +277,8 @@ export const parseParams = async (
   const meta = images.meta;
 
   const gallery: GalleryState = {
-    after: meta.page < meta.pages ? meta.page + 1 : null,
-    before: meta.page > 1 ? meta.page - 1 : null,
+    after: nextPageNo(images),
+    before: prevPageNo(images),
     error: null,
     data: images.data,
     isLoading: false,

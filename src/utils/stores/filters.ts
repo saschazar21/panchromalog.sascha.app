@@ -1,6 +1,7 @@
-import type { Camera } from "@utils/graphql/cameras/camera";
-import type { Film } from "@utils/graphql/films/film";
-import type { Lens } from "@utils/graphql/lenses/lens";
+import type { Camera } from "@utils/db/neon/cameras";
+import type { Film } from "@utils/db/neon/films";
+import type { Lens, WithLenses } from "@utils/db/neon/lenses";
+import type { WithMount } from "@utils/db/neon/mounts";
 import { atom, onSet, task } from "nanostores";
 import { cameras } from "./cameras";
 import { lenses } from "./lenses";
@@ -14,9 +15,9 @@ export enum FILTER_ACTIONS {
 }
 
 export interface Filters {
-  camera: Camera | null;
+  camera: WithMount<WithLenses<Camera>> | null;
   film: Film | null;
-  lens: Lens | null;
+  lens: WithMount<Lens> | null;
   page: number | null;
   resetGallery: boolean;
 }
@@ -47,7 +48,7 @@ export const mutateFilters = (action: FilterAction) => {
     case FILTER_ACTIONS.SET_CAMERA:
       return filters.set({
         ...state,
-        camera: action.payload.camera as Camera,
+        camera: action.payload.camera as WithMount<WithLenses<Camera>>,
         page: null,
         resetGallery: true,
       });
@@ -68,7 +69,7 @@ export const mutateFilters = (action: FilterAction) => {
       return filters.set({
         ...state,
         page: null,
-        lens: action.payload.lens as Lens,
+        lens: action.payload.lens as WithMount<Lens>,
         resetGallery: true,
       });
   }
@@ -103,16 +104,16 @@ onSet(filters, async ({ newValue: { camera: newCamera, lens: newLens } }) => {
 
   if (
     newCamera !== currentCamera ||
-    newCamera?.mount?.name !== currentCamera?.mount?.name
+    newCamera?.mount?.id !== currentCamera?.mount?.id
   ) {
     endpoint = "lenses";
-    newCamera && params.set("mount", newCamera.mount?.name ?? "none");
+    newCamera && params.set("mount", newCamera.mount?.id ?? "none");
   } else if (
     newLens !== currentLens ||
-    newLens?.mount.name !== currentLens?.mount.name
+    newLens?.mount.id !== currentLens?.mount.id
   ) {
     endpoint = "cameras";
-    newLens && params.set("mount", newLens.mount.name);
+    newLens && params.set("mount", newLens.mount.id);
   }
 
   const url = new URL(`/api/${endpoint}`, import.meta.env.SITE);

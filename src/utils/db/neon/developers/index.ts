@@ -10,6 +10,6 @@ export interface DeveloperImageMeta {
   image: string;
 }
 
-export type WithDeveloper<T extends ImageMeta> = T & {
+export type WithDeveloper<T extends Omit<ImageMeta, "developer">> = T & {
   developer: DeveloperImageMeta;
 };

@@ -1,5 +1,6 @@
 import type { Page } from "@utils/db/sql";
 import type { Image, WithImageMeta } from "@utils/db/neon/images";
+import { nextPageNo, prevPageNo } from "@utils/helpers";
 import { atom } from "nanostores";
 import { type Filters, filters } from "./filters";
 
@@ -52,7 +53,9 @@ export const mutateGallery = (action: GalleryAction) => {
       return gallery.set({
         ...state,
         ...action.payload,
-        after: action.payload.meta?.page as number,
+        after: action.payload?.meta
+          ? nextPageNo(action.payload as Page<Image>)
+          : null,
         before: state.before,
         data: [...state.data, ...(action.payload.data ?? [])],
         mutations: ++state.mutations,
@@ -62,7 +65,9 @@ export const mutateGallery = (action: GalleryAction) => {
         ...state,
         ...action.payload,
         after: state.after,
-        before: action.payload.meta?.page as number,
+        before: action.payload?.meta
+          ? prevPageNo(action.payload as Page<Image>)
+          : null,
         data: [...(action.payload.data ?? []), ...state.data],
         mutations: ++state.mutations,
       });
@@ -101,14 +106,14 @@ const galleryUpdate = ({ camera, film, lens, page, resetGallery }: Filters) => {
 
   fetch(url)
     .then((res) => res.json())
-    .then(({ data, errors }) => {
-      if (!data && errors?.length) {
-        throw new Error(errors[0].message);
-      }
+    .then((data: Page<WithImageMeta<Image>>) => {
+      // if (!data && errors?.length) {
+      //   throw new Error(errors[0].message);
+      // }
 
       if (resetGallery) {
         return mutateGallery({
-          payload: data.images,
+          payload: data,
           type: GALLERY_ACTIONS.RESET,
         });
       }
@@ -117,13 +122,13 @@ const galleryUpdate = ({ camera, film, lens, page, resetGallery }: Filters) => {
 
       if (page === before) {
         return mutateGallery({
-          payload: data.images,
+          payload: data,
           type: GALLERY_ACTIONS.PREPEND,
         });
       }
 
       return mutateGallery({
-        payload: data.images,
+        payload: data,
         type: GALLERY_ACTIONS.APPEND,
       });
     })

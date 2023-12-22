@@ -24,7 +24,9 @@ export interface GetLensesParams {
   mount: string | null;
 }
 
-export type WithLenses<T extends Camera & Mount> = T & {
+export type WithLenses<
+  T extends Omit<Camera, "lenses"> | Omit<Mount, "lenses">
+> = T & {
   lenses: Lens[] | null;
 };
 

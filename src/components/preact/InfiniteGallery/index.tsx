@@ -84,7 +84,7 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
   return (
     <div className={styles.container}>
       {before && (
-        <a className={className} href={`/?cursor=${before}`} rel="prev">
+        <a className={className} href={`/?page=${before}`} rel="prev">
           Load previous images
         </a>
       )}
@@ -94,7 +94,7 @@ export const InfiniteGallery: FunctionComponent<InfiniteGalleryProps> = ({
         {isIntersectingAfter && placeholders}
       </section>
       {after ? (
-        <a className={className} href={`/?cursor=${after}`} rel="next">
+        <a className={className} href={`/?page=${after}`} rel="next">
           Load next images
         </a>
       ) : (
