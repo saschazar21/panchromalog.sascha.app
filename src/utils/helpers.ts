@@ -15,7 +15,7 @@ import {
   type WithLenses,
 } from "./db/neon/lenses";
 import type { Image, WithImageMeta } from "./db/neon/images";
-import { executeTransaction, type QueryTuple } from "./db/neon";
+import { executeTransaction } from "./db/neon";
 import type { Page } from "./db/sql";
 import type { WithMount } from "./db/neon/mounts";
 
