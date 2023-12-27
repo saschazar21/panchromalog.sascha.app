@@ -15,7 +15,7 @@ import {
   type WithLenses,
 } from "./db/neon/lenses";
 import type { Image, WithImageMeta } from "./db/neon/images";
-import { executeTransaction } from "./db/neon";
+import { executeTransaction, type QueryTuple } from "./db/neon";
 import type { Page } from "./db/sql";
 import type { WithMount } from "./db/neon/mounts";
 
@@ -180,9 +180,9 @@ export const fetchFilters = async (
     const [[camera], [film], [lens]] = await executeTransaction<
       [[Camera], [Film], [Lens]]
     >([
-      getCameraByIdQuery(params.get("camera") as string),
-      getFilmByIdQuery(params.get("film") as string),
-      getLensByIdQuery(params.get("lens") as string),
+      getCameraByIdQuery((params.get("camera") as string) ?? ""),
+      getFilmByIdQuery((params.get("film") as string) ?? ""),
+      getLensByIdQuery((params.get("lens") as string) ?? ""),
     ]);
 
     if (camera) {

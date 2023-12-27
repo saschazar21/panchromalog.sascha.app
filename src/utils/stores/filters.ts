@@ -1,7 +1,8 @@
-import type { Camera } from "@utils/db/neon/cameras";
+import type { Camera, WithCameras } from "@utils/db/neon/cameras";
 import type { Film } from "@utils/db/neon/films";
 import type { Lens, WithLenses } from "@utils/db/neon/lenses";
 import type { WithMount } from "@utils/db/neon/mounts";
+import type { Page } from "@utils/db/sql";
 import { atom, onSet, task } from "nanostores";
 import { cameras } from "./cameras";
 import { lenses } from "./lenses";
@@ -77,18 +78,15 @@ export const mutateFilters = (action: FilterAction) => {
 
 const refetch = async (endpoint: string, url: URL) => {
   try {
-    const { data, errors } = await fetch(url).then((res) => res.json());
-
-    if (!data && errors?.length) {
-      throw new Error(errors[0].message);
-    }
+    const res: Page<WithMount<WithLenses<Camera> | WithCameras<Lens>>> =
+      await fetch(url).then((res) => res.json());
 
     switch (endpoint) {
       case "cameras":
-        return cameras.set(data[endpoint]);
+        return cameras.set((res.data as WithMount<WithLenses<Camera>>[]) ?? []);
       case "lenses":
     }
-    return lenses.set(data[endpoint]);
+    return lenses.set((res.data as WithMount<WithCameras<Lens>>[]) ?? []);
   } catch (e) {
     if (import.meta.env.DEV) {
       console.error(e);

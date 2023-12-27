@@ -124,7 +124,7 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
                 name="camera"
                 options={cameras}
                 placeholder="Enter camera model"
-                value={camera?.model ?? null}
+                value={camera?.id ?? null}
                 onChange={(payload) => handleChange(payload, "camera")}
               />
             </EditBlock>
@@ -134,7 +134,7 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
                 name="lens"
                 options={lenses}
                 placeholder="Enter lens model"
-                value={lens?.model ?? null}
+                value={lens?.id ?? null}
                 onChange={(payload) => handleChange(payload, "lens")}
               />
             </EditBlock>
@@ -144,7 +144,7 @@ export const FilterForm: FunctionalComponent<FilterFormProps> = (props) => {
                 name="film"
                 options={films}
                 placeholder="Enter film name"
-                value={film?.name ?? null}
+                value={film?.id ?? null}
                 onChange={(payload) => handleChange(payload, "film")}
               />
             </EditBlock>

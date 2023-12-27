@@ -1,37 +1,45 @@
 ---
 import { ImageDetail } from "@components/preact/ImageDetail";
 import Default from "@layouts/Default.astro";
+import type { WithImageMeta, Image } from "@utils/db/images";
 import { buildImageLink, getImageUrl } from "@utils/helpers";
 import ErrorPage from "../404.astro";
 
+let data: WithImageMeta<Image>;
+let props;
+
 const id = Astro.params.id;
 
-const data = await fetch(new URL(`/api/images/${id}`, Astro.site)).then((res) =>
-  res.json()
-);
+try {
+  data = await fetch(new URL(`/api/images/${id}`, Astro.site)).then((res) =>
+    res.json()
+  );
 
-// if (!data?.image && errors?.length) {
-//   Astro.response.status = 404;
-//   Astro.response.statusText = "This image could not be found.";
-// }
+  if (!data) {
+    Astro.response.status = 404;
+    Astro.response.statusText = "This image could not be found.";
+  }
 
-// const { image = {} } = data ?? {};
-const { description, meta, path, title } = data;
+  const { description, meta, path, title } = data;
 
-const imageUrl = buildImageLink({
-  f: "jpeg",
-  fit: "cover",
-  h: 600,
-  href: getImageUrl(path),
-  w: 1200,
-});
+  const imageUrl = buildImageLink({
+    f: "jpeg",
+    fit: "cover",
+    h: 600,
+    href: getImageUrl(path),
+    w: 1200,
+  });
 
-const props = {
-  alt: meta.alt,
-  title,
-  description,
-  image: imageUrl,
-};
+  props = {
+    alt: meta.alt,
+    title,
+    description,
+    image: imageUrl,
+  };
+} catch (_e) {
+  Astro.response.status = 404;
+  Astro.response.statusText = "This image could not be found.";
+}
 ---
 
 {

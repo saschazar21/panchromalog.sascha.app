@@ -9,6 +9,10 @@ export const GET: APIRoute = async ({ params }): Promise<Response> => {
 
   const [result] = await executeQuery<Image>(getImageByIdQuery(id));
 
+  if (!result) {
+    return new Response(null, { status: 404, statusText: "Not found." });
+  }
+
   return new Response(JSON.stringify(result), {
     status: 200,
     headers: {

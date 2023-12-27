@@ -10,6 +10,10 @@ export const GET: APIRoute = async ({ params }) => {
     getFilmByIdQuery(params.id as string)
   );
 
+  if (!result) {
+    return new Response(null, { status: 404, statusText: "Not found." });
+  }
+
   return new Response(JSON.stringify(result), {
     status: 200,
     headers: {

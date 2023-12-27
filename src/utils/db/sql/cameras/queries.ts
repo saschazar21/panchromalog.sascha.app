@@ -8,21 +8,24 @@ CASE
   WHEN COUNT(${LENSES}.id) > 0
   THEN jsonb_agg(${LENSES}.*)
   ELSE '[]'::jsonb
-END AS ${LENSES},
-SIMILARITY(${CAMERAS}.id, $3) AS accuracy
-FROM ${CAMERAS}
+END AS ${LENSES}`;
+
+const JOINS = `FROM ${CAMERAS}
 LEFT JOIN ${LENSES} on ${LENSES}.mount = ${CAMERAS}.mount
 LEFT JOIN ${MOUNTS} on ${MOUNTS}.id = ${CAMERAS}.mount`;
 
 const GROUP_BY = `GROUP BY ${CAMERAS}.id, ${MOUNTS}.id`;
 
 export const SELECT_CAMERA_BY_ID = `${BASE_SELECT}
+${JOINS}
 WHERE ${CAMERAS}.id = $1
-${GROUP_BY}
+${GROUP_BY};
 `;
 
 export const SELECT_CAMERAS = `WITH data AS (
-  ${BASE_SELECT}
+  ${BASE_SELECT},
+  SIMILARITY(${CAMERAS}.id, $3) AS accuracy
+  ${JOINS}
   WHERE (SIMILARITY(${CAMERAS}.id, $3) > ${MIN_ACCURACY} OR $3 IS NULL) AND (${CAMERAS}.mount = $4 OR $4 IS NULL)
   ${GROUP_BY}
   ORDER BY SIMILARITY(${CAMERAS}.id, $3) DESC, ${CAMERAS}.created_at DESC

@@ -10,7 +10,7 @@ import customStyles from "./EditBlock.module.css";
 export interface EditBlockProps {
   children: VNode | VNode[];
   name: string;
-  subtitle?: string;
+  subtitle?: string | null;
   title?: string;
 }
 

@@ -22,6 +22,10 @@ export const GET: APIRoute = async ({ url }) => {
     })
   );
 
+  if (!result) {
+    return new Response(null, { status: 404, statusText: "Not found." });
+  }
+
   return new Response(JSON.stringify(result), {
     status: 200,
     headers: {
