@@ -253,7 +253,10 @@ export const buildParams = (state: Filters): URLSearchParams => {
     ...(state.camera ? [["camera", state.camera.id]] : []),
     ...(state.film ? [["film", state.film.id]] : []),
     ...(state.lens ? [["lens", state.lens.id]] : []),
-    ...(state.page ? [["page", state.page.toString()]] : []),
+    /**
+     * TODO: enable again, after reverse infinite scroll is working
+     */
+    // ...(state.page ? [["page", state.page.toString()]] : []),
   ];
 
   return new URLSearchParams(params);
