@@ -88,10 +88,10 @@ const galleryUpdate = ({ camera, film, lens, page, resetGallery }: Filters) => {
   const params: URLSearchParams = new URLSearchParams(
     Object.assign(
       {},
-      camera ? { camera: camera.model } : {},
+      camera ? { camera: camera.id } : {},
       page ? { page } : {},
-      film ? { film: film.name } : {},
-      lens ? { lens: lens.model } : {}
+      film ? { film: film.id } : {},
+      lens ? { lens: lens.id } : {}
     )
   );
 
@@ -100,9 +100,8 @@ const galleryUpdate = ({ camera, film, lens, page, resetGallery }: Filters) => {
     type: GALLERY_ACTIONS.SET_LOADING,
   });
 
-  const search = params.toString();
   const url = new URL("/api/images", import.meta.env.SITE);
-  url.search = search.toString();
+  url.search = params.toString();
 
   fetch(url)
     .then((res) => res.json())

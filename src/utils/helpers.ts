@@ -250,9 +250,9 @@ export const mapImageDataToProps = ({
 
 export const buildParams = (state: Filters): URLSearchParams => {
   const params = [
-    ...(state.camera ? [["camera", state.camera.model]] : []),
-    ...(state.film ? [["film", state.film.name]] : []),
-    ...(state.lens ? [["lens", state.lens.model]] : []),
+    ...(state.camera ? [["camera", state.camera.id]] : []),
+    ...(state.film ? [["film", state.film.id]] : []),
+    ...(state.lens ? [["lens", state.lens.id]] : []),
     ...(state.page ? [["page", state.page.toString()]] : []),
   ];
 
@@ -266,9 +266,9 @@ export const parseParams = async (
   const url = new URL("/api/images", import.meta.env.SITE);
   url.search = search.toString();
 
-  const images: Page<WithImageMeta<Image>> | null = await fetch(url).then(
-    (res) => res.json()
-  );
+  const images: Page<WithImageMeta<Image>> | null = await fetch(url)
+    .then((res) => res.json())
+    .catch(() => null);
 
   if (!images?.data) {
     return undefined;
