@@ -32,8 +32,8 @@ The following prerequisites are needed to successfully launch this project local
 #### Accounts
 
 - An [ImageKit](https://imagekit.io/) account for storing images.
-- A [GraphQL](https://graphql.org/)-compatible API endpoint for storing the image metadata.
-  - I use [Fauna](https://fauna.com/) - for other services, the environment variables may need to be adjusted accordingly in the source code.
+- A [Neon](https://neon.tech/) account for storing image metadata in a Postgres database.
+  - Other serverless Postgres services are supported, but demand a change in the source code (e.g. switch Neon's driver with a generic Postgres client).
 
 ### Quick start
 

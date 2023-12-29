@@ -2,7 +2,7 @@ import { ImageDetail } from "@components/preact/ImageDetail";
 import { Modal } from "@components/preact/Modal";
 import {
   SuspendedPicture,
-  SuspendedPictureProps,
+  type SuspendedPictureProps,
 } from "@components/preact/SuspendedPicture";
 import { useStore } from "@nanostores/preact";
 import type { Image } from "@utils/graphql/images/image";

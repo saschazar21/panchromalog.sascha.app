@@ -1,5 +1,5 @@
 import { createContext } from "preact";
-import { StateUpdater, useContext } from "preact/hooks";
+import { type StateUpdater, useContext } from "preact/hooks";
 
 export const EditContext = createContext<
   [boolean, StateUpdater<boolean>] | null

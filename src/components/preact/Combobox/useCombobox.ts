@@ -72,7 +72,7 @@ const init = (customInitialState: Partial<ComboboxHookParams>): ComboboxState =>
     ...initialState,
     filtered: customInitialState.options,
     value: customInitialState.value,
-  } as ComboboxState);
+  }) as ComboboxState;
 
 export const useCombobox = (initialState: ComboboxHookParams) => {
   const {

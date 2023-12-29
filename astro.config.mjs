@@ -1,9 +1,6 @@
 import { defineConfig } from "astro/config";
 
 // https://astro.build/config
-import image from "@astrojs/image";
-
-// https://astro.build/config
 import vitePwa from "@vite-pwa/astro";
 import { manifest } from "./src/utils/manifest";
 
@@ -24,15 +21,12 @@ const define = Object.fromEntries(
 
 // https://astro.build/config
 export default defineConfig({
-  site: "http://localhost:3000",
+  site: "http://localhost:4321",
   output: "server",
   adapter: netlify(),
   integrations: [
     preact({
       compat: true,
-    }),
-    image({
-      serviceEntryPoint: "@astrojs/image/sharp",
     }),
     vitePwa({
       base: "/",

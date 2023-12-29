@@ -15,7 +15,7 @@ export interface ImageKitOptions {
 const IMAGEKIT_BASE_URL = "https://ik.imagekit.io";
 const CACHE_DURATION = 3.15576e7;
 
-export const get: APIRoute = async ({
+export const GET: APIRoute = async ({
   params,
   url: currentUrl,
 }): Promise<Response> => {

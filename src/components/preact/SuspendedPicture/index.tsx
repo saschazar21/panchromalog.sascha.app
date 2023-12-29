@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "preact/hooks";
-import { forwardRef, lazy, HTMLAttributes, Suspense } from "preact/compat";
+import { forwardRef, lazy, type HTMLAttributes, Suspense } from "preact/compat";
 import { SuspendedImage } from "@components/preact/SuspendedImage";
 import { buildImageLink } from "@utils/helpers";
 import classNames from "classnames";
@@ -14,9 +14,9 @@ const Blurhash = lazy(() =>
 
 export interface SuspendedPictureProps
   extends Omit<HTMLAttributes<HTMLImageElement>, "ref"> {
-  color?: string;
+  color?: string | null;
   formats?: Array<"avif" | "webp" | "jpeg">;
-  hash?: string;
+  hash?: string | null;
   height: number;
   originalHeight?: number;
   originalWidth?: number;

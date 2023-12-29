@@ -1,11 +1,23 @@
 import type { SuspendedPictureProps } from "@components/preact/SuspendedPicture";
-import { Camera, getCamera } from "@utils/graphql/cameras/camera";
-import { getFilters } from "@utils/graphql/custom/filters";
-import { Film, getFilm } from "@utils/graphql/films/film";
-import type { Image } from "@utils/graphql/images/image";
-import { getLens, Lens } from "@utils/graphql/lenses/lens";
 import type { Filters } from "@utils/stores/filters";
 import type { Gallery as GalleryState } from "@utils/stores/gallery";
+import {
+  getCameraByIdQuery,
+  type Camera,
+  getCamerasQuery,
+  type WithCameras,
+} from "./db/neon/cameras";
+import { getFilmByIdQuery, type Film, getFilmsQuery } from "./db/neon/films";
+import {
+  getLensByIdQuery,
+  getLensesQuery,
+  type Lens,
+  type WithLenses,
+} from "./db/neon/lenses";
+import type { Image, WithImageMeta } from "./db/neon/images";
+import { executeTransaction } from "./db/neon";
+import type { Page } from "./db/sql";
+import type { WithMount } from "./db/neon/mounts";
 
 export interface ImageOptions {
   /** original image url */
@@ -29,14 +41,16 @@ export interface ImageOptions {
 }
 
 export interface FilterInit {
-  cursor: string | null;
-  cameras?: Camera[];
+  cameras?: WithMount<WithLenses<Camera>>[];
   films?: Film[];
-  lenses?: Lens[];
-  camera?: Camera | null;
+  lenses?: WithMount<WithCameras<Lens>>[];
+  camera?: WithMount<WithLenses<Camera>> | null;
   film?: Film | null;
-  lens?: Lens | null;
+  lens?: WithMount<WithCameras<Lens>> | null;
+  page: number | null;
 }
+
+export const DEFAULT_PAGE_SIZE = 10;
 
 export const IMAGE_API_PATH = "/api/image";
 
@@ -158,39 +172,58 @@ export const fetchFilters = async (
 ): Promise<FilterInit> => {
   const keys = [];
 
-  if (params.has("camera")) {
-    keys.push([
-      "camera",
-      (await (
-        await getCamera({ model: params.get("camera") as string })
-      )?.data?.camera) ?? null,
+  if (
+    [params.get("camera"), params.get("film"), params.get("lens")].some(
+      (param) => param?.length
+    )
+  ) {
+    const [[camera], [film], [lens]] = await executeTransaction<
+      [[Camera], [Film], [Lens]]
+    >([
+      getCameraByIdQuery((params.get("camera") as string) ?? ""),
+      getFilmByIdQuery((params.get("film") as string) ?? ""),
+      getLensByIdQuery((params.get("lens") as string) ?? ""),
     ]);
-  }
-  if (params.has("film")) {
-    keys.push([
-      "film",
-      (await (
-        await getFilm({ name: params.get("film") as string })
-      )?.data?.film) ?? null,
-    ]);
-  }
-  if (params.has("lens")) {
-    keys.push([
-      "lens",
-      (await (
-        await getLens({ model: params.get("lens") as string })
-      )?.data?.lens) ?? null,
-    ]);
+
+    if (camera) {
+      keys.push(["camera", camera]);
+    }
+    if (film) {
+      keys.push(["film", film]);
+    }
+    if (lens) {
+      keys.push(["lens", lens]);
+    }
   }
 
-  const filters = (await (await getFilters())?.data) ?? {};
+  const size = 25;
+
+  const [[camerasPage], [filmsPage], [lensesPage]] = await executeTransaction<
+    [[Page<Camera>], [Page<Film>], [Page<Lens>]]
+  >([
+    getCamerasQuery({ size, offset: 0, searchTerm: null, mount: null }),
+    getFilmsQuery({ size, offset: 0, searchTerm: null, type: null }),
+    getLensesQuery({ size, offset: 0, searchTerm: null, mount: null }),
+  ]);
+
+  const { data: cameras = [] } = camerasPage ?? {};
+  const { data: films = [] } = filmsPage ?? {};
+  const { data: lenses = [] } = lensesPage ?? {};
+
+  const filters = { cameras, films, lenses };
 
   return {
     ...Object.fromEntries(keys.filter(([_, val]) => !!val)),
     ...filters,
-    cursor: params.get("cursor") ?? null,
+    page: params.get("page") ?? null,
   };
 };
+
+export const nextPageNo = (page: Page<Image>) =>
+  page.meta.page < page.meta.pages ? page.meta.page + 1 : null;
+
+export const prevPageNo = (page: Page<Image>) =>
+  page.meta.page > 1 ? page.meta.page - 1 : null;
 
 export const getImageUrl = (path: string) => {
   const p = path?.startsWith("/") ? path : `/${path}`;
@@ -202,7 +235,7 @@ export const mapImageDataToProps = ({
   id,
   meta,
   path,
-}: Image): Omit<
+}: WithImageMeta<Image>): Omit<
   SuspendedPictureProps,
   "height" | "sizes" | "width" | "widths"
 > => ({
@@ -217,10 +250,13 @@ export const mapImageDataToProps = ({
 
 export const buildParams = (state: Filters): URLSearchParams => {
   const params = [
-    ...(state.camera ? [["camera", state.camera.model]] : []),
-    ...(state.film ? [["film", state.film.name]] : []),
-    ...(state.lens ? [["lens", state.lens.model]] : []),
-    ...(state.cursor ? [["cursor", state.cursor]] : []),
+    ...(state.camera ? [["camera", state.camera.id]] : []),
+    ...(state.film ? [["film", state.film.id]] : []),
+    ...(state.lens ? [["lens", state.lens.id]] : []),
+    /**
+     * TODO: enable again, after reverse infinite scroll is working
+     */
+    // ...(state.page ? [["page", state.page.toString()]] : []),
   ];
 
   return new URLSearchParams(params);
@@ -228,22 +264,46 @@ export const buildParams = (state: Filters): URLSearchParams => {
 
 export const parseParams = async (
   params: URLSearchParams
-): Promise<GalleryState | null> => {
-  console.log(Object.fromEntries(params));
-
+): Promise<GalleryState | undefined> => {
   const search = params.toString();
   const url = new URL("/api/images", import.meta.env.SITE);
   url.search = search.toString();
 
-  const { data: gallery, errors } = await fetch(url).then((res) => res.json());
+  const images: Page<WithImageMeta<Image>> | null = await fetch(url)
+    .then((res) => res.json())
+    .catch(() => null);
 
-  if (!gallery && errors?.length) {
-    throw new Error(errors[0].message);
+  if (!images?.data) {
+    return undefined;
   }
 
-  return gallery?.images ?? null;
+  const meta = images.meta;
+
+  const gallery: GalleryState = {
+    after: nextPageNo(images),
+    before: prevPageNo(images),
+    error: null,
+    data: images.data,
+    isLoading: false,
+    meta,
+    mutations: 0,
+  };
+
+  return gallery;
 };
 
 export const getPushPullFactor = (box: number, iso: number): string | null => {
   return ISO_MAP.has(box) ? ISO_MAP.get(box)?.get(iso) ?? null : null;
+};
+
+export const parsePaginationParams = (params: URLSearchParams) => {
+  const parsedPage = parseInt(params.get("page") ?? "", 10);
+  const parsedSize = parseInt(params.get("size") ?? "", 10);
+
+  const page = !isNaN(parsedPage) && parsedPage > 0 ? parsedPage : 0;
+  const size =
+    !isNaN(parsedSize) && parsedSize > 0 ? parsedSize : DEFAULT_PAGE_SIZE;
+  const offset = (page > 0 ? page - 1 : 0) * size;
+
+  return [size, offset];
 };

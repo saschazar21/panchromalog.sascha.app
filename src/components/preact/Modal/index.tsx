@@ -1,7 +1,7 @@
-import { ReactComponent as CloseIcon } from "@icons/x.svg";
+import CloseIcon from "@icons/x.svg?react";
 import classNames from "classnames";
 import type { FunctionComponent, VNode } from "preact";
-import { createPortal, HTMLAttributes, useEffect } from "preact/compat";
+import { createPortal, type HTMLAttributes, useEffect } from "preact/compat";
 import styles from "./Modal.module.css";
 
 export interface ModalProps extends HTMLAttributes<HTMLDivElement> {

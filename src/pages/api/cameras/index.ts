@@ -1,16 +1,32 @@
-import { getCameras } from "@utils/graphql/cameras/cameras";
+import { executeQuery } from "@utils/db/neon";
+import { getCamerasQuery, type Camera } from "@utils/db/neon/cameras";
+import type { Page, WithSearchResult } from "@utils/db/sql";
+import { parsePaginationParams } from "@utils/helpers";
 import type { APIRoute } from "astro";
 
 const DURATION_MAX_AGE = 86400;
 const DURATION_STALE = 86400;
 
-export const get: APIRoute = async ({ url }) => {
+export const GET: APIRoute = async ({ url }) => {
   const { searchParams } = new URL(url);
   const mount = searchParams.get("mount");
+  const searchTerm = searchParams.get("search");
+  const [size, offset] = parsePaginationParams(searchParams);
 
-  const res = await getCameras(mount ? { mount } : undefined);
+  const [result] = await executeQuery<Page<WithSearchResult<Camera>>>(
+    getCamerasQuery({
+      size,
+      offset,
+      searchTerm,
+      mount,
+    })
+  );
 
-  return new Response(JSON.stringify(res), {
+  if (!result) {
+    return new Response(null, { status: 404, statusText: "Not found." });
+  }
+
+  return new Response(JSON.stringify(result), {
     status: 200,
     headers: {
       "content-type": "application/json",

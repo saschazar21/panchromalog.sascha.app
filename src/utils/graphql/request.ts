@@ -8,7 +8,7 @@ export const graphQLRequest = async <T>(
     | [
         {
           message: string;
-        }
+        },
       ]
     | null;
 }> => {

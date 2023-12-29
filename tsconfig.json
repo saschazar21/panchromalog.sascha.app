@@ -18,6 +18,7 @@
       "react": ["node_modules/preact/compat/"],
       "react-dom": ["node_modules/preact/compat/"]
     },
+    "plugins": [{ "name": "@astrojs/ts-plugin" }],
     "rootDir": ".",
     "skipLibCheck": true,
     "useDefineForClassFields": false

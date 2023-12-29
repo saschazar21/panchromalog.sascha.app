@@ -1,12 +1,12 @@
 ---
-import { Picture } from "@astrojs/image/components";
+import { Picture } from "astro:assets";
 import social from "@data/social.json";
 import { manifest } from "@utils/manifest";
 import pkg from "../../package.json";
 
-import { ReactComponent as GitHubIcon } from "@icons/github.svg";
-import { ReactComponent as InstagramIcon } from "@icons/instagram.svg";
-import { ReactComponent as PixelfedIcon } from "@icons/pixelfed.svg";
+import GitHubIcon from "@icons/github.svg?react";
+import InstagramIcon from "@icons/instagram.svg?react";
+import PixelfedIcon from "@icons/pixelfed.svg?react";
 ---
 
 <header aria-labelledby="title">
@@ -17,10 +17,8 @@ import { ReactComponent as PixelfedIcon } from "@icons/pixelfed.svg";
         alt={`Logo of ${manifest.name}`}
         sizes="(min-width: 640px) 96px, 64px"
         widths={[64, 128, 192, 256]}
-        aspectRatio={1}
         formats={["avif", "webp", "jpeg"]}
         loading="eager"
-        background={undefined}
         width={64}
         height={64}
       />

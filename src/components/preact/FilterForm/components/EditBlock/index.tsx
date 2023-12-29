@@ -1,4 +1,4 @@
-import { ReactComponent as EditIcon } from "@icons/edit-3.svg";
+import EditIcon from "@icons/edit-3.svg?react";
 import { EditContext } from "@utils/context/EditBlockContext";
 import classNames from "classnames";
 import type { FunctionalComponent, VNode } from "preact";
@@ -10,7 +10,7 @@ import customStyles from "./EditBlock.module.css";
 export interface EditBlockProps {
   children: VNode | VNode[];
   name: string;
-  subtitle?: string;
+  subtitle?: string | null;
   title?: string;
 }
 

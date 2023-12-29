@@ -1,6 +1,8 @@
-import type { PaginatedImages } from "@utils/graphql/images/images";
+import type { Page } from "@utils/db/sql";
+import type { Image, WithImageMeta } from "@utils/db/neon/images";
+import { nextPageNo, prevPageNo } from "@utils/helpers";
 import { atom } from "nanostores";
-import { Filters, filters } from "./filters";
+import { type Filters, filters } from "./filters";
 
 export enum GALLERY_ACTIONS {
   RESET,
@@ -15,7 +17,9 @@ export interface GalleryAction {
   type: GALLERY_ACTIONS;
 }
 
-export interface Gallery extends PaginatedImages {
+export interface Gallery extends Page<WithImageMeta<Image>> {
+  after: number | null;
+  before: number | null;
   error: Error | null;
   isLoading: boolean;
   mutations: number;
@@ -27,6 +31,11 @@ const initialState: Gallery = {
   data: [],
   error: null,
   isLoading: false,
+  meta: {
+    entries: 0,
+    page: 0,
+    pages: 0,
+  },
   mutations: 0,
 };
 
@@ -44,6 +53,9 @@ export const mutateGallery = (action: GalleryAction) => {
       return gallery.set({
         ...state,
         ...action.payload,
+        after: action.payload?.meta
+          ? nextPageNo(action.payload as Page<Image>)
+          : null,
         before: state.before,
         data: [...state.data, ...(action.payload.data ?? [])],
         mutations: ++state.mutations,
@@ -53,6 +65,9 @@ export const mutateGallery = (action: GalleryAction) => {
         ...state,
         ...action.payload,
         after: state.after,
+        before: action.payload?.meta
+          ? prevPageNo(action.payload as Page<Image>)
+          : null,
         data: [...(action.payload.data ?? []), ...state.data],
         mutations: ++state.mutations,
       });
@@ -69,20 +84,14 @@ export const mutateGallery = (action: GalleryAction) => {
   }
 };
 
-const galleryUpdate = ({
-  camera,
-  cursor,
-  film,
-  lens,
-  resetGallery,
-}: Filters) => {
+const galleryUpdate = ({ camera, film, lens, page, resetGallery }: Filters) => {
   const params: URLSearchParams = new URLSearchParams(
     Object.assign(
       {},
-      camera ? { camera: camera.model } : {},
-      cursor ? { cursor } : {},
-      film ? { film: film.name } : {},
-      lens ? { lens: lens.model } : {}
+      camera ? { camera: camera.id } : {},
+      page ? { page } : {},
+      film ? { film: film.id } : {},
+      lens ? { lens: lens.id } : {}
     )
   );
 
@@ -91,35 +100,34 @@ const galleryUpdate = ({
     type: GALLERY_ACTIONS.SET_LOADING,
   });
 
-  const search = params.toString();
   const url = new URL("/api/images", import.meta.env.SITE);
-  url.search = search.toString();
+  url.search = params.toString();
 
   fetch(url)
     .then((res) => res.json())
-    .then(({ data, errors }) => {
-      if (!data && errors?.length) {
-        throw new Error(errors[0].message);
-      }
+    .then((data: Page<WithImageMeta<Image>>) => {
+      // if (!data && errors?.length) {
+      //   throw new Error(errors[0].message);
+      // }
 
       if (resetGallery) {
         return mutateGallery({
-          payload: data.images,
+          payload: data,
           type: GALLERY_ACTIONS.RESET,
         });
       }
 
       const { before } = gallery.get();
 
-      if (cursor === before) {
+      if (page === before) {
         return mutateGallery({
-          payload: data.images,
+          payload: data,
           type: GALLERY_ACTIONS.PREPEND,
         });
       }
 
       return mutateGallery({
-        payload: data.images,
+        payload: data,
         type: GALLERY_ACTIONS.APPEND,
       });
     })
